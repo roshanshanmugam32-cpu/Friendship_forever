@@ -3,9 +3,28 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>R × A — A Friendship Written in Stars</title>
+<meta name="theme-color" content="#080812">
+
+<title>THE UNBREAKABLE FRIENDSHIP</title>
 
 <style>
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root{
+    --bg:#070711;
+    --bg2:#0e0d1c;
+    --card:rgba(255,255,255,.065);
+    --card2:rgba(255,255,255,.095);
+    --text:#ffffff;
+    --muted:#aaa8ba;
+    --accent:#9c6cff;
+    --accent2:#ff62a8;
+    --line:rgba(255,255,255,.1);
+    --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
 *{
     margin:0;
     padding:0;
@@ -17,361 +36,565 @@ html{
 }
 
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:#050512;
-    color:#fff;
+    min-height:100vh;
+    font-family:
+        Inter,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(142,87,255,.16),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(255,75,150,.13),
+            transparent 28%
+        ),
+        var(--bg);
     overflow-x:hidden;
+    transition:.5s;
 }
 
-button,
-input,
-textarea,
-select{
-    font:inherit;
+body.light{
+    --bg:#f5f3fb;
+    --bg2:#ffffff;
+    --card:rgba(0,0,0,.045);
+    --card2:rgba(0,0,0,.08);
+    --text:#16131f;
+    --muted:#656171;
+    --line:rgba(0,0,0,.1);
 }
 
-button{
-    cursor:pointer;
-}
-
-/* =========================
+/* =========================================================
    BACKGROUND
-========================= */
+========================================================= */
 
-#stars{
+#universe{
     position:fixed;
     inset:0;
-    z-index:-5;
-    background:
-      radial-gradient(circle at 20% 20%,rgba(122,92,255,.18),transparent 30%),
-      radial-gradient(circle at 80% 70%,rgba(255,75,150,.15),transparent 30%),
-      linear-gradient(135deg,#03030b,#0b0920,#03030b);
+    pointer-events:none;
+    z-index:-10;
+    overflow:hidden;
 }
 
 .star{
     position:absolute;
-    width:2px;
-    height:2px;
-    background:white;
     border-radius:50%;
-    animation:twinkle 3s infinite ease-in-out;
+    background:white;
+    animation:twinkle var(--duration) infinite ease-in-out;
 }
 
 @keyframes twinkle{
-    0%,100%{opacity:.2;transform:scale(.7)}
-    50%{opacity:1;transform:scale(1.5)}
+    0%,100%{
+        opacity:.15;
+        transform:scale(.5);
+    }
+    50%{
+        opacity:1;
+        transform:scale(1.5);
+    }
 }
 
-/* =========================
-   LOGIN
-========================= */
+.float-orb{
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.12;
+    animation:orbMove 15s infinite alternate ease-in-out;
+}
 
-#loginPage{
+.orb1{
+    background:#7b4dff;
+    left:-100px;
+    top:20%;
+}
+
+.orb2{
+    background:#ff4e9d;
+    right:-100px;
+    bottom:10%;
+    animation-delay:-5s;
+}
+
+@keyframes orbMove{
+    from{
+        transform:translate(0,0);
+    }
+    to{
+        transform:translate(100px,-70px);
+    }
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
     min-height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
-    padding:25px;
+    padding:20px;
 }
 
-.login-card{
+.login-box{
     width:min(470px,100%);
-    padding:45px 32px;
-    border-radius:30px;
-    background:rgba(255,255,255,.07);
-    backdrop-filter:blur(25px);
-    border:1px solid rgba(255,255,255,.13);
-    box-shadow:0 30px 100px rgba(0,0,0,.6);
+    padding:42px 30px;
     text-align:center;
-    animation:loginFloat 5s infinite ease-in-out;
+    border:1px solid var(--line);
+    border-radius:35px;
+    background:var(--card);
+    backdrop-filter:blur(30px);
+    box-shadow:var(--shadow);
+    animation:loginIn 1s ease;
 }
 
-@keyframes loginFloat{
-    0%,100%{transform:translateY(0)}
-    50%{transform:translateY(-8px)}
+@keyframes loginIn{
+    from{
+        opacity:0;
+        transform:translateY(40px) scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
 }
 
-.logo{
-    font-size:60px;
-    margin-bottom:10px;
+.login-symbol{
+    width:95px;
+    height:95px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-size:45px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            var(--accent2)
+        );
+    box-shadow:
+        0 0 60px rgba(150,90,255,.35);
+    animation:heartbeat 2.5s infinite;
 }
 
-.login-card h1{
+@keyframes heartbeat{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.07);
+    }
+}
+
+.login-box h1{
     font-size:32px;
-    margin-bottom:10px;
+    margin-bottom:8px;
 }
 
-.login-card p{
-    color:#bdbbd0;
-    line-height:1.6;
-    margin-bottom:30px;
+.login-box .subtitle{
+    color:var(--muted);
+    line-height:1.7;
+    margin-bottom:28px;
 }
 
-.input{
+.field{
     width:100%;
     padding:15px 17px;
-    margin:8px 0;
-    border-radius:15px;
-    border:1px solid rgba(255,255,255,.13);
-    background:rgba(0,0,0,.3);
-    color:white;
+    margin:7px 0;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.2);
+    color:var(--text);
     outline:none;
 }
 
-.input:focus{
-    border-color:#b46cff;
-    box-shadow:0 0 20px rgba(180,108,255,.2);
+.field:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 25px rgba(150,90,255,.15);
 }
 
-.enter-btn{
+.primary-btn{
     width:100%;
-    margin-top:15px;
     padding:16px;
     border:none;
-    border-radius:16px;
-    background:linear-gradient(90deg,#7b4dff,#ef4c9a);
+    border-radius:17px;
+    margin-top:12px;
     color:white;
-    font-weight:bold;
-    box-shadow:0 10px 30px rgba(135,75,255,.35);
+    font-weight:800;
+    background:
+        linear-gradient(
+            100deg,
+            #744cff,
+            #b05cff,
+            #ff529d
+        );
+    box-shadow:0 15px 35px rgba(125,70,255,.25);
     transition:.3s;
 }
 
-.enter-btn:hover{
+.primary-btn:hover{
     transform:translateY(-3px);
-    box-shadow:0 15px 40px rgba(135,75,255,.5);
+    box-shadow:0 20px 45px rgba(125,70,255,.4);
 }
 
 #error{
     min-height:25px;
-    color:#ff6b9d;
-    margin-top:14px;
+    margin-top:12px;
+    color:#ff739f;
 }
 
-/* =========================
-   MAIN
-========================= */
+/* =========================================================
+   APP
+========================================================= */
 
-#mainPage{
+#app{
     display:none;
+    min-height:100vh;
 }
 
-nav{
-    position:sticky;
+.topbar{
+    position:fixed;
     top:0;
-    z-index:100;
+    left:0;
+    right:0;
+    z-index:1000;
+    padding:14px 20px;
     display:flex;
-    justify-content:center;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(5,5,15,.65);
+    backdrop-filter:blur(22px);
+    border-bottom:1px solid var(--line);
+}
+
+body.light .topbar{
+    background:rgba(255,255,255,.72);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
     gap:10px;
-    padding:15px;
-    background:rgba(3,3,12,.65);
-    backdrop-filter:blur(20px);
-    border-bottom:1px solid rgba(255,255,255,.08);
+    font-weight:900;
+    letter-spacing:1px;
 }
 
-nav button{
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.06);
-    color:#ddd;
-    padding:10px 15px;
-    border-radius:20px;
+.brand-dot{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            var(--accent2)
+        );
 }
 
-nav button:hover{
-    background:rgba(255,255,255,.13);
+.top-actions{
+    display:flex;
+    gap:8px;
 }
 
-/* =========================
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--text);
+}
+
+/* =========================================================
    HERO
-========================= */
+========================================================= */
 
 .hero{
-    min-height:92vh;
+    min-height:100vh;
+    padding:130px 20px 150px;
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    padding:40px 20px;
 }
 
-.hero-inner{
-    max-width:900px;
+.hero-content{
+    max-width:950px;
 }
 
-.small-title{
-    color:#c59cff;
+.eyebrow{
+    color:#c29cff;
+    font-size:12px;
     letter-spacing:4px;
     text-transform:uppercase;
-    font-size:13px;
+    font-weight:800;
     margin-bottom:20px;
 }
 
 .hero h1{
-    font-size:clamp(50px,10vw,110px);
-    line-height:.9;
-    background:linear-gradient(90deg,#fff,#d29cff,#ff82b8,#fff);
+    font-size:clamp(48px,10vw,110px);
+    line-height:.88;
+    font-weight:950;
+    letter-spacing:-5px;
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #c58cff,
+            #ff82b8,
+            #fff
+        );
+    background-size:250% auto;
     -webkit-background-clip:text;
+    background-clip:text;
     color:transparent;
-    animation:shine 5s linear infinite;
+    animation:gradientMove 6s linear infinite;
 }
 
-@keyframes shine{
-    0%{filter:hue-rotate(0)}
-    100%{filter:hue-rotate(30deg)}
+@keyframes gradientMove{
+    to{
+        background-position:250% center;
+    }
 }
 
-.hero-sub{
+.hero-title-small{
+    font-size:clamp(18px,3vw,27px);
+    margin-top:22px;
+    color:var(--muted);
+}
+
+.hero-description{
+    max-width:680px;
     margin:25px auto;
-    max-width:700px;
-    font-size:20px;
-    line-height:1.7;
-    color:#c9c5d8;
+    color:var(--muted);
+    line-height:1.8;
+    font-size:17px;
 }
 
-.scroll-btn{
-    display:inline-block;
-    margin-top:20px;
-    padding:14px 25px;
+.hero-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.hero-btn{
+    padding:14px 23px;
     border-radius:30px;
-    border:1px solid rgba(255,255,255,.2);
-    background:rgba(255,255,255,.06);
-    color:white;
+    border:1px solid var(--line);
+    color:var(--text);
+    background:var(--card);
 }
 
-/* =========================
-   SECTIONS
-========================= */
+/* =========================================================
+   SECTION
+========================================================= */
 
-section{
-    padding:100px 20px;
+.section{
     max-width:1200px;
     margin:auto;
+    padding:100px 20px;
 }
 
-.section-head{
+.section-header{
     text-align:center;
-    margin-bottom:55px;
+    margin-bottom:50px;
 }
 
-.section-head span{
-    color:#b983ff;
-    letter-spacing:3px;
+.chapter-number{
+    color:#b88cff;
     font-size:12px;
+    letter-spacing:4px;
     text-transform:uppercase;
+    font-weight:900;
 }
 
-.section-head h2{
-    font-size:clamp(35px,6vw,60px);
+.section-header h2{
+    font-size:clamp(34px,6vw,62px);
     margin:12px 0;
 }
 
-.section-head p{
-    color:#aaa6ba;
+.section-header p{
     max-width:650px;
     margin:auto;
+    color:var(--muted);
     line-height:1.7;
 }
 
-/* =========================
-   BIRTHDAY CARDS
-========================= */
+/* =========================================================
+   PROFILE
+========================================================= */
 
-.birth-grid{
+.profile-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:1fr 1fr;
     gap:25px;
 }
 
-.birth-card{
+.profile-card{
     padding:35px;
-    border-radius:28px;
-    background:linear-gradient(
-        145deg,
-        rgba(255,255,255,.1),
-        rgba(255,255,255,.035)
-    );
-    border:1px solid rgba(255,255,255,.1);
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+}
+
+.profile-card h3{
+    font-size:27px;
+    margin-bottom:12px;
+}
+
+.profile-card p{
+    color:var(--muted);
+    line-height:1.8;
+}
+
+.profile-icon{
+    font-size:50px;
+    margin-bottom:20px;
+}
+
+/* =========================================================
+   BIRTHDAY
+========================================================= */
+
+.birthday-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.birthday-card{
+    padding:35px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
     text-align:center;
     position:relative;
     overflow:hidden;
 }
 
-.birth-card::before{
+.birthday-card::after{
     content:"";
     position:absolute;
-    width:150px;
-    height:150px;
-    background:rgba(179,99,255,.25);
-    filter:blur(50px);
-    top:-70px;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:var(--accent);
+    filter:blur(80px);
+    opacity:.13;
+    top:-80px;
     right:-70px;
 }
 
-.avatar{
-    width:100px;
-    height:100px;
+.person-icon{
+    width:90px;
+    height:90px;
     margin:auto;
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     border-radius:50%;
-    font-size:38px;
-    background:linear-gradient(135deg,#744cff,#ff62a7);
-    box-shadow:0 0 50px rgba(170,90,255,.35);
+    font-size:40px;
+    background:linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent2)
+    );
 }
 
-.birth-card h3{
-    font-size:28px;
-    margin:20px 0 8px;
+.birthday-card h3{
+    font-size:27px;
+    margin-top:20px;
 }
 
-.dob{
-    color:#c9a7ff;
+.birth-date{
+    color:#bc93ff;
+    margin-top:5px;
 }
 
-.age{
+.age-number{
     font-size:50px;
-    font-weight:bold;
+    font-weight:950;
     margin:20px 0;
 }
 
-.age small{
-    font-size:14px;
-    color:#aaa;
+.countdown{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
 }
 
-.countdown{
-    padding:15px;
+.time-box{
+    padding:12px 5px;
     border-radius:15px;
     background:rgba(0,0,0,.2);
-    color:#ddd;
+    border:1px solid var(--line);
 }
 
-/* =========================
-   STORY
-========================= */
-
-.story-box{
-    padding:45px;
-    border-radius:30px;
-    background:rgba(255,255,255,.055);
-    border:1px solid rgba(255,255,255,.1);
-    line-height:1.9;
-    color:#cbc8d5;
-    font-size:17px;
+.time-box strong{
+    display:block;
+    font-size:22px;
 }
 
-.story-box strong{
-    color:white;
+.time-box span{
+    font-size:10px;
+    color:var(--muted);
+    text-transform:uppercase;
 }
 
-/* =========================
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    padding:25px 15px;
+    text-align:center;
+    border-radius:22px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.stat-number{
+    font-size:35px;
+    font-weight:900;
+    color:#c493ff;
+}
+
+.stat-label{
+    color:var(--muted);
+    margin-top:5px;
+    font-size:13px;
+}
+
+/* =========================================================
    TIMELINE
-========================= */
+========================================================= */
 
 .timeline{
-    position:relative;
     max-width:850px;
     margin:auto;
+    position:relative;
 }
 
 .timeline::before{
@@ -381,109 +604,83 @@ section{
     top:0;
     bottom:0;
     width:2px;
-    background:linear-gradient(#784cff,#ff5eae,#784cff);
+    background:
+        linear-gradient(
+            #744cff,
+            #ff5ba5,
+            #744cff
+        );
 }
 
-.time-item{
+.timeline-item{
     width:50%;
-    padding:20px 35px;
+    padding:15px 35px;
     position:relative;
 }
 
-.time-item:nth-child(odd){
-    left:0;
+.timeline-item:nth-child(odd){
     text-align:right;
 }
 
-.time-item:nth-child(even){
-    left:50%;
+.timeline-item:nth-child(even){
+    margin-left:50%;
 }
 
-.time-dot{
-    position:absolute;
+.timeline-dot{
     width:16px;
     height:16px;
-    background:#fff;
+    position:absolute;
+    top:28px;
     border-radius:50%;
-    top:30px;
-    box-shadow:0 0 20px #d78bff;
+    background:white;
+    box-shadow:0 0 25px #a86cff;
 }
 
-.time-item:nth-child(odd) .time-dot{
+.timeline-item:nth-child(odd) .timeline-dot{
     right:-8px;
 }
 
-.time-item:nth-child(even) .time-dot{
+.timeline-item:nth-child(even) .timeline-dot{
     left:-8px;
 }
 
-.time-content{
+.timeline-card{
     padding:22px;
     border-radius:20px;
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.08);
+    background:var(--card);
+    border:1px solid var(--line);
 }
 
-.year{
-    color:#c27cff;
-    font-weight:bold;
+.timeline-card .year{
+    color:#be8eff;
+    font-weight:900;
     font-size:20px;
+    margin-bottom:6px;
 }
 
-/* =========================
-   SPECIAL FRIENDSHIP
-========================= */
-
-.traits{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:20px;
-}
-
-.trait{
-    padding:28px;
-    border-radius:22px;
-    background:rgba(255,255,255,.055);
-    border:1px solid rgba(255,255,255,.08);
-    transition:.4s;
-}
-
-.trait:hover{
-    transform:translateY(-8px) scale(1.02);
-}
-
-.trait-icon{
-    font-size:35px;
-    margin-bottom:15px;
-}
-
-.trait h3{
-    margin-bottom:10px;
-}
-
-.trait p{
-    color:#aaa7b6;
+.timeline-card p{
+    color:var(--muted);
     line-height:1.6;
 }
 
-/* =========================
+/* =========================================================
    MEMORY
-========================= */
+========================================================= */
 
-.memory-controls{
+.memory-tools{
     display:flex;
-    flex-wrap:wrap;
     gap:10px;
+    flex-wrap:wrap;
     justify-content:center;
-    margin-bottom:35px;
+    margin-bottom:30px;
 }
 
-.memory-controls button{
-    padding:10px 17px;
+.memory-tools button{
+    padding:10px 16px;
     border-radius:20px;
-    border:1px solid rgba(255,255,255,.1);
-    background:rgba(255,255,255,.05);
-    color:white;
+    border:1px solid var(--line);
+    color:var(--text);
+    background:var(--card);
 }
 
 .memory-grid{
@@ -492,168 +689,230 @@ section{
     gap:20px;
 }
 
-.memory{
-    border-radius:22px;
+.memory-card{
     overflow:hidden;
-    background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.08);
-    transition:.4s;
+    border-radius:24px;
+    background:var(--card);
+    border:1px solid var(--line);
+    transition:.35s;
 }
 
-.memory:hover{
-    transform:translateY(-7px);
+.memory-card:hover{
+    transform:translateY(-8px);
 }
 
-.memory img{
+.memory-card img{
     width:100%;
     height:220px;
     object-fit:cover;
-    background:#151522;
+    display:block;
 }
 
-.memory-info{
+.memory-content{
     padding:20px;
 }
 
-.memory-info h3{
-    margin-bottom:6px;
+.memory-content h3{
+    margin-bottom:5px;
 }
 
-.memory-info p{
-    color:#aaa;
+.memory-content small{
+    color:#b68aff;
+}
+
+.memory-content p{
+    margin-top:10px;
+    color:var(--muted);
     line-height:1.5;
 }
 
-.add-memory{
-    margin:35px auto;
-    display:block;
-    padding:15px 25px;
-    border:none;
+.empty-memory{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px;
+    color:var(--muted);
+    border:1px dashed var(--line);
     border-radius:25px;
-    color:white;
-    background:linear-gradient(90deg,#764cff,#f04f9d);
 }
 
-/* =========================
-   SECRET WORLD
-========================= */
+/* =========================================================
+   SPECIAL CARDS
+========================================================= */
 
-.secret-grid{
+.special-grid{
     display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:22px;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
 }
 
-.secret-card{
-    min-height:220px;
-    padding:35px;
-    border-radius:28px;
-    background:
-      linear-gradient(
-        145deg,
-        rgba(110,70,255,.12),
-        rgba(255,70,160,.06)
-      );
-    border:1px solid rgba(255,255,255,.1);
+.special-card{
+    padding:30px;
+    min-height:230px;
+    border-radius:26px;
+    background:var(--card);
+    border:1px solid var(--line);
     display:flex;
     flex-direction:column;
     justify-content:space-between;
     transition:.4s;
 }
 
-.secret-card:hover{
-    transform:scale(1.025);
-    box-shadow:0 20px 60px rgba(0,0,0,.3);
+.special-card:hover{
+    transform:translateY(-8px);
+    box-shadow:var(--shadow);
 }
 
-.secret-card .icon{
+.special-icon{
     font-size:45px;
 }
 
-.secret-card button{
-    align-self:flex-start;
-    padding:10px 18px;
-    border-radius:20px;
-    border:1px solid rgba(255,255,255,.15);
-    background:rgba(255,255,255,.07);
-    color:white;
+.special-card h3{
+    margin:12px 0 7px;
 }
 
-/* =========================
-   MYSTERY
-========================= */
+.special-card p{
+    color:var(--muted);
+    line-height:1.6;
+}
 
-.mystery{
+.small-btn{
+    margin-top:20px;
+    width:max-content;
+    padding:10px 17px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:var(--card2);
+    color:var(--text);
+}
+
+/* =========================================================
+   QUIZ
+========================================================= */
+
+.quiz-box{
+    max-width:750px;
+    margin:auto;
+    padding:35px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.question{
+    font-size:22px;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.quiz-option{
+    width:100%;
+    padding:14px;
+    margin:6px 0;
+    border-radius:15px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--text);
+    text-align:left;
+}
+
+.quiz-option:hover{
+    background:var(--card2);
+}
+
+.quiz-result{
+    margin-top:20px;
+    padding:15px;
+    border-radius:15px;
+    background:rgba(130,80,255,.1);
+    color:#d0b0ff;
+}
+
+/* =========================================================
+   MYSTERY
+========================================================= */
+
+.mystery-grid{
     display:grid;
     grid-template-columns:repeat(3,1fr);
     gap:20px;
 }
 
-.box{
-    height:190px;
-    border-radius:25px;
+.mystery-box{
+    height:210px;
     display:flex;
     align-items:center;
     justify-content:center;
     flex-direction:column;
-    background:linear-gradient(145deg,#1c163c,#110e26);
-    border:1px solid rgba(255,255,255,.1);
+    border-radius:27px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(116,76,255,.15),
+            rgba(255,83,158,.08)
+        );
+    border:1px solid var(--line);
     transition:.5s;
 }
 
-.box:hover{
-    transform:translateY(-10px) rotateX(5deg);
-    box-shadow:0 20px 60px rgba(115,75,255,.25);
+.mystery-box:hover{
+    transform:
+        translateY(-10px)
+        rotateX(5deg)
+        rotateY(-4deg);
 }
 
-.box span{
-    font-size:50px;
+.mystery-box .gift{
+    font-size:65px;
 }
 
-.box p{
-    margin-top:10px;
-    color:#aaa;
+.mystery-box span{
+    margin-top:12px;
+    color:var(--muted);
 }
 
-/* =========================
+/* =========================================================
    CONSTELLATION
-========================= */
+========================================================= */
 
 .constellation{
     height:500px;
-    border-radius:35px;
     position:relative;
     overflow:hidden;
-    background:
-      radial-gradient(circle at center,rgba(112,73,255,.18),transparent 45%),
-      #04040c;
-    border:1px solid rgba(255,255,255,.1);
+    border-radius:35px;
+    background:#03030b;
+    border:1px solid var(--line);
 }
 
-.node{
+.constellation-star{
     position:absolute;
-    width:18px;
-    height:18px;
-    background:white;
+    width:12px;
+    height:12px;
     border-radius:50%;
-    box-shadow:0 0 30px white;
-    animation:pulse 2s infinite;
+    background:white;
+    box-shadow:0 0 25px white;
+    animation:constPulse 2s infinite;
 }
 
-@keyframes pulse{
-    0%,100%{transform:scale(.8);opacity:.7}
-    50%{transform:scale(1.2);opacity:1}
+@keyframes constPulse{
+    50%{
+        transform:scale(1.5);
+    }
 }
 
-.line{
+.constellation-line{
     position:absolute;
-    height:2px;
-    background:linear-gradient(90deg,transparent,#fff,transparent);
+    height:1px;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.7),
+            transparent
+        );
     transform-origin:left;
-    opacity:.5;
 }
 
-.center-text{
+.constellation-center{
     position:absolute;
     inset:0;
     display:flex;
@@ -663,88 +922,168 @@ section{
     text-align:center;
 }
 
-.center-text h2{
-    font-size:65px;
+.constellation-center h2{
+    font-size:55px;
 }
 
-.center-text p{
+.constellation-center p{
     color:#aaa;
 }
 
-/* =========================
-   PROMISE
-========================= */
+/* =========================================================
+   SECRET
+========================================================= */
 
-.promise{
-    text-align:center;
-    padding:60px 30px;
+.secret-room{
+    padding:45px;
     border-radius:35px;
     background:
-      linear-gradient(
-        135deg,
-        rgba(126,73,255,.12),
-        rgba(255,76,158,.1)
-      );
-    border:1px solid rgba(255,255,255,.1);
+        radial-gradient(
+            circle at center,
+            rgba(130,70,255,.15),
+            transparent 60%
+        ),
+        var(--card);
+    border:1px solid var(--line);
+    text-align:center;
 }
 
-.promise h2{
-    font-size:42px;
-    margin-bottom:25px;
+.lock{
+    font-size:70px;
+    margin-bottom:15px;
 }
 
-.promise p{
-    max-width:700px;
+.secret-room h2{
+    font-size:35px;
+}
+
+.secret-room p{
+    max-width:650px;
+    margin:15px auto;
+    color:var(--muted);
+    line-height:1.8;
+}
+
+/* =========================================================
+   DAILY MESSAGE
+========================================================= */
+
+.daily{
+    max-width:800px;
     margin:auto;
-    color:#c2bfcc;
+    text-align:center;
+    padding:45px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.daily-message{
+    font-size:24px;
+    line-height:1.7;
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-section{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.final-content{
+    max-width:850px;
+}
+
+.final-content h2{
+    font-size:clamp(45px,9vw,95px);
+    line-height:.95;
+}
+
+.final-content p{
+    margin:25px auto;
+    max-width:650px;
+    color:var(--muted);
     line-height:1.9;
     font-size:18px;
 }
 
-/* =========================
-   FINAL
-========================= */
+.final-line{
+    font-size:24px;
+    color:#cb99ff;
+    letter-spacing:3px;
+}
 
-.final{
-    min-height:80vh;
+/* =========================================================
+   BOTTOM CHAPTERS
+========================================================= */
+
+.chapter-bar{
+    position:fixed;
+    bottom:15px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:1100;
+    width:min(650px,calc(100% - 20px));
     display:flex;
-    align-items:center;
-    justify-content:center;
-    text-align:center;
+    justify-content:space-around;
+    gap:4px;
+    padding:9px;
+    border-radius:25px;
+    background:rgba(12,11,24,.8);
+    backdrop-filter:blur(25px);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 15px 50px rgba(0,0,0,.35);
 }
 
-.final h2{
-    font-size:clamp(45px,8vw,90px);
+body.light .chapter-bar{
+    background:rgba(255,255,255,.85);
 }
 
-.final p{
-    margin:25px auto;
-    max-width:650px;
-    color:#aaa7b7;
-    line-height:1.8;
-    font-size:18px;
+.chapter-btn{
+    flex:1;
+    border:none;
+    background:transparent;
+    color:var(--muted);
+    padding:9px 4px;
+    border-radius:17px;
+    font-size:11px;
 }
 
-.forever{
-    font-size:22px;
-    color:#d59aff;
-    letter-spacing:5px;
+.chapter-btn span{
+    display:block;
+    font-size:19px;
+    margin-bottom:3px;
 }
 
-/* =========================
-   MODAL
-========================= */
+.chapter-btn.active{
+    color:white;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(120,75,255,.7),
+            rgba(255,78,155,.6)
+        );
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
 
 .modal{
-    display:none;
     position:fixed;
     inset:0;
-    z-index:999;
-    background:rgba(0,0,0,.75);
-    backdrop-filter:blur(10px);
+    z-index:3000;
+    display:none;
     align-items:center;
     justify-content:center;
     padding:20px;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(12px);
 }
 
 .modal.show{
@@ -752,16 +1091,18 @@ section{
 }
 
 .modal-card{
-    width:min(550px,100%);
-    padding:35px;
+    width:min(570px,100%);
+    max-height:90vh;
+    overflow:auto;
+    padding:30px;
     border-radius:28px;
     background:#11101d;
-    border:1px solid rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.13);
     box-shadow:0 30px 100px #000;
 }
 
 .modal-card h2{
-    margin-bottom:20px;
+    margin-bottom:18px;
 }
 
 .modal-card p{
@@ -770,133 +1111,191 @@ section{
     white-space:pre-line;
 }
 
-.close{
+.modal-close{
     float:right;
     border:none;
     background:none;
     color:white;
-    font-size:25px;
+    font-size:27px;
 }
 
-/* =========================
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 #toast{
     position:fixed;
-    bottom:25px;
     left:50%;
-    transform:translateX(-50%) translateY(100px);
-    padding:14px 22px;
-    border-radius:20px;
-    background:#191625;
-    border:1px solid rgba(255,255,255,.1);
-    z-index:2000;
+    bottom:95px;
+    transform:
+        translateX(-50%)
+        translateY(100px);
+    z-index:5000;
+    padding:13px 20px;
+    border-radius:22px;
+    background:#181624;
+    border:1px solid var(--line);
+    color:white;
     transition:.4s;
+    pointer-events:none;
 }
 
 #toast.show{
-    transform:translateX(-50%) translateY(0);
+    transform:
+        translateX(-50%)
+        translateY(0);
 }
 
-/* =========================
-   MOBILE
-========================= */
+/* =========================================================
+   RESPONSIVE
+========================================================= */
 
-@media(max-width:800px){
+@media(max-width:850px){
 
-    nav{
-        overflow-x:auto;
-        justify-content:flex-start;
-    }
-
-    nav button{
-        white-space:nowrap;
-    }
-
-    .birth-grid,
-    .secret-grid{
+    .profile-grid,
+    .birthday-grid{
         grid-template-columns:1fr;
     }
 
-    .traits,
-    .memory-grid,
-    .mystery{
-        grid-template-columns:1fr;
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .memory-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .special-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .mystery-grid{
+        grid-template-columns:1fr 1fr;
     }
 
     .timeline::before{
-        left:10px;
+        left:8px;
     }
 
-    .time-item,
-    .time-item:nth-child(even){
+    .timeline-item,
+    .timeline-item:nth-child(even){
         width:100%;
-        left:0;
+        margin-left:0;
+        padding-left:38px;
         text-align:left;
-        padding-left:40px;
     }
 
-    .time-item:nth-child(odd) .time-dot,
-    .time-item:nth-child(even) .time-dot{
-        left:2px;
+    .timeline-item:nth-child(odd) .timeline-dot,
+    .timeline-item:nth-child(even) .timeline-dot{
+        left:0;
         right:auto;
     }
+}
 
-    .story-box{
-        padding:25px;
+@media(max-width:600px){
+
+    .hero h1{
+        letter-spacing:-3px;
     }
 
-    .center-text h2{
-        font-size:45px;
+    .section{
+        padding:75px 16px;
+    }
+
+    .memory-grid,
+    .special-grid,
+    .mystery-grid{
+        grid-template-columns:1fr;
+    }
+
+    .countdown{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .constellation{
+        height:400px;
+    }
+
+    .chapter-btn{
+        font-size:9px;
+    }
+
+    .chapter-btn span{
+        font-size:17px;
+    }
+
+    .secret-room{
+        padding:30px 20px;
     }
 }
 </style>
 </head>
 
+
 <body>
 
-<div id="stars"></div>
+<!-- =======================================================
+     BACKGROUND
+======================================================= -->
 
-<!-- ================= LOGIN ================= -->
+<div id="universe">
 
-<div id="loginPage">
+    <div class="float-orb orb1"></div>
+    <div class="float-orb orb2"></div>
 
-    <div class="login-card">
+</div>
 
-        <div class="logo">💫</div>
 
-        <h1>R × A</h1>
+<!-- =======================================================
+     LOGIN
+======================================================= -->
 
-        <p>
-            Some friendships don't need a reason.<br>
-            They simply become a beautiful part of life.
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-symbol">
+            🫶
+        </div>
+
+        <h1>
+            THE UNBREAKABLE FRIENDSHIP
+        </h1>
+
+        <p class="subtitle">
+
+            Some friendships are ordinary.<br>
+            Some become unforgettable.
+
             <br><br>
-            Enter the two names and the year
-            to enter your private friendship world.
+
+            Enter the names and the year
+            to unlock this private world.
+
         </p>
 
         <input
-            id="name1"
-            class="input"
-            placeholder="First Name"
-        >
+            id="loginName1"
+            class="field"
+            placeholder="Name 1">
 
         <input
-            id="name2"
-            class="input"
-            placeholder="Second Name"
-        >
+            id="loginName2"
+            class="field"
+            placeholder="Name 2">
 
         <input
-            id="friendYear"
-            class="input"
+            id="loginYear"
+            class="field"
             type="number"
-            placeholder="Friendship Year"
-        >
+            placeholder="Friendship Year">
 
-        <button class="enter-btn" onclick="enterWorld()">
-            ENTER OUR WORLD ✨
+        <button
+            class="primary-btn"
+            onclick="unlock()">
+
+            UNLOCK OUR STORY ✨
+
         </button>
 
         <div id="error"></div>
@@ -906,180 +1305,294 @@ section{
 </div>
 
 
-<!-- ================= MAIN ================= -->
+<!-- =======================================================
+     APP
+======================================================= -->
 
-<div id="mainPage">
-
-<nav>
-
-    <button onclick="go('home')">Home</button>
-    <button onclick="go('story')">Our Story</button>
-    <button onclick="go('birthdays')">Birthdays</button>
-    <button onclick="go('memories')">Memories</button>
-    <button onclick="go('secret')">Secret World</button>
-    <button onclick="go('forever')">Forever</button>
-
-</nav>
+<div id="app">
 
 
-<!-- HERO -->
+<!-- TOP BAR -->
 
-<div id="home" class="hero">
+<header class="topbar">
 
-    <div class="hero-inner">
+    <div class="brand">
 
-        <div class="small-title">
-            A story that started in 2018
+        <div class="brand-dot">
+            🫶
         </div>
 
-        <h1>R × A</h1>
+        <span>
+            OUR FRIENDSHIP
+        </span>
 
-        <div class="hero-sub">
-            Two different people.<br>
-            Two different birthdays.<br>
-            One unexpectedly beautiful friendship.
-        </div>
+    </div>
+
+    <div class="top-actions">
 
         <button
-            class="scroll-btn"
-            onclick="go('story')">
-            Discover Our Story ↓
+            class="icon-btn"
+            onclick="toggleTheme()">
+            🌓
+        </button>
+
+        <button
+            class="icon-btn"
+            onclick="showDaily()">
+            ✨
         </button>
 
     </div>
 
-</div>
+</header>
 
 
-<!-- STORY -->
+<!-- =======================================================
+     HOME
+======================================================= -->
 
-<section id="story">
+<main>
 
-    <div class="section-head">
-        <span>Chapter 01</span>
-        <h2>Our Story</h2>
+<section
+    id="home"
+    class="hero">
 
-        <p>
-            Not every connection needs a name.
-            Some connections are simply understood.
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            A friendship story • since 2019
+        </div>
+
+        <h1>
+            TWO SOULS.<br>
+            ONE FRIENDSHIP.
+        </h1>
+
+        <div class="hero-title-small">
+            Aashiya Begum × Roshan Raj
+        </div>
+
+        <p class="hero-description">
+
+            Two birthdays.
+            Two personalities.
+            Two different journeys.
+
+            <br><br>
+
+            But somewhere between ordinary days
+            and countless little moments,
+            a pure friendship became something
+            worth remembering forever.
+
         </p>
-    </div>
 
-    <div class="story-box">
+        <div class="hero-actions">
 
-        <p>
-            <strong>2018.</strong>
-            That's where this story begins.
+            <button
+                class="hero-btn"
+                onclick="scrollToId('story')">
+                📖 Start Story
+            </button>
 
-            <br><br>
+            <button
+                class="hero-btn"
+                onclick="scrollToId('birthdays')">
+                🎂 Birthdays
+            </button>
 
-            What started as a simple friendship slowly became
-            something much more meaningful.
-
-            <br><br>
-
-            There are friendships where people talk every day.
-            There are friendships where people meet every day.
-
-            And then there are friendships where,
-            even when life becomes busy,
-            the connection somehow remains.
-
-            <br><br>
-
-            That's what makes
-            <strong>R × A</strong>
-            different.
-
-            <br><br>
-
-            No expectations.
-            No conditions.
-            No need to prove anything.
-
-            Just genuine care,
-            understanding,
-            support,
-            laughter,
-            memories,
-            arguments,
-            forgiveness
-            and countless little moments.
-
-            <br><br>
-
-            A pure friendship that grew quietly
-            and became one of the most beautiful chapters
-            of life.
-        </p>
+        </div>
 
     </div>
 
 </section>
 
 
-<!-- BIRTHDAYS -->
+<!-- =======================================================
+     CHAPTER 1 — STORY
+======================================================= -->
 
-<section id="birthdays">
+<section
+    id="story"
+    class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 02</span>
+        <div class="chapter-number">
+            Chapter 01
+        </div>
 
-        <h2>Two Birthdays</h2>
+        <h2>
+            The Story
+        </h2>
 
         <p>
-            Two dates that brought two different souls
-            into this world.
+            It all started in 2019.
         </p>
 
     </div>
 
-    <div class="birth-grid">
 
-        <div class="birth-card">
+    <div class="profile-grid">
 
-            <div class="avatar">👩</div>
+        <div class="profile-card">
 
-            <h3>Aashiya Begum</h3>
+            <div class="profile-icon">
+                👩🏻
+            </div>
 
-            <div class="dob">
+            <h3>
+                Aashiya Begum
+            </h3>
+
+            <p>
+
+                A person who became a special part
+                of this friendship story.
+
+                <br><br>
+
+                Her birthday is
+                <strong>10 August 2006</strong>.
+
+                <br><br>
+
+                The beautiful thing about a person
+                isn't just their personality.
+
+                It's the memories,
+                conversations,
+                laughter and comfort
+                they create with another person.
+
+            </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <div class="profile-icon">
+                👦🏻
+            </div>
+
+            <h3>
+                Roshan Raj
+            </h3>
+
+            <p>
+
+                The other half of this friendship story.
+
+                <br><br>
+
+                Birthday:
+                <strong>16 December 2006</strong>.
+
+                <br><br>
+
+                And since 2019,
+                this friendship has collected
+                conversations,
+                memories,
+                funny moments,
+                emotional moments
+                and countless little stories.
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 2 — BIRTHDAYS
+======================================================= -->
+
+<section
+    id="birthdays"
+    class="section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 02
+        </div>
+
+        <h2>
+            Two Birthdays 🎂
+        </h2>
+
+        <p>
+            Two special dates.
+            Two different journeys.
+        </p>
+
+    </div>
+
+
+    <div class="birthday-grid">
+
+        <!-- AASHIYA -->
+
+        <div class="birthday-card">
+
+            <div class="person-icon">
+                👩🏻
+            </div>
+
+            <h3>
+                Aashiya Begum
+            </h3>
+
+            <div class="birth-date">
                 10 August 2006
             </div>
 
             <div
-                class="age"
-                id="aashiyaAge">
+                id="aashiyaAge"
+                class="age-number">
                 --
             </div>
 
-            <div class="countdown"
-                 id="aashiyaBirthday">
-                Calculating...
+            <div
+                id="aashiyaCountdown"
+                class="countdown">
+
             </div>
 
         </div>
 
 
-        <div class="birth-card">
+        <!-- ROSHAN -->
 
-            <div class="avatar">👨</div>
+        <div class="birthday-card">
 
-            <h3>Roshan Raj</h3>
+            <div class="person-icon">
+                👦🏻
+            </div>
 
-            <div class="dob">
+            <h3>
+                Roshan Raj
+            </h3>
+
+            <div class="birth-date">
                 16 December 2006
             </div>
 
             <div
-                class="age"
-                id="roshanAge">
+                id="roshanAge"
+                class="age-number">
                 --
             </div>
 
-            <div class="countdown"
-                 id="roshanBirthday">
-                Calculating...
+            <div
+                id="roshanCountdown"
+                class="countdown">
+
             </div>
 
         </div>
@@ -1089,101 +1602,79 @@ section{
 </section>
 
 
-<!-- SPECIAL FRIENDSHIP -->
+<!-- =======================================================
+     FRIENDSHIP STATS
+======================================================= -->
 
-<section>
+<section class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 03</span>
+        <div class="chapter-number">
+            Friendship Stats
+        </div>
 
-        <h2>Why This Friendship Is Different</h2>
-
-        <p>
-            A friendship isn't measured by time.
-            It's measured by what remains after time passes.
-        </p>
+        <h2>
+            The Numbers
+        </h2>
 
     </div>
 
-    <div class="traits">
 
-        <div class="trait">
+    <div class="stats">
 
-            <div class="trait-icon">🤝</div>
+        <div class="stat">
 
-            <h3>Pure</h3>
+            <div
+                id="friendYears"
+                class="stat-number">
+                7+
+            </div>
 
-            <p>
-                No hidden expectations.
-                Just genuine friendship and respect.
-            </p>
-
-        </div>
-
-        <div class="trait">
-
-            <div class="trait-icon">🫶</div>
-
-            <h3>Understanding</h3>
-
-            <p>
-                Sometimes words aren't necessary.
-                Understanding can exist silently.
-            </p>
+            <div class="stat-label">
+                Years of Friendship
+            </div>
 
         </div>
 
-        <div class="trait">
 
-            <div class="trait-icon">😂</div>
+        <div class="stat">
 
-            <h3>Unlimited Memories</h3>
+            <div
+                id="friendDays"
+                class="stat-number">
+                --
+            </div>
 
-            <p>
-                Random conversations, jokes,
-                funny moments and unforgettable memories.
-            </p>
-
-        </div>
-
-        <div class="trait">
-
-            <div class="trait-icon">🛡️</div>
-
-            <h3>Always There</h3>
-
-            <p>
-                Good days and bad days.
-                Friendship means being there.
-            </p>
+            <div class="stat-label">
+                Days Together
+            </div>
 
         </div>
 
-        <div class="trait">
 
-            <div class="trait-icon">🌱</div>
+        <div class="stat">
 
-            <h3>Growing Together</h3>
+            <div class="stat-number">
+                ∞
+            </div>
 
-            <p>
-                From 2018 to 2026,
-                both changed and grew,
-                but the connection remained.
-            </p>
+            <div class="stat-label">
+                Memories
+            </div>
 
         </div>
 
-        <div class="trait">
 
-            <div class="trait-icon">♾️</div>
+        <div class="stat">
 
-            <h3>No Expiry Date</h3>
+            <div class="stat-number">
+                1
+            </div>
 
-            <p>
-                Some friendships aren't meant
-                for one chapter.
-            </p>
+            <div class="stat-label">
+                Pure Friendship
+            </div>
 
         </div>
 
@@ -1192,36 +1683,51 @@ section{
 </section>
 
 
-<!-- TIMELINE -->
+<!-- =======================================================
+     CHAPTER 3 — TIMELINE
+======================================================= -->
 
-<section>
+<section
+    id="journey"
+    class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 04</span>
+        <div class="chapter-number">
+            Chapter 03
+        </div>
 
-        <h2>2018 → 2026</h2>
+        <h2>
+            Our Journey
+        </h2>
 
         <p>
-            Eight years of a friendship story.
+            2019 → 2026
         </p>
 
     </div>
+
 
     <div class="timeline">
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2018</div>
+                <div class="year">
+                    2019
+                </div>
 
-                <h3>The Beginning</h3>
+                <h3>
+                    The Beginning
+                </h3>
 
                 <p>
-                    The year when the story started.
+                    A simple beginning
+                    that nobody knew
+                    would become a beautiful story.
                 </p>
 
             </div>
@@ -1229,40 +1735,24 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2019</div>
+                <div class="year">
+                    2020
+                </div>
 
-                <h3>Getting Closer</h3>
-
-                <p>
-                    More conversations.
-                    More memories.
-                    More understanding.
-                </p>
-
-            </div>
-
-        </div>
-
-
-        <div class="time-item">
-
-            <div class="time-dot"></div>
-
-            <div class="time-content">
-
-                <div class="year">2020</div>
-
-                <h3>A Different Year</h3>
+                <h3>
+                    A Different Chapter
+                </h3>
 
                 <p>
                     Life changed,
-                    but friendship remained.
+                    days changed,
+                    but friendship continued.
                 </p>
 
             </div>
@@ -1270,19 +1760,24 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2021</div>
+                <div class="year">
+                    2021
+                </div>
 
-                <h3>More Memories</h3>
+                <h3>
+                    More Understanding
+                </h3>
 
                 <p>
-                    Another chapter
-                    added to the story.
+                    More conversations,
+                    more understanding,
+                    more memories.
                 </p>
 
             </div>
@@ -1290,15 +1785,19 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2022</div>
+                <div class="year">
+                    2022
+                </div>
 
-                <h3>Growing Together</h3>
+                <h3>
+                    Growing Together
+                </h3>
 
                 <p>
                     Different experiences,
@@ -1310,19 +1809,23 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2023</div>
+                <div class="year">
+                    2023
+                </div>
 
-                <h3>More Than Memories</h3>
+                <h3>
+                    More Memories
+                </h3>
 
                 <p>
-                    The friendship became
-                    a part of everyday life.
+                    More random conversations,
+                    jokes and unforgettable moments.
                 </p>
 
             </div>
@@ -1330,19 +1833,23 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2024</div>
+                <div class="year">
+                    2024
+                </div>
 
-                <h3>Still Here</h3>
+                <h3>
+                    Still Here
+                </h3>
 
                 <p>
-                    Years passed.
-                    The bond stayed.
+                    Time moved forward.
+                    The friendship stayed.
                 </p>
 
             </div>
@@ -1350,19 +1857,24 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2025</div>
+                <div class="year">
+                    2025
+                </div>
 
-                <h3>Another Chapter</h3>
+                <h3>
+                    Another Chapter
+                </h3>
 
                 <p>
+                    New days.
                     New memories.
-                    Same connection.
+                    Same bond.
                 </p>
 
             </div>
@@ -1370,18 +1882,22 @@ section{
         </div>
 
 
-        <div class="time-item">
+        <div class="timeline-item">
 
-            <div class="time-dot"></div>
+            <div class="timeline-dot"></div>
 
-            <div class="time-content">
+            <div class="timeline-card">
 
-                <div class="year">2026</div>
+                <div class="year">
+                    2026
+                </div>
 
-                <h3>Here We Are</h3>
+                <h3>
+                    Here We Are
+                </h3>
 
                 <p>
-                    Still writing the story.
+                    The story is still being written.
                 </p>
 
             </div>
@@ -1393,30 +1909,204 @@ section{
 </section>
 
 
-<!-- MEMORIES -->
+<!-- =======================================================
+     CHAPTER 4 — PERSONALITY
+======================================================= -->
 
-<section id="memories">
+<section
+    id="personality"
+    class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 05</span>
+        <div class="chapter-number">
+            Chapter 04
+        </div>
 
-        <h2>Memory Vault</h2>
+        <h2>
+            What Makes It Special
+        </h2>
 
         <p>
-            Every memory deserves a place.
+            A friendship is made from little things.
         </p>
 
     </div>
 
-    <div class="memory-controls">
+
+    <div class="special-grid">
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🫶
+            </div>
+
+            <div>
+
+                <h3>
+                    Pure
+                </h3>
+
+                <p>
+                    No unnecessary expectations.
+                    Just genuine friendship.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🤝
+            </div>
+
+            <div>
+
+                <h3>
+                    Trust
+                </h3>
+
+                <p>
+                    The kind of connection
+                    where understanding matters.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                😂
+            </div>
+
+            <div>
+
+                <h3>
+                    Randomness
+                </h3>
+
+                <p>
+                    The funniest conversations
+                    are often completely random.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h3>
+                    Support
+                </h3>
+
+                <p>
+                    Being there when
+                    life doesn't feel easy.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🧠
+            </div>
+
+            <div>
+
+                <h3>
+                    Understanding
+                </h3>
+
+                <p>
+                    Sometimes one look,
+                    one word or silence
+                    is enough.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                ♾️
+            </div>
+
+            <div>
+
+                <h3>
+                    Unbreakable
+                </h3>
+
+                <p>
+                    Time can change many things,
+                    but meaningful friendship
+                    can remain.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 5 — MEMORY VAULT
+======================================================= -->
+
+<section
+    id="memories"
+    class="section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 05
+        </div>
+
+        <h2>
+            Memory Vault 📸
+        </h2>
+
+        <p>
+            Save your favourite memories inside this world.
+        </p>
+
+    </div>
+
+
+    <div class="memory-tools">
+
+        <button onclick="openMemoryModal()">
+            + Add Memory
+        </button>
 
         <button onclick="filterMemories('all')">
             All
-        </button>
-
-        <button onclick="filterMemories('2018')">
-            2018
         </button>
 
         <button onclick="filterMemories('2019')">
@@ -1453,173 +2143,340 @@ section{
 
     </div>
 
-    <button
-        class="add-memory"
-        onclick="openMemoryModal()">
-        + ADD OUR MEMORY
-    </button>
 
     <div
         id="memoryGrid"
         class="memory-grid">
-    </div>
-
-</section>
-
-
-<!-- SECRET WORLD -->
-
-<section id="secret">
-
-    <div class="section-head">
-
-        <span>Chapter 06</span>
-
-        <h2>Secret World 🔐</h2>
-
-        <p>
-            Not everything needs to be public.
-            Some memories belong only to us.
-        </p>
-
-    </div>
-
-
-    <div class="secret-grid">
-
-        <div class="secret-card">
-
-            <div>
-                <div class="icon">💌</div>
-
-                <h3>Open When You're Sad</h3>
-
-                <p>
-                    A small message for difficult days.
-                </p>
-            </div>
-
-            <button onclick="
-                openSecret(
-                'Open When You’re Sad',
-                'Whatever happens, remember this: you are stronger than the difficult moment you are going through.\\n\\nTake a breath. Things will get better.\\n\\nAnd somewhere in this world, your friend is always wishing for your happiness. 💙'
-                )">
-                Open Letter
-            </button>
-
-        </div>
-
-
-        <div class="secret-card">
-
-            <div>
-                <div class="icon">😂</div>
-
-                <h3>Inside Jokes</h3>
-
-                <p>
-                    The jokes nobody else understands.
-                </p>
-            </div>
-
-            <button onclick="
-                openSecret(
-                'Our Secret Jokes',
-                'This section is reserved for the jokes, words, moments and random conversations that only R × A understands. 😂'
-                )">
-                Enter
-            </button>
-
-        </div>
-
-
-        <div class="secret-card">
-
-            <div>
-                <div class="icon">🎙️</div>
-
-                <h3>Voice Memories</h3>
-
-                <p>
-                    Keep special voice messages here.
-                </p>
-            </div>
-
-            <button onclick="
-                openSecret(
-                'Voice Memories',
-                'Future version: add voice recordings and play them directly inside the friendship vault.'
-                )">
-                Open
-            </button>
-
-        </div>
-
-
-        <div class="secret-card">
-
-            <div>
-                <div class="icon">🫶</div>
-
-                <h3>Friendship Promises</h3>
-
-                <p>
-                    Small promises that matter.
-                </p>
-            </div>
-
-            <button onclick="
-                openSecret(
-                'Our Promise',
-                'No matter how busy life becomes, never forget the friendship that started in 2018.\\n\\nRespect. Understand. Support. Forgive. Remember.\\n\\nAnd keep the friendship pure. 🤝'
-                )">
-                Read
-            </button>
-
-        </div>
 
     </div>
 
 </section>
 
 
-<!-- MYSTERY -->
+<!-- =======================================================
+     CHAPTER 6 — QUIZ
+======================================================= -->
 
-<section>
+<section
+    id="quiz"
+    class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 07</span>
+        <div class="chapter-number">
+            Chapter 06
+        </div>
 
-        <h2>Mystery Boxes 🎁</h2>
+        <h2>
+            How Well Do You Know Her? 🧠
+        </h2>
 
         <p>
-            You don't know what's inside until you open it.
+            A small friendship challenge.
         </p>
 
     </div>
 
-    <div class="mystery">
+
+    <div class="quiz-box">
 
         <div
-            class="box"
+            id="question"
+            class="question">
+            Loading...
+        </div>
+
+        <div id="options"></div>
+
+        <div
+            id="quizResult"
+            class="quiz-result">
+            Score: 0
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 7 — SECRET WORLD
+======================================================= -->
+
+<section
+    id="secret"
+    class="section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 07
+        </div>
+
+        <h2>
+            Secret World 🔐
+        </h2>
+
+        <p>
+            Some things are better kept inside the friendship.
+        </p>
+
+    </div>
+
+
+    <div class="special-grid">
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                💌
+            </div>
+
+            <div>
+
+                <h3>
+                    Open When Sad
+                </h3>
+
+                <p>
+                    A little message for difficult days.
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretMessage(
+                    'Open When You Are Sad',
+                    sadMessage
+                    )">
+                    Open
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🌧️
+            </div>
+
+            <div>
+
+                <h3>
+                    Open When Lonely
+                </h3>
+
+                <p>
+                    A reminder that you are not alone.
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretMessage(
+                    'Open When You Feel Lonely',
+                    lonelyMessage
+                    )">
+                    Open
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                😂
+            </div>
+
+            <div>
+
+                <h3>
+                    Inside Jokes
+                </h3>
+
+                <p>
+                    Things only this friendship understands.
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretMessage(
+                    'Inside Jokes',
+                    jokeMessage
+                    )">
+                    Enter
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🎙️
+            </div>
+
+            <div>
+
+                <h3>
+                    Voice Memories
+                </h3>
+
+                <p>
+                    Keep special voice moments here.
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretMessage(
+                    'Voice Memories',
+                    voiceMessage
+                    )">
+                    Open
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                📝
+            </div>
+
+            <div>
+
+                <h3>
+                    Friendship Promise
+                </h3>
+
+                <p>
+                    One promise worth remembering.
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretMessage(
+                    'Our Promise',
+                    promiseMessage
+                    )">
+                    Read
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="special-card">
+
+            <div class="special-icon">
+                🔒
+            </div>
+
+            <div>
+
+                <h3>
+                    Hidden Room
+                </h3>
+
+                <p>
+                    There may be something hidden here...
+                </p>
+
+                <button
+                    class="small-btn"
+                    onclick="secretRoom()">
+                    Unlock
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 8 — MYSTERY
+======================================================= -->
+
+<section
+    id="mystery"
+    class="section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 08
+        </div>
+
+        <h2>
+            Mystery Boxes 🎁
+        </h2>
+
+        <p>
+            Choose one.
+            Don't think too much.
+        </p>
+
+    </div>
+
+
+    <div class="mystery-grid">
+
+        <div
+            class="mystery-box"
             onclick="mystery(1)">
-            <span>🎁</span>
-            <p>Mystery #01</p>
+
+            <div class="gift">
+                🎁
+            </div>
+
+            <span>
+                Mystery One
+            </span>
+
         </div>
 
+
         <div
-            class="box"
+            class="mystery-box"
             onclick="mystery(2)">
-            <span>🎁</span>
-            <p>Mystery #02</p>
+
+            <div class="gift">
+                🎁
+            </div>
+
+            <span>
+                Mystery Two
+            </span>
+
         </div>
 
+
         <div
-            class="box"
+            class="mystery-box"
             onclick="mystery(3)">
-            <span>🎁</span>
-            <p>Mystery #03</p>
+
+            <div class="gift">
+                🎁
+            </div>
+
+            <span>
+                Mystery Three
+            </span>
+
         </div>
 
     </div>
@@ -1627,69 +2484,81 @@ section{
 </section>
 
 
-<!-- CONSTELLATION -->
+<!-- =======================================================
+     CHAPTER 9 — CONSTELLATION
+======================================================= -->
 
-<section>
+<section
+    id="constellation"
+    class="section">
 
-    <div class="section-head">
+    <div class="section-header">
 
-        <span>Chapter 08</span>
+        <div class="chapter-number">
+            Chapter 09
+        </div>
 
-        <h2>Our Constellation</h2>
+        <h2>
+            Friendship Constellation 🌌
+        </h2>
 
         <p>
-            Two stars.
-            One connection.
+            Two points in a huge universe,
+            connected by one story.
         </p>
 
     </div>
+
 
     <div class="constellation">
 
         <div
-            class="node"
-            style="left:25%;top:30%">
+            class="constellation-star"
+            style="left:20%;top:25%">
         </div>
 
         <div
-            class="node"
-            style="left:72%;top:65%">
+            class="constellation-star"
+            style="left:75%;top:68%">
         </div>
 
         <div
-            class="node"
-            style="left:48%;top:50%">
+            class="constellation-star"
+            style="left:45%;top:50%">
         </div>
 
         <div
-            class="node"
-            style="left:35%;top:70%">
+            class="constellation-star"
+            style="left:33%;top:72%">
         </div>
 
         <div
-            class="node"
-            style="left:65%;top:25%">
+            class="constellation-star"
+            style="left:65%;top:24%">
         </div>
 
-        <div class="line"
-             style="
-             left:26%;
-             top:31%;
-             width:430px;
-             transform:rotate(25deg);
-             ">
+        <div
+            class="constellation-line"
+            style="
+            left:21%;
+            top:26%;
+            width:390px;
+            transform:rotate(24deg);
+            ">
         </div>
 
-        <div class="center-text">
+        <div class="constellation-center">
 
-            <div class="small-title">
-                Connected since
+            <div class="eyebrow">
+                connected since
             </div>
 
-            <h2>2018</h2>
+            <h2>
+                2019
+            </h2>
 
             <p>
-                R × A
+                A friendship worth remembering
             </p>
 
         </div>
@@ -1699,168 +2568,244 @@ section{
 </section>
 
 
-<!-- PROMISE -->
+<!-- =======================================================
+     DAILY MESSAGE
+======================================================= -->
 
-<section>
+<section class="section">
 
-    <div class="promise">
+    <div class="section-header">
 
-        <h2>One Simple Promise</h2>
-
-        <p>
-
-            We don't know where life will take us.
-
-            <br><br>
-
-            We don't know how many things will change.
-
-            <br><br>
-
-            But one thing should never change:
-
-            <br><br>
-
-            <strong>
-                The respect, care and pure friendship
-                that started in 2018.
-            </strong>
-
-            <br><br>
-
-            Because some people become memories.
-
-            <br>
-
-            Some become chapters.
-
-            <br><br>
-
-            And some become a beautiful part
-            of your story forever.
-
-        </p>
-
-    </div>
-
-</section>
-
-
-<!-- FOREVER -->
-
-<section id="forever" class="final">
-
-    <div>
-
-        <div class="small-title">
-            Final Chapter
+        <div class="chapter-number">
+            Daily
         </div>
 
         <h2>
-            2018 → 2026
+            Today's Friendship Note ✨
         </h2>
 
-        <div class="forever">
-            → FOREVER
+    </div>
+
+
+    <div class="daily">
+
+        <div
+            id="dailyMessage"
+            class="daily-message">
+            Loading...
         </div>
-
-        <p>
-
-            This isn't the end of our story.
-
-            <br><br>
-
-            It's just the place where we stop
-            for a moment and look back at everything
-            we've created together.
-
-            <br><br>
-
-            Eight years.
-
-            Countless conversations.
-
-            Countless memories.
-
-            Countless moments.
-
-            <br><br>
-
-            And still...
-
-            <br><br>
-
-            <strong>
-                There are more chapters waiting to be written.
-            </strong>
-
-        </p>
-
-        <h2 style="margin-top:40px">
-            R ❤️ A
-        </h2>
-
-        <p>
-            A pure friendship story.
-        </p>
 
     </div>
 
 </section>
+
+
+<!-- =======================================================
+     FINAL
+======================================================= -->
+
+<section
+    id="forever"
+    class="final-section">
+
+    <div class="final-content">
+
+        <div class="eyebrow">
+            The Final Chapter
+        </div>
+
+        <h2>
+            2019<br>
+            → 2026
+        </h2>
+
+        <div class="final-line">
+            AND THE STORY CONTINUES...
+        </div>
+
+        <p>
+
+            Years passed.
+
+            People changed.
+
+            Life moved forward.
+
+            <br><br>
+
+            But somewhere in all those years,
+            a simple friendship became a collection
+            of memories that can never be recreated
+            in exactly the same way.
+
+            <br><br>
+
+            That's what makes it special.
+
+            <br><br>
+
+            <strong>
+                Not because it was perfect.
+                But because it was real.
+            </strong>
+
+        </p>
+
+        <div
+            style="
+            font-size:55px;
+            margin-top:30px;
+            ">
+            🫶
+        </div>
+
+        <div
+            style="
+            margin-top:15px;
+            color:#c99aff;
+            font-size:20px;
+            letter-spacing:3px;
+            ">
+            PURE • CLOSE • UNBREAKABLE
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =======================================================
+     BOTTOM CHAPTER NAVIGATION
+======================================================= -->
+
+<div class="chapter-bar">
+
+    <button
+        class="chapter-btn active"
+        onclick="chapterNav('home',this)">
+
+        <span>🏠</span>
+        Home
+
+    </button>
+
+
+    <button
+        class="chapter-btn"
+        onclick="chapterNav('story',this)">
+
+        <span>📖</span>
+        Story
+
+    </button>
+
+
+    <button
+        class="chapter-btn"
+        onclick="chapterNav('birthdays',this)">
+
+        <span>🎂</span>
+        Birthdays
+
+    </button>
+
+
+    <button
+        class="chapter-btn"
+        onclick="chapterNav('memories',this)">
+
+        <span>📸</span>
+        Memories
+
+    </button>
+
+
+    <button
+        class="chapter-btn"
+        onclick="chapterNav('secret',this)">
+
+        <span>🔐</span>
+        Secret
+
+    </button>
+
+
+    <button
+        class="chapter-btn"
+        onclick="chapterNav('forever',this)">
+
+        <span>♾️</span>
+        Forever
+
+    </button>
+
+</div>
 
 </div>
 
 
-<!-- MEMORY MODAL -->
+<!-- =======================================================
+     MEMORY MODAL
+======================================================= -->
 
-<div id="memoryModal" class="modal">
+<div
+    id="memoryModal"
+    class="modal">
 
     <div class="modal-card">
 
         <button
-            class="close"
-            onclick="closeMemoryModal()">
+            class="modal-close"
+            onclick="closeModal('memoryModal')">
             ×
         </button>
 
-        <h2>Add Our Memory</h2>
+        <h2>
+            Add A Memory 📸
+        </h2>
 
         <input
             id="memoryTitle"
-            class="input"
+            class="field"
             placeholder="Memory title">
 
         <select
             id="memoryYear"
-            class="input">
+            class="field">
 
-            <option>2018</option>
-            <option>2019</option>
-            <option>2020</option>
-            <option>2021</option>
-            <option>2022</option>
-            <option>2023</option>
-            <option>2024</option>
-            <option>2025</option>
-            <option>2026</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
 
         </select>
 
         <input
+            id="memoryDate"
+            class="field"
+            type="date">
+
+        <input
             id="memoryPhoto"
-            class="input"
+            class="field"
             type="file"
             accept="image/*">
 
         <textarea
             id="memoryDescription"
-            class="input"
-            rows="4"
+            class="field"
+            rows="5"
             placeholder="Write about this memory">
         </textarea>
 
         <button
-            class="enter-btn"
+            class="primary-btn"
             onclick="saveMemory()">
             SAVE MEMORY ❤️
         </button>
@@ -1870,143 +2815,223 @@ section{
 </div>
 
 
-<!-- SECRET MODAL -->
+<!-- =======================================================
+     MESSAGE MODAL
+======================================================= -->
 
-<div id="secretModal" class="modal">
+<div
+    id="messageModal"
+    class="modal">
 
     <div class="modal-card">
 
         <button
-            class="close"
-            onclick="closeSecret()">
+            class="modal-close"
+            onclick="closeModal('messageModal')">
             ×
         </button>
 
-        <h2 id="secretTitle"></h2>
+        <h2 id="messageTitle">
+            Secret
+        </h2>
 
-        <p id="secretText"></p>
+        <p id="messageText">
+        </p>
 
     </div>
 
 </div>
 
 
+<!-- =======================================================
+     TOAST
+======================================================= -->
+
 <div id="toast"></div>
 
 
 <script>
 
-/* =========================
-   STARS
-========================= */
+/* =========================================================
+   STAR GENERATOR
+========================================================= */
 
-const stars=document.getElementById("stars");
+const universe=
+    document.getElementById("universe");
 
-for(let i=0;i<180;i++){
+for(let i=0;i<220;i++){
 
-    const s=document.createElement("div");
+    const star=
+        document.createElement("div");
 
-    s.className="star";
+    star.className="star";
 
-    s.style.left=Math.random()*100+"%";
-    s.style.top=Math.random()*100+"%";
+    const size=
+        Math.random()*3+1;
 
-    s.style.animationDelay=
-        Math.random()*4+"s";
+    star.style.width=size+"px";
+    star.style.height=size+"px";
 
-    s.style.opacity=
-        Math.random();
+    star.style.left=
+        Math.random()*100+"%";
 
-    stars.appendChild(s);
+    star.style.top=
+        Math.random()*100+"%";
+
+    star.style.setProperty(
+        "--duration",
+        (Math.random()*4+2)+"s"
+    );
+
+    star.style.animationDelay=
+        Math.random()*5+"s";
+
+    universe.appendChild(star);
+
 }
 
 
-/* =========================
+/* =========================================================
    LOGIN
-========================= */
+========================================================= */
 
-function cleanName(name){
+function normalize(value){
 
-    return name
+    return value
         .trim()
         .replace(/\s+/g," ")
         .toUpperCase();
 
 }
 
-function enterWorld(){
 
-    const n1=cleanName(
-        document.getElementById("name1").value
-    );
+function unlock(){
 
-    const n2=cleanName(
-        document.getElementById("name2").value
-    );
-
-    const year=
-        document.getElementById("friendYear").value;
-
-    const validNames=
-        (n1==="ROSHAN RAJ" &&
-         n2==="AASHIYA BEGUM")
-        ||
-        (n1==="AASHIYA BEGUM" &&
-         n2==="ROSHAN RAJ");
-
-    if(validNames && year==="2019"){
-
-        document.getElementById("loginPage")
-            .style.display="none";
-
-        document.getElementById("mainPage")
-            .style.display="block";
-
-        toast(
-            "Welcome to the R × A friendship world ❤️"
+    const a=
+        normalize(
+            document.getElementById(
+                "loginName1"
+            ).value
         );
 
-        updateAges();
+    const b=
+        normalize(
+            document.getElementById(
+                "loginName2"
+            ).value
+        );
 
-        loadMemories();
+    const year=
+        document.getElementById(
+            "loginYear"
+        ).value;
+
+    const validNames=
+        (
+            a==="ROSHAN RAJ" &&
+            b==="AASHIYA BEGUM"
+        )
+        ||
+        (
+            a==="AASHIYA BEGUM" &&
+            b==="ROSHAN RAJ"
+        );
+
+    if(
+        validNames &&
+        year==="2019"
+    ){
+
+        document.getElementById(
+            "loginScreen"
+        ).style.display="none";
+
+        document.getElementById(
+            "app"
+        ).style.display="block";
+
+        startApp();
+
+        toast(
+            "Friendship world unlocked 🫶"
+        );
 
     }else{
 
-        document.getElementById("error")
-            .textContent=
-            "Names or friendship year doesn't match. Try again.";
+        document.getElementById(
+            "error"
+        ).textContent=
+        "Access denied — check the two names and year.";
 
     }
 
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
+/* =========================================================
+   APP START
+========================================================= */
 
-function go(id){
+function startApp(){
 
-    document
-        .getElementById(id)
-        .scrollIntoView({
-            behavior:"smooth"
-        });
+    updateBirthdayData();
+
+    updateFriendshipDays();
+
+    loadMemories();
+
+    setupQuiz();
+
+    dailyMessage();
 
 }
 
 
-/* =========================
-   AGE CALCULATION
-========================= */
+/* =========================================================
+   SCROLL
+========================================================= */
 
-function calculateAge(
-    year,
-    month,
-    day
-){
+function scrollToId(id){
 
-    const today=new Date();
+    const element=
+        document.getElementById(id);
+
+    if(element){
+
+        element.scrollIntoView({
+            behavior:"smooth"
+        });
+
+    }
+
+}
+
+
+function chapterNav(id,button){
+
+    scrollToId(id);
+
+    document
+        .querySelectorAll(
+            ".chapter-btn"
+        )
+        .forEach(
+            b=>b.classList.remove("active")
+        );
+
+    button.classList.add("active");
+
+}
+
+
+/* =========================================================
+   AGE
+========================================================= */
+
+function getAge(year,month,day){
+
+    const today=
+        new Date();
 
     let age=
         today.getFullYear()-year;
@@ -2019,26 +3044,33 @@ function calculateAge(
         );
 
     if(today<birthday){
+
         age--;
+
     }
 
     return age;
 
 }
 
-function nextBirthday(
-    month,
-    day
-){
 
-    const now=new Date();
+/* =========================================================
+   NEXT BIRTHDAY
+========================================================= */
+
+function getNextBirthday(month,day){
+
+    const now=
+        new Date();
 
     let next=
         new Date(
             now.getFullYear(),
             month-1,
             day,
-            0,0,0
+            0,
+            0,
+            0
         );
 
     if(next<=now){
@@ -2048,7 +3080,9 @@ function nextBirthday(
                 now.getFullYear()+1,
                 month-1,
                 day,
-                0,0,0
+                0,
+                0,
+                0
             );
 
     }
@@ -2057,147 +3091,323 @@ function nextBirthday(
 
 }
 
-function birthdayText(
-    month,
-    day
-){
 
-    const now=new Date();
+/* =========================================================
+   COUNTDOWN HTML
+========================================================= */
 
-    const next=
-        nextBirthday(month,day);
+function countdownHTML(target){
 
-    const diff=
-        next-now;
+    const now=
+        new Date();
+
+    let difference=
+        target-now;
+
+    if(difference<0){
+        difference=0;
+    }
 
     const days=
-        Math.ceil(
+        Math.floor(
+            difference/
+            (1000*60*60*24)
+        );
+
+    const hours=
+        Math.floor(
+            (difference/
+            (1000*60*60))%24
+        );
+
+    const minutes=
+        Math.floor(
+            (difference/
+            (1000*60))%60
+        );
+
+    const seconds=
+        Math.floor(
+            (difference/
+            1000)%60
+        );
+
+    return `
+
+        <div class="time-box">
+            <strong>${days}</strong>
+            <span>Days</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${hours}</strong>
+            <span>Hours</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${minutes}</strong>
+            <span>Minutes</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${seconds}</strong>
+            <span>Seconds</span>
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   BIRTHDAY UPDATE
+========================================================= */
+
+function updateBirthdayData(){
+
+    document.getElementById(
+        "aashiyaAge"
+    ).textContent=
+        getAge(
+            2006,
+            8,
+            10
+        );
+
+    document.getElementById(
+        "roshanAge"
+    ).textContent=
+        getAge(
+            2006,
+            12,
+            16
+        );
+
+    document.getElementById(
+        "aashiyaCountdown"
+    ).innerHTML=
+        countdownHTML(
+            getNextBirthday(
+                8,
+                10
+            )
+        );
+
+    document.getElementById(
+        "roshanCountdown"
+    ).innerHTML=
+        countdownHTML(
+            getNextBirthday(
+                12,
+                16
+            )
+        );
+
+}
+
+
+/* =========================================================
+   FRIENDSHIP DAYS
+========================================================= */
+
+function updateFriendshipDays(){
+
+    const start=
+        new Date(
+            2019,
+            0,
+            1
+        );
+
+    const today=
+        new Date();
+
+    const diff=
+        today-start;
+
+    const days=
+        Math.floor(
             diff/
             (1000*60*60*24)
         );
 
-    if(
-        now.getMonth()===month-1 &&
-        now.getDate()===day
-    ){
+    document.getElementById(
+        "friendDays"
+    ).textContent=
+        days.toLocaleString();
 
-        return "🎂 Today is the birthday! ❤️";
+    document.getElementById(
+        "friendYears"
+    ).textContent=
+        (
+            today.getFullYear()-2019
+        )+"+";
+
+}
+
+
+/* Update every second */
+
+setInterval(
+    updateBirthdayData,
+    1000
+);
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function toggleTheme(){
+
+    document
+        .body
+        .classList
+        .toggle("light");
+
+    const mode=
+        document.body.classList.contains(
+            "light"
+        )
+        ? "light"
+        : "dark";
+
+    localStorage.setItem(
+        "ra_theme",
+        mode
+    );
+
+    toast(
+        mode==="light"
+        ? "Light mode ☀️"
+        : "Night mode 🌙"
+    );
+
+}
+
+
+(function(){
+
+    const theme=
+        localStorage.getItem(
+            "ra_theme"
+        );
+
+    if(theme==="light"){
+
+        document
+            .body
+            .classList
+            .add("light");
 
     }
 
-    return days+
-        " days until birthday 🎂";
-
-}
-
-function updateAges(){
-
-    document
-        .getElementById("aashiyaAge")
-        .innerHTML=
-        calculateAge(
-            2006,
-            8,
-            10
-        )+
-        " <small>years</small>";
-
-    document
-        .getElementById("roshanAge")
-        .innerHTML=
-        calculateAge(
-            2006,
-            12,
-            16
-        )+
-        " <small>years</small>";
-
-    document
-        .getElementById("aashiyaBirthday")
-        .textContent=
-        birthdayText(8,10);
-
-    document
-        .getElementById("roshanBirthday")
-        .textContent=
-        birthdayText(12,16);
-
-}
+})();
 
 
-/* =========================
-   MEMORIES
-========================= */
+/* =========================================================
+   MEMORY SYSTEM
+========================================================= */
 
 let memories=
     JSON.parse(
         localStorage.getItem(
-            "ra_memories"
+            "friendship_memories"
         ) || "[]"
     );
+
 
 function openMemoryModal(){
 
     document
-        .getElementById("memoryModal")
-        .classList.add("show");
+        .getElementById(
+            "memoryModal"
+        )
+        .classList
+        .add("show");
 
 }
 
-function closeMemoryModal(){
+
+function closeModal(id){
 
     document
-        .getElementById("memoryModal")
-        .classList.remove("show");
+        .getElementById(id)
+        .classList
+        .remove("show");
 
 }
+
 
 function saveMemory(){
 
     const title=
         document
-        .getElementById("memoryTitle")
+        .getElementById(
+            "memoryTitle"
+        )
         .value
         .trim();
 
     const year=
         document
-        .getElementById("memoryYear")
+        .getElementById(
+            "memoryYear"
+        )
         .value;
 
-    const desc=
+    const date=
         document
-        .getElementById("memoryDescription")
+        .getElementById(
+            "memoryDate"
+        )
+        .value;
+
+    const description=
+        document
+        .getElementById(
+            "memoryDescription"
+        )
         .value
         .trim();
 
     const file=
         document
-        .getElementById("memoryPhoto")
+        .getElementById(
+            "memoryPhoto"
+        )
         .files[0];
+
 
     if(!title){
 
-        toast("Please enter a memory title.");
+        toast(
+            "Enter a memory title."
+        );
 
         return;
 
     }
+
 
     if(!file){
 
-        toast("Please select a photo.");
+        toast(
+            "Choose a photo."
+        );
 
         return;
 
     }
+
 
     const reader=
         new FileReader();
 
-    reader.onload=function(e){
 
-        memories.push({
+    reader.onload=function(event){
+
+        const memory={
 
             id:Date.now(),
 
@@ -2205,42 +3415,66 @@ function saveMemory(){
 
             year:year,
 
-            description:desc,
+            date:date,
 
-            image:e.target.result
+            description:description,
 
-        });
+            image:event.target.result
+
+        };
+
+
+        memories.push(memory);
+
 
         localStorage.setItem(
-            "ra_memories",
-            JSON.stringify(memories)
+            "friendship_memories",
+            JSON.stringify(
+                memories
+            )
         );
+
 
         loadMemories();
 
-        closeMemoryModal();
 
-        document
-            .getElementById("memoryTitle")
-            .value="";
+        closeModal(
+            "memoryModal"
+        );
 
-        document
-            .getElementById("memoryDescription")
-            .value="";
 
-        document
-            .getElementById("memoryPhoto")
-            .value="";
+        document.getElementById(
+            "memoryTitle"
+        ).value="";
+
+        document.getElementById(
+            "memoryDate"
+        ).value="";
+
+        document.getElementById(
+            "memoryDescription"
+        ).value="";
+
+        document.getElementById(
+            "memoryPhoto"
+        ).value="";
+
 
         toast(
-            "Memory saved ❤️"
+            "Memory added to the vault 📸"
         );
 
     };
 
+
     reader.readAsDataURL(file);
 
 }
+
+
+/* =========================================================
+   LOAD MEMORIES
+========================================================= */
 
 function loadMemories(){
 
@@ -2249,49 +3483,95 @@ function loadMemories(){
             "memoryGrid"
         );
 
-    grid.innerHTML="";
+    if(memories.length===0){
 
-    memories.forEach(m=>{
+        grid.innerHTML=`
 
-        const card=
-            document.createElement("div");
+            <div class="empty-memory">
 
-        card.className="memory";
+                📸 No memories added yet.
 
-        card.dataset.year=m.year;
+                <br><br>
 
-        card.innerHTML=`
-
-            <img src="${m.image}">
-
-            <div class="memory-info">
-
-                <h3>${escapeHTML(m.title)}</h3>
-
-                <small>${m.year}</small>
-
-                <p>
-                    ${escapeHTML(
-                        m.description || ""
-                    )}
-                </p>
+                Add your first friendship memory.
 
             </div>
 
         `;
 
-        grid.appendChild(card);
+        return;
 
-    });
+    }
+
+
+    grid.innerHTML="";
+
+
+    memories
+        .slice()
+        .reverse()
+        .forEach(memory=>{
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+            card.className=
+                "memory-card";
+
+            card.dataset.year=
+                memory.year;
+
+
+            card.innerHTML=`
+
+                <img
+                    src="${memory.image}"
+                    alt="Friendship memory">
+
+                <div class="memory-content">
+
+                    <h3>
+                        ${safe(memory.title)}
+                    </h3>
+
+                    <small>
+                        ${memory.year}
+                        ${memory.date
+                            ? " • "+memory.date
+                            : ""}
+                    </small>
+
+                    <p>
+                        ${safe(
+                            memory.description || ""
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        });
 
 }
+
+
+/* =========================================================
+   FILTER
+========================================================= */
 
 function filterMemories(year){
 
     const cards=
         document.querySelectorAll(
-            ".memory"
+            ".memory-card"
         );
+
 
     cards.forEach(card=>{
 
@@ -2300,11 +3580,13 @@ function filterMemories(year){
             card.dataset.year===year
         ){
 
-            card.style.display="block";
+            card.style.display=
+                "block";
 
         }else{
 
-            card.style.display="none";
+            card.style.display=
+                "none";
 
         }
 
@@ -2312,9 +3594,14 @@ function filterMemories(year){
 
 }
 
-function escapeHTML(text){
 
-    return text
+/* =========================================================
+   SAFE HTML
+========================================================= */
+
+function safe(value){
+
+    return String(value)
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
@@ -2324,55 +3611,396 @@ function escapeHTML(text){
 }
 
 
-/* =========================
-   SECRET WORLD
-========================= */
+/* =========================================================
+   QUIZ
+========================================================= */
 
-function openSecret(title,text){
+const quizQuestions=[
 
-    document
-        .getElementById("secretTitle")
-        .textContent=title;
+    {
+        q:"When did this friendship begin?",
+        options:[
+            "2017",
+            "2018",
+            "2019",
+            "2020"
+        ],
+        answer:2
+    },
 
-    document
-        .getElementById("secretText")
-        .textContent=text;
+    {
+        q:"When is Aashiya's birthday?",
+        options:[
+            "10 August",
+            "16 December",
+            "10 December",
+            "16 August"
+        ],
+        answer:0
+    },
 
-    document
-        .getElementById("secretModal")
-        .classList.add("show");
+    {
+        q:"When is Roshan's birthday?",
+        options:[
+            "10 August",
+            "16 December",
+            "16 August",
+            "10 December"
+        ],
+        answer:1
+    },
+
+    {
+        q:"What is the main theme of this website?",
+        options:[
+            "Competition",
+            "Business",
+            "Pure Friendship",
+            "Gaming"
+        ],
+        answer:2
+    }
+
+];
+
+
+let quizIndex=0;
+let quizScore=0;
+
+
+function setupQuiz(){
+
+    quizIndex=0;
+    quizScore=0;
+
+    showQuestion();
 
 }
 
-function closeSecret(){
 
-    document
-        .getElementById("secretModal")
-        .classList.remove("show");
+function showQuestion(){
+
+    const question=
+        quizQuestions[
+            quizIndex
+        ];
+
+    document.getElementById(
+        "question"
+    ).textContent=
+        question.q;
+
+
+    const options=
+        document.getElementById(
+            "options"
+        );
+
+    options.innerHTML="";
+
+
+    question.options
+        .forEach(
+            (option,index)=>{
+
+                const button=
+                    document.createElement(
+                        "button"
+                    );
+
+                button.className=
+                    "quiz-option";
+
+                button.textContent=
+                    option;
+
+                button.onclick=
+                    ()=>answerQuiz(
+                        index
+                    );
+
+                options.appendChild(
+                    button
+                );
+
+            }
+        );
+
+
+    document.getElementById(
+        "quizResult"
+    ).textContent=
+        "Score: "+
+        quizScore+
+        " / "+
+        quizQuestions.length;
 
 }
 
 
-/* =========================
-   MYSTERY
-========================= */
+function answerQuiz(index){
+
+    const correct=
+        quizQuestions[
+            quizIndex
+        ].answer;
+
+
+    if(index===correct){
+
+        quizScore++;
+
+        toast(
+            "Correct! 🫶"
+        );
+
+    }else{
+
+        toast(
+            "Not this one 😄"
+        );
+
+    }
+
+
+    quizIndex++;
+
+
+    if(
+        quizIndex>=
+        quizQuestions.length
+    ){
+
+        document.getElementById(
+            "question"
+        ).textContent=
+            "Quiz Complete 🎉";
+
+        document.getElementById(
+            "options"
+        ).innerHTML=`
+
+            <button
+                class="primary-btn"
+                onclick="setupQuiz()">
+
+                PLAY AGAIN
+
+            </button>
+
+        `;
+
+        document.getElementById(
+            "quizResult"
+        ).textContent=
+            "Final Score: "+
+            quizScore+
+            " / "+
+            quizQuestions.length;
+
+        return;
+
+    }
+
+
+    setTimeout(
+        showQuestion,
+        250
+    );
+
+}
+
+
+/* =========================================================
+   SECRET MESSAGES
+========================================================= */
+
+const sadMessage=
+`
+If today feels heavy,
+don't forget that difficult days
+don't last forever.
+
+Take your time.
+
+Breathe.
+
+You don't have to solve everything
+at once.
+
+And remember:
+
+You have a friend who genuinely
+wants to see you happy. 🫶
+`;
+
+
+const lonelyMessage=
+`
+Feeling alone doesn't mean
+you are actually alone.
+
+There are people,
+memories and moments
+that still matter.
+
+2019 created a friendship
+that became a collection
+of beautiful memories.
+
+Keep going. 💙
+`;
+
+
+const jokeMessage=
+`
+This room belongs to those
+completely random conversations,
+stupid jokes,
+unexpected laughter
+and moments that make absolutely
+no sense to anyone else. 😂
+
+Only the friendship understands.
+`;
+
+
+const voiceMessage=
+`
+This room is reserved for
+future voice memories.
+
+Add your favourite voice notes,
+funny recordings or special
+messages here in the future. 🎙️
+`;
+
+
+const promiseMessage=
+`
+A simple friendship promise:
+
+Respect each other.
+
+Understand each other.
+
+Support each other.
+
+Forgive mistakes.
+
+Remember the good moments.
+
+And never forget
+the pure friendship
+that started in 2019. 🤝
+`;
+
+
+function secretMessage(title,text){
+
+    document.getElementById(
+        "messageTitle"
+    ).textContent=title;
+
+    document.getElementById(
+        "messageText"
+    ).textContent=text;
+
+    document.getElementById(
+        "messageModal"
+    ).classList.add("show");
+
+}
+
+
+/* =========================================================
+   SECRET ROOM
+========================================================= */
+
+function secretRoom(){
+
+    const code=
+        prompt(
+            "Enter the secret friendship code:"
+        );
+
+
+    if(
+        code &&
+        code.trim().toUpperCase()==="FOREVER"
+    ){
+
+        secretMessage(
+            "🔓 Hidden Room Unlocked",
+            `
+You found the hidden room.
+
+Not everything needs
+to be displayed publicly.
+
+Some memories are valuable
+because only two people
+understand what they mean.
+
+Welcome to the deepest corner
+of the friendship vault. 🫶
+            `
+        );
+
+    }else{
+
+        toast(
+            "Wrong code 🔒"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   MYSTERY BOX
+========================================================= */
 
 function mystery(number){
 
     const messages={
 
-        1:
-        "🎁 Mystery #01\\n\\nA friendship that survives time is rare. Protect it.",
+        1:`
+Mystery #1 🎁
 
-        2:
-        "🎁 Mystery #02\\n\\nThe best memories are usually the random ones.",
+The best friendships are often
+built from ordinary moments
+that become extraordinary memories.
+        `,
 
-        3:
-        "🎁 Mystery #03\\n\\n2018 was only the beginning. The story is still being written."
+        2:`
+Mystery #2 🎁
+
+2019 was not the end of something.
+
+It was the beginning
+of a story that continued
+through many different years.
+        `,
+
+        3:`
+Mystery #3 🎁
+
+One day you may forget
+some conversations.
+
+You may forget some dates.
+
+But the feeling of having
+a genuinely good friendship
+can stay forever. 🫶
+        `
 
     };
 
-    openSecret(
+
+    secretMessage(
         "Mystery Revealed ✨",
         messages[number]
     );
@@ -2380,31 +4008,95 @@ function mystery(number){
 }
 
 
-/* =========================
+/* =========================================================
+   DAILY MESSAGE
+========================================================= */
+
+const dailyMessages=[
+
+    "Some friendships are gifts that don't need wrapping. 🫶",
+
+    "The best memories are usually the unplanned ones. ✨",
+
+    "Years change. Genuine friendship can remain. 🤝",
+
+    "Never underestimate the value of one good friend. 💙",
+
+    "A simple conversation can become a lifelong memory. 🌌",
+
+    "2019 was a beginning. The story is still continuing. 📖",
+
+    "Pure friendship doesn't need to be explained. It is felt. 🫶"
+
+];
+
+
+function dailyMessage(){
+
+    const day=
+        Math.floor(
+            Date.now()/
+            (1000*60*60*24)
+        );
+
+    const message=
+        dailyMessages[
+            day%dailyMessages.length
+        ];
+
+    document.getElementById(
+        "dailyMessage"
+    ).textContent=
+        message;
+
+}
+
+
+function showDaily(){
+
+    dailyMessage();
+
+    scrollToId(
+        "dailyMessage"
+    );
+
+    toast(
+        "Today's friendship note ✨"
+    );
+
+}
+
+
+/* =========================================================
    TOAST
-========================= */
+========================================================= */
 
 function toast(message){
 
     const t=
-        document.getElementById("toast");
+        document.getElementById(
+            "toast"
+        );
 
     t.textContent=message;
 
     t.classList.add("show");
 
-    setTimeout(()=>{
-
-        t.classList.remove("show");
-
-    },3000);
+    setTimeout(
+        ()=>{
+            t.classList.remove(
+                "show"
+            );
+        },
+        2800
+    );
 
 }
 
 
-/* =========================
-   CLOSE MODAL OUTSIDE
-========================= */
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
 
 document
     .querySelectorAll(".modal")
@@ -2428,16 +4120,149 @@ document
     });
 
 
-/* =========================
-   UPDATE
-========================= */
+/* =========================================================
+   KEYBOARD EASTER EGG
+========================================================= */
 
-setInterval(
-    updateAges,
-    60000
-);
+let keySequence="";
+
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        keySequence+=
+            event.key.toUpperCase();
+
+        if(
+            keySequence.length>20
+        ){
+
+            keySequence=
+                keySequence.slice(-20);
+
+        }
+
+
+        if(
+            keySequence.includes(
+                "FRIENDSHIP"
+            )
+        ){
+
+            keySequence="";
+
+            toast(
+                "You found an Easter Egg! 🫶✨"
+            );
+
+            document.body.animate(
+                [
+                    {
+                        filter:"brightness(1)"
+                    },
+                    {
+                        filter:"brightness(1.7)"
+                    },
+                    {
+                        filter:"brightness(1)"
+                    }
+                ],
+                {
+                    duration:900
+                }
+            );
+
+        }
+
+    });
+
+
+/* =========================================================
+   SCROLL ACTIVE CHAPTER
+========================================================= */
+
+const observedSections=[
+    "home",
+    "story",
+    "birthdays",
+    "memories",
+    "secret",
+    "forever"
+];
+
+
+const observer=
+    new IntersectionObserver(
+        entries=>{
+
+            entries.forEach(
+                entry=>{
+
+                    if(
+                        entry.isIntersecting
+                    ){
+
+                        const id=
+                            entry.target.id;
+
+                        document
+                            .querySelectorAll(
+                                ".chapter-btn"
+                            )
+                            .forEach(
+                                btn=>
+                                    btn.classList
+                                    .remove(
+                                        "active"
+                                    )
+                            );
+
+                        const buttons=
+                            document.querySelectorAll(
+                                ".chapter-btn"
+                            );
+
+                        const index=
+                            observedSections
+                            .indexOf(id);
+
+                        if(
+                            index>=0 &&
+                            buttons[index]
+                        ){
+
+                            buttons[index]
+                                .classList
+                                .add("active");
+
+                        }
+
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold:.45
+        }
+    );
+
+
+observedSections
+    .forEach(id=>{
+
+        const el=
+            document.getElementById(id);
+
+        if(el){
+            observer.observe(el);
+        }
+
+    });
 
 </script>
 
 </body>
-</html>
+    </html>
