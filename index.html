@@ -1871,6 +1871,27 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     color:rgba(255,255,255,.82);
     font-size:14px;
 }
+/* =========================================================
+   ENCRYPTED PRIVATE DATA UI
+========================================================= */
+.encryption-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin:0 auto 18px;
+    padding:8px 12px;
+    border:1px solid rgba(97,230,168,.22);
+    border-radius:999px;
+    background:rgba(97,230,168,.07);
+    color:#9ff0c5;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+}
+.encryption-badge::before{
+    content:"🔐";
+}
 .daily-notes-panel{
     margin-top:22px;
     text-align:left;
@@ -2957,6 +2978,8 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
 
         <div class="daily-notes-panel">
 
+            <div class="encryption-badge">Encrypted on this device</div>
+
             <div class="daily-note-form">
                 <textarea
                     id="dailyNoteInput"
@@ -3544,7 +3567,7 @@ function normalize(value){
 }
 
 
-function unlock(){
+async function unlock(){
 
     const a=
         normalize(
@@ -3598,6 +3621,7 @@ function unlock(){
             })
         );
 
+        await initializeEncryptionKey(a,b,year);
         updateActiveUserUI();
 
         document.getElementById(
@@ -3608,7 +3632,12 @@ function unlock(){
             "app"
         ).style.display="block";
 
-        startApp();
+        startApp().catch(function(error){
+            console.error("Secure app startup failed:",error);
+            document.getElementById("error").textContent="Secure storage could not be initialized. Use HTTPS or localhost and try again.";
+            document.getElementById("app").style.display="none";
+            document.getElementById("loginScreen").style.display="flex";
+        });
 
 
     }else{
@@ -3627,7 +3656,9 @@ function unlock(){
    APP START
 ========================================================= */
 
-function startApp(){
+async function startApp(){
+
+    await loadEncryptedMemories();
 
     updateBirthdayData();
 
@@ -3637,7 +3668,7 @@ function startApp(){
 
     dailyMessage();
 
-    loadDailyNotes();
+    await loadDailyNotes();
 
     updateActiveUserUI();
 
@@ -3896,10 +3927,12 @@ setInterval(
 );
 
 
-function showPrivacyInfo(){closeSettingsPanel();document.getElementById("messageTitle").textContent="Privacy";document.getElementById("messageText").textContent="Your saved friendship memories stay in this browser.";document.getElementById("messageModal").classList.add("show");}
+function showPrivacyInfo(){closeSettingsPanel();document.getElementById("messageTitle").textContent="Privacy & Encryption";document.getElementById("messageText").textContent="Your private Daily Notes and saved friendship memories are encrypted in this browser with AES-GCM. The encryption key is derived from the login names and friendship year and is kept only in memory while you are logged in.";document.getElementById("messageModal").classList.add("show");}
 function logoutApp(){
     closeSettingsPanel();
     activeSession=null;
+    friendshipCryptoKey=null;
+    memories=[];
     localStorage.removeItem("friendship_active_session");
     document.getElementById("app").style.display="none";
     document.getElementById("loginScreen").style.display="flex";
@@ -3953,15 +3986,203 @@ function toggleTheme(){
 
 
 /* =========================================================
+   FRIENDSHIP FOREVER — LOCAL ENCRYPTION
+
+   Private notes and memories are encrypted with AES-GCM.
+   The key is derived from the two login names + friendship year
+   using PBKDF2. The encryption key never gets stored in localStorage.
+========================================================= */
+
+let friendshipCryptoKey=null;
+const FRIENDSHIP_CRYPTO_SALT_KEY="friendship_crypto_salt_v1";
+const FRIENDSHIP_MEMORIES_KEY="friendship_memories_encrypted_v1";
+const FRIENDSHIP_NOTES_PREFIX="friendship_daily_notes_encrypted_v1_";
+
+function base64FromBytes(bytes){
+    let binary="";
+    bytes.forEach(function(byte){ binary+=String.fromCharCode(byte); });
+    return btoa(binary);
+}
+
+function bytesFromBase64(value){
+    const binary=atob(value);
+    const bytes=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++){
+        bytes[i]=binary.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function getCryptoSalt(){
+    let salt=localStorage.getItem(FRIENDSHIP_CRYPTO_SALT_KEY);
+
+    if(!salt){
+        const bytes=new Uint8Array(16);
+        crypto.getRandomValues(bytes);
+        salt=base64FromBytes(bytes);
+        localStorage.setItem(FRIENDSHIP_CRYPTO_SALT_KEY,salt);
+    }
+
+    return bytesFromBase64(salt);
+}
+
+async function initializeEncryptionKey(name1,name2,year){
+    if(!window.crypto || !window.crypto.subtle){
+        throw new Error("Web Crypto API is unavailable. Use HTTPS or localhost.");
+    }
+
+    const identity=[normalize(name1),normalize(name2)]
+        .sort()
+        .join("|")+"|"+String(year);
+
+    const encoder=new TextEncoder();
+    const baseKey=await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(identity),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+    );
+
+    friendshipCryptoKey=await crypto.subtle.deriveKey(
+        {
+            name:"PBKDF2",
+            salt:getCryptoSalt(),
+            iterations:200000,
+            hash:"SHA-256"
+        },
+        baseKey,
+        {
+            name:"AES-GCM",
+            length:256
+        },
+        false,
+        ["encrypt","decrypt"]
+    );
+}
+
+async function encryptJSON(value){
+    if(!friendshipCryptoKey){
+        throw new Error("Encryption key is not initialized.");
+    }
+
+    const iv=new Uint8Array(12);
+    crypto.getRandomValues(iv);
+
+    const encoded=new TextEncoder().encode(JSON.stringify(value));
+    const encrypted=await crypto.subtle.encrypt(
+        {name:"AES-GCM",iv:iv},
+        friendshipCryptoKey,
+        encoded
+    );
+
+    return {
+        version:1,
+        algorithm:"AES-GCM",
+        iv:base64FromBytes(iv),
+        data:base64FromBytes(new Uint8Array(encrypted))
+    };
+}
+
+async function decryptJSON(payload){
+    if(!friendshipCryptoKey || !payload || !payload.iv || !payload.data){
+        throw new Error("Encrypted data is unavailable.");
+    }
+
+    const decrypted=await crypto.subtle.decrypt(
+        {name:"AES-GCM",iv:bytesFromBase64(payload.iv)},
+        friendshipCryptoKey,
+        bytesFromBase64(payload.data)
+    );
+
+    return JSON.parse(new TextDecoder().decode(decrypted));
+}
+
+async function saveEncryptedMemories(){
+    const payload=await encryptJSON(memories);
+    localStorage.setItem(FRIENDSHIP_MEMORIES_KEY,JSON.stringify(payload));
+}
+
+async function loadEncryptedMemories(){
+    memories=[];
+
+    const encrypted=localStorage.getItem(FRIENDSHIP_MEMORIES_KEY);
+
+    if(encrypted){
+        try{
+            memories=await decryptJSON(JSON.parse(encrypted));
+            if(!Array.isArray(memories)) memories=[];
+            return;
+        }catch(error){
+            console.warn("Encrypted memories could not be opened.",error);
+            alert("Private memories could not be decrypted. Please use the same login details used to create them.");
+            return;
+        }
+    }
+
+    // One-time migration from the older unencrypted memory storage.
+    const legacy=localStorage.getItem("friendship_memories");
+
+    if(legacy){
+        try{
+            const oldMemories=JSON.parse(legacy);
+            memories=Array.isArray(oldMemories)?oldMemories:[];
+            await saveEncryptedMemories();
+            localStorage.removeItem("friendship_memories");
+        }catch(error){
+            console.warn("Legacy memory migration failed.",error);
+        }
+    }
+}
+
+async function getEncryptedDailyNotes(){
+    if(!friendshipCryptoKey) return [];
+
+    const key=FRIENDSHIP_NOTES_PREFIX+getTodayKey();
+    const encrypted=localStorage.getItem(key);
+
+    if(encrypted){
+        try{
+            const notes=await decryptJSON(JSON.parse(encrypted));
+            return Array.isArray(notes)?notes:[];
+        }catch(error){
+            console.warn("Encrypted daily notes could not be opened.",error);
+            return [];
+        }
+    }
+
+    // One-time migration from the previous plaintext daily-note key.
+    const legacyKey="friendship_daily_notes_"+getTodayKey();
+    const legacy=localStorage.getItem(legacyKey);
+
+    if(legacy){
+        try{
+            const notes=JSON.parse(legacy);
+            const safeNotes=Array.isArray(notes)?notes:[];
+            await saveEncryptedDailyNotes(safeNotes);
+            localStorage.removeItem(legacyKey);
+            return safeNotes;
+        }catch(error){
+            console.warn("Legacy daily-note migration failed.",error);
+        }
+    }
+
+    return [];
+}
+
+async function saveEncryptedDailyNotes(notes){
+    const payload=await encryptJSON(notes);
+    localStorage.setItem(
+        FRIENDSHIP_NOTES_PREFIX+getTodayKey(),
+        JSON.stringify(payload)
+    );
+}
+
+/* =========================================================
    MEMORY SYSTEM
 ========================================================= */
 
-let memories=
-    JSON.parse(
-        localStorage.getItem(
-            "friendship_memories"
-        ) || "[]"
-    );
+let memories=[];
 
 
 function openMemoryModal(){
@@ -4046,7 +4267,7 @@ function saveMemory(){
         new FileReader();
 
 
-    reader.onload=function(event){
+    reader.onload=async function(event){
 
         const memory={
 
@@ -4068,12 +4289,14 @@ function saveMemory(){
         memories.push(memory);
 
 
-        localStorage.setItem(
-            "friendship_memories",
-            JSON.stringify(
-                memories
-            )
-        );
+        try{
+            await saveEncryptedMemories();
+        }catch(error){
+            console.error("Could not encrypt memory:",error);
+            memories.pop();
+            alert("This memory could not be encrypted and saved.");
+            return;
+        }
 
 
         loadMemories();
@@ -4536,26 +4759,15 @@ function getTodayKey(){
         String(today.getDate()).padStart(2,"0");
 }
 
-function getDailyNotes(){
-    const key="friendship_daily_notes_"+getTodayKey();
-
-    try{
-        return JSON.parse(
-            localStorage.getItem(key) || "[]"
-        );
-    }catch(error){
-        return [];
-    }
+async function getDailyNotes(){
+    return await getEncryptedDailyNotes();
 }
 
-function saveDailyNotes(notes){
-    localStorage.setItem(
-        "friendship_daily_notes_"+getTodayKey(),
-        JSON.stringify(notes)
-    );
+async function saveDailyNotes(notes){
+    await saveEncryptedDailyNotes(notes);
 }
 
-function addDailyNote(){
+async function addDailyNote(){
     const input=document.getElementById("dailyNoteInput");
 
     if(!input){
@@ -4570,7 +4782,12 @@ function addDailyNote(){
         return;
     }
 
-    const notes=getDailyNotes();
+    if(!friendshipCryptoKey){
+        alert("Private encryption is not ready. Please log in again.");
+        return;
+    }
+
+    const notes=await getDailyNotes();
 
     if(notes.length>=5){
         alert("Daily Notes limit reached. You can add a maximum of 5 notes per day.");
@@ -4582,13 +4799,13 @@ function addDailyNote(){
         createdAt:new Date().toISOString()
     });
 
-    saveDailyNotes(notes);
+    await saveDailyNotes(notes);
 
     input.value="";
-    loadDailyNotes();
+    await loadDailyNotes();
 }
 
-function loadDailyNotes(){
+async function loadDailyNotes(){
     const list=document.getElementById("dailyNotesList");
     const counter=document.getElementById("dailyNoteCount");
 
@@ -4596,10 +4813,10 @@ function loadDailyNotes(){
         return;
     }
 
-    const notes=getDailyNotes();
+    const notes=await getDailyNotes();
 
     counter.textContent=
-        notes.length+" / 5 notes used today";
+        notes.length+" / 5 notes used today • encrypted";
 
     if(notes.length===0){
         list.innerHTML=
@@ -4609,7 +4826,7 @@ function loadDailyNotes(){
 
     list.innerHTML="";
 
-    notes.slice().reverse().forEach(function(note,index){
+    notes.slice().reverse().forEach(function(note){
         const item=document.createElement("div");
         item.className="note-item";
 
@@ -4617,8 +4834,8 @@ function loadDailyNotes(){
         const created=new Date(note.createdAt);
         small.textContent=
             isNaN(created.getTime())
-            ? "Today's note"
-            : created.toLocaleTimeString([],{
+            ? "Today's encrypted note"
+            : created.toLocaleTimeString([], {
                 hour:"2-digit",
                 minute:"2-digit"
             });
