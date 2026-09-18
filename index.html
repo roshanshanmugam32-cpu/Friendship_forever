@@ -2195,6 +2195,47 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     min-height:16px;
 }
 
+#accountScreen .biometric-actions{
+    display:flex;
+    gap:9px;
+    margin-top:10px;
+}
+#accountScreen .biometric-secondary-btn{
+    flex:1;
+    border:1px solid var(--line);
+    border-radius:13px;
+    padding:11px 10px;
+    color:var(--text);
+    background:rgba(255,255,255,.045);
+    font:700 11px "Outfit",sans-serif;
+    cursor:pointer;
+    transition:.2s ease;
+}
+#accountScreen .biometric-secondary-btn:hover{
+    background:rgba(255,255,255,.09);
+    transform:translateY(-1px);
+}
+#accountScreen .biometric-secondary-btn.danger{
+    color:#ff8fa8;
+}
+#accountScreen .google-profile-preview{
+    position:relative;
+}
+#accountScreen .google-secure-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    margin-top:6px;
+    padding:4px 8px;
+    border:1px solid rgba(120,220,170,.22);
+    border-radius:999px;
+    color:#9be6c2;
+    background:rgba(120,220,170,.07);
+    font-size:9px;
+    font-weight:800;
+    letter-spacing:.4px;
+}
+
 #accountScreen.google-biometric-only .google-login-wrap,
 #accountScreen.google-biometric-only .google-divider,
 #accountScreen.google-biometric-only .account-tabs,
@@ -2603,6 +2644,7 @@ body.light #chatPanel{
                     <div>
                         <div class="google-profile-title">Google Account</div>
                         <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
+                        <div class="google-secure-badge">✓ SECURE GOOGLE SIGN-IN</div>
                     </div>
                 </div>
                 <div id="googleSignInButton" class="google-signin-host"></div>
@@ -2624,6 +2666,14 @@ body.light #chatPanel{
                 🔐 UNLOCK WITH BIOMETRIC
             </button>
             <div class="biometric-status" id="biometricStatus"></div>
+            <div class="biometric-actions">
+                <button type="button" class="biometric-secondary-btn" onclick="useAnotherSignInMethod()">
+                    ↪ USE ANOTHER OPTION
+                </button>
+                <button type="button" class="biometric-secondary-btn danger" onclick="googleAccountLogout()">
+                    ⎋ LOG OUT
+                </button>
+            </div>
         </div>
 
         <form
@@ -5233,11 +5283,9 @@ async function authenticateGooglePasskey(){
         publicKey:{
             challenge:randomChallenge(),
             rpId:location.hostname,
-            allowCredentials:[{
-                type:"public-key",
-                id:bytesFromBase64(saved.id),
-                transports:["internal"]
-            }],
+            // The passkey is discoverable, so the device can use its
+            // built-in fingerprint / face unlock / screen lock directly.
+            // Do not force an "account login" transport here.
             userVerification:"required",
             timeout:60000
         }
@@ -5296,6 +5344,46 @@ async function unlockWithBiometric(){
         console.error("Biometric authentication failed:",error);
         setBiometricStatus(error && error.message ? error.message : "Biometric verification failed. Try again.");
     }
+}
+
+function useAnotherSignInMethod(){
+    // Leave the saved passkey intact, but return to the Google sign-in method.
+    // This is the app-level fallback when the device biometric is unavailable.
+    currentAccount=null;
+    googleBiometricUnlocked=false;
+    localStorage.removeItem(FRIENDSHIP_ACCOUNT_SESSION_KEY);
+    setBiometricStatus("");
+    setAccountError("");
+
+    if(window.google && google.accounts && google.accounts.id){
+        try{ google.accounts.id.disableAutoSelect(); }catch(error){}
+    }
+
+    applyAuthState();
+    setTimeout(initGoogleLogin,100);
+}
+
+function googleAccountLogout(){
+    closeSettingsPanel();
+    closeModal("profileModal");
+    closeChatPanel();
+
+    currentAccount=null;
+    googleBiometricUnlocked=false;
+    activeSession=null;
+    friendshipCryptoKey=null;
+    memories=[];
+
+    localStorage.removeItem(FRIENDSHIP_ACCOUNT_SESSION_KEY);
+    localStorage.removeItem("friendship_active_session");
+
+    if(window.google && google.accounts && google.accounts.id){
+        try{ google.accounts.id.disableAutoSelect(); }catch(error){}
+    }
+
+    document.body.dataset.page="home";
+    applyAuthState();
+    setTimeout(initGoogleLogin,100);
 }
 
 function initGoogleLogin(){
@@ -6887,4 +6975,4 @@ applyAuthState();
 </script>
 
 </body>
-           </html>
+    </html>
