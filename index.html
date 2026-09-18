@@ -2195,6 +2195,23 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     min-height:16px;
 }
 
+#accountScreen.google-biometric-only .google-login-wrap,
+#accountScreen.google-biometric-only .google-divider,
+#accountScreen.google-biometric-only .account-tabs,
+#accountScreen.google-biometric-only #signInForm,
+#accountScreen.google-biometric-only #signUpForm{
+    display:none !important;
+}
+
+#accountScreen.google-biometric-only .biometric-card{
+    display:block !important;
+    margin-top:18px;
+}
+
+#accountScreen.google-biometric-only .login-box > h1{
+    margin-bottom:8px;
+}
+
 #accountScreen .google-divider{
     display:flex;
     align-items:center;
@@ -5031,6 +5048,29 @@ function updateAccountProfileUI(){
    Account Gate → Friendship Login → App
 ========================================================= */
 
+function updateGoogleAuthMode(){
+    const accountScreen=document.getElementById("accountScreen");
+    const googleWrap=document.querySelector("#accountScreen .google-login-wrap");
+    const tabs=document.querySelector("#accountScreen .account-tabs");
+    const signIn=document.getElementById("signInForm");
+    const signUp=document.getElementById("signUpForm");
+    const divider=document.querySelector("#accountScreen .google-divider");
+    const biometric=document.getElementById("biometricCard");
+
+    const returningGoogle=!!(currentAccount && currentAccount.googleEmail===ALLOWED_GOOGLE_EMAIL);
+
+    if(accountScreen){
+        accountScreen.classList.toggle("google-biometric-only",returningGoogle);
+    }
+
+    if(googleWrap) googleWrap.style.display=returningGoogle ? "none" : "";
+    if(tabs) tabs.style.display=returningGoogle ? "none" : "";
+    if(signIn) signIn.style.display=returningGoogle ? "none" : "";
+    if(signUp) signUp.style.display=returningGoogle ? "none" : "";
+    if(divider) divider.style.display=returningGoogle ? "none" : "";
+    if(biometric && returningGoogle) biometric.classList.add("show");
+}
+
 function applyAuthState(){
     const accountScreen=document.getElementById("accountScreen");
     const loginScreen=document.getElementById("loginScreen");
@@ -5039,6 +5079,7 @@ function applyAuthState(){
 
     updateAccountProfileUI();
     updateBiometricUI();
+    updateGoogleAuthMode();
 
     if(!currentAccount){
         if(accountScreen){
@@ -5114,6 +5155,10 @@ function updateBiometricUI(){
             }
         }
         if(button) button.textContent=hasSavedPasskey() ? "🔐 UNLOCK WITH BIOMETRIC" : "☝️ SET UP FINGERPRINT / PASSKEY";
+        const title=document.getElementById("biometricTitle");
+        const subtitle=document.getElementById("biometricSubtitle");
+        if(title) title.textContent=hasSavedPasskey() ? "Welcome back, Roshan" : "Secure this Google Account";
+        if(subtitle) subtitle.textContent=hasSavedPasskey() ? "Verify with your device fingerprint, face unlock, or screen lock to open Friendship Forever." : "After Google sign-in, register your device biometric once. Next time, biometric unlock will take you directly to Home.";
     }else{
         card.classList.remove("show");
     }
@@ -5206,7 +5251,7 @@ async function unlockGoogleSessionAfterBiometric(){
     restoreActiveSession();
 
     if(!activeSession){
-        setBiometricStatus("Fingerprint is ready. Complete the existing Friendship profile setup once to protect your private encrypted data.");
+        setBiometricStatus("Your Google account is unlocked, but this device has no saved Friendship profile yet. Complete the Friendship profile once, then future unlocks will go directly to Home.");
         return false;
     }
 
@@ -5352,6 +5397,7 @@ function handleGoogleCredential(response){
         setAccountError("");
         setBiometricStatus(hasSavedPasskey() ? "Google account verified. Use your device biometric to continue." : "Google account verified. Set up your device fingerprint / passkey to continue.");
         updateBiometricUI();
+        updateGoogleAuthMode();
         applyAuthState();
     }catch(error){
         console.error("Google sign-in failed:",error);
@@ -6841,4 +6887,4 @@ applyAuthState();
 </script>
 
 </body>
-    </html>
+           </html>
