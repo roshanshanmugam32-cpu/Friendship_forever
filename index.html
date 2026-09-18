@@ -2072,6 +2072,62 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     width:100% !important;
 }
 
+#accountScreen .google-signin-host{
+    width:100%;
+    min-height:44px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+#accountScreen .google-signin-host iframe{
+    max-width:100%;
+}
+
+#accountScreen .google-fallback-btn{
+    width:100%;
+    min-height:46px;
+    margin-top:10px;
+    border:1px solid rgba(255,255,255,.16);
+    border-radius:14px;
+    background:rgba(255,255,255,.07);
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    font:800 13px "Outfit",sans-serif;
+    cursor:pointer;
+    transition:.2s ease;
+}
+
+#accountScreen .google-fallback-btn:hover{
+    transform:translateY(-1px);
+    background:rgba(255,255,255,.11);
+    border-color:rgba(255,255,255,.25);
+}
+
+#accountScreen .google-g-logo{
+    width:23px;
+    height:23px;
+    border-radius:50%;
+    background:#fff;
+    color:#4285f4;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font:900 15px Arial,sans-serif;
+}
+
+#accountScreen .google-login-status{
+    min-height:16px;
+    margin-top:8px;
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.4;
+}
+
 #accountScreen .biometric-card{
     display:none;
     width:100%;
@@ -2532,7 +2588,12 @@ body.light #chatPanel{
                         <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
                     </div>
                 </div>
-                <div id="googleSignInButton"></div>
+                <div id="googleSignInButton" class="google-signin-host"></div>
+                <button type="button" id="googleFallbackButton" class="google-fallback-btn" onclick="startGoogleSignInFallback()">
+                    <span class="google-g-logo">G</span>
+                    <span>Continue with Google</span>
+                </button>
+                <div id="googleLoginStatus" class="google-login-status"></div>
             </div>
         </div>
 
@@ -5193,7 +5254,10 @@ async function unlockWithBiometric(){
 }
 
 function initGoogleLogin(){
+    const status=document.getElementById("googleLoginStatus");
+
     if(!window.google || !google.accounts || !google.accounts.id){
+        if(status) status.textContent="Loading Google Sign-In…";
         setTimeout(initGoogleLogin,500);
         return;
     }
@@ -5202,10 +5266,12 @@ function initGoogleLogin(){
         client_id:GOOGLE_CLIENT_ID,
         callback:handleGoogleCredential,
         login_hint:ALLOWED_GOOGLE_EMAIL,
-        auto_select:false
+        auto_select:false,
+        cancel_on_tap_outside:false
     });
 
     const button=document.getElementById("googleSignInButton");
+    const fallback=document.getElementById("googleFallbackButton");
 
     if(button){
         button.innerHTML="";
@@ -5218,7 +5284,24 @@ function initGoogleLogin(){
         });
     }
 
+    if(fallback) fallback.style.display="none";
+    if(status) status.textContent="";
     updateBiometricUI();
+}
+
+function startGoogleSignInFallback(){
+    const status=document.getElementById("googleLoginStatus");
+    if(!window.google || !google.accounts || !google.accounts.id){
+        if(status) status.textContent="Google Sign-In is still loading. Please wait a moment.";
+        initGoogleLogin();
+        return;
+    }
+    if(status) status.textContent="Opening Google account sign-in…";
+    google.accounts.id.prompt(function(notification){
+        if(notification && notification.isNotDisplayed && notification.isNotDisplayed()){
+            if(status) status.textContent="Google Sign-In could not open. Check your Vercel domain in Google Cloud Console → Authorized JavaScript origins.";
+        }
+    });
 }
 
 function base64UrlDecode(value){
