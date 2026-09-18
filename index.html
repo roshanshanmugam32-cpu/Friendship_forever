@@ -1091,27 +1091,7 @@ body.light .page-menu{
 /* =========================================================
    PAGE ENTRY ANIMATION / ZERO-GAP TOP POSITION
 ========================================================= */
-.page-section.page-enter{
-    animation:pageEnter .42s cubic-bezier(.22,1,.36,1) both;
-    will-change:opacity,transform;
-}
-
-@keyframes pageEnter{
-    from{
-        opacity:0;
-        transform:translate3d(0,18px,0);
-    }
-    to{
-        opacity:1;
-        transform:translate3d(0,0,0);
-    }
-}
-
-@media(prefers-reduced-motion:reduce){
-    .page-section.page-enter{
-        animation:none;
-    }
-}
+.page-section.page-enter{animation:none !important;transform:none !important;opacity:1 !important;}
 
 @media(max-width:600px){
     .page-menu-shell{
@@ -2769,7 +2749,7 @@ body.light #chatPanel{
 /* Option navigation: keep every selected section flush to the viewport top. */
 html, body { scroll-padding-top: 0 !important; }
 .section, [id^="section"], .page-section { scroll-margin-top: 0 !important; }
-.option-content-enter { animation: optionContentEnter .28s ease-out both; }
+.option-content-enter { animation:none !important; }
 @keyframes optionContentEnter { from { opacity: .35; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @media (prefers-reduced-motion: reduce) { .option-content-enter { animation: none !important; } }
 </style>
@@ -2817,6 +2797,16 @@ html, body { scroll-padding-top: 0 !important; }
 
 <style id="encrypted-video-vault-styles">
 .video-vault-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}.video-upload-btn{border:1px solid rgba(255,255,255,.13);border-radius:15px;padding:12px 17px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));color:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.16)}.video-upload-btn span{font-size:18px}.video-security-badge{padding:10px 13px;border-radius:13px;background:rgba(69,227,139,.08);border:1px solid rgba(69,227,139,.18);font-size:11px;color:#91efb7}.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.video-card{overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);box-shadow:0 12px 30px rgba(0,0,0,.14)}.video-card video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#050509}.video-card-body{padding:12px}.video-card-title{font-size:13px;font-weight:700;word-break:break-word}.video-card-meta{font-size:10px;color:var(--muted);margin-top:4px}.video-card-actions{display:flex;gap:8px;margin-top:10px}.video-card-actions button{flex:1;border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:8px;background:rgba(255,255,255,.05);color:inherit;cursor:pointer}.video-empty{padding:45px 18px;text-align:center;border:1px dashed rgba(255,255,255,.13);border-radius:18px;color:var(--muted)}.video-vault-note{margin-top:15px;font-size:10px;line-height:1.6;color:var(--muted)}@media(max-width:620px){.video-grid{grid-template-columns:1fr}.video-vault-toolbar{align-items:stretch}.video-upload-btn{width:100%}.video-security-badge{width:100%;text-align:center}}
+
+/* =========================================================
+   DAILY AUTOMATIC UPDATES
+========================================================= */
+.daily-auto-panel{margin-top:16px;}
+.daily-auto-item{padding:13px 14px;border:1px solid var(--line);border-radius:15px;background:rgba(255,255,255,.025);margin-bottom:8px;}
+.daily-auto-item small{display:block;color:var(--muted);font-size:10px;letter-spacing:.5px;margin-bottom:5px;}
+.daily-auto-item p{margin:0;color:var(--text);font-size:13px;line-height:1.55;}
+.video-upload-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;}
+@media(max-width:600px){.daily-auto-item{padding:12px}.daily-auto-item p{font-size:12px}}
 </style>
 
 </head>
@@ -3963,6 +3953,13 @@ html, body { scroll-padding-top: 0 !important; }
             Loading...
         </div>
 
+        <div class="daily-notes-panel daily-auto-panel">
+            <div class="encryption-badge">AUTOMATIC DAILY UPDATE</div>
+            <div id="dailyAutoUpdateList" class="notes-list">
+                <div class="empty-memory">Preparing today's automatic update...</div>
+            </div>
+        </div>
+
         <div class="daily-notes-panel">
 
             <div class="encryption-badge">Encrypted on this device</div>
@@ -4566,7 +4563,7 @@ function notifyBirthday(name){
    PREMIUM PAGE NAVIGATION
 ========================================================= */
 
-const raPages=["home","story","journey","birthdays","memories","gallery","daily","forever"];
+const raPages=["home","story","journey","birthdays","memories","gallery","video","daily","forever"];
 
 function togglePageMenu(){
 
@@ -4633,14 +4630,6 @@ function navigatePage(id){
 
     if(id==="video"){
         loadVideoGallery();
-    }
-
-    /* Restart a clean, short entry animation every time an option is clicked. */
-    const target=document.getElementById(id);
-    if(target){
-        target.classList.remove("page-enter");
-        void target.offsetWidth;
-        target.classList.add("page-enter");
     }
 
     /* A second frame guarantees the selected section begins at the top
@@ -4755,7 +4744,8 @@ async function decryptVideo(item){const key=await getVideoCryptoKey();const plai
 function triggerVideoUpload(){const input=document.getElementById("videoUploadInput");if(input)input.click();}
 async function handleVideoUpload(event){
   const files=Array.from(event.target.files||[]); if(!files.length)return;
-  try{const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");const store=tx.objectStore(VIDEO_STORE);for(const file of files){const enc=await encryptVideoBlob(file);store.add({name:file.name,type:file.type,size:file.size,created:Date.now(),iv:enc.iv,data:enc.data});}tx.oncomplete=()=>loadVideoGallery();}
+  try{const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");const store=tx.objectStore(VIDEO_STORE);for(const file of files){const enc=await encryptVideoBlob(file);store.add({name:file.name,type:file.type,size:file.size,created:Date.now(),iv:enc.iv,data:enc.data});}
+tx.oncomplete=()=>{loadVideoGallery();notifyActivity("New video uploaded",files.length===1?files[0].name:(files.length+" videos uploaded"));};}
   catch(err){alert("Video could not be saved securely in this browser.");console.error(err);}finally{event.target.value="";}
 }
 async function loadVideoGallery(){
@@ -4765,15 +4755,25 @@ async function loadVideoGallery(){
     if(!items.length){grid.innerHTML='<div class="video-empty"><div style="font-size:44px">🎥</div><strong>No videos yet</strong><p>Upload a video to create your private encrypted video gallery.</p></div>';return;}
     for(const item of items.slice().reverse()){
       const card=document.createElement("div");card.className="video-card";const v=document.createElement("video");v.controls=true;v.preload="metadata";v.setAttribute("playsinline","");
-      const body=document.createElement("div");body.className="video-card-body";body.innerHTML='<div class="video-card-title">'+escapeHtml(item.name||"Video")+'</div><div class="video-card-meta">🔐 Encrypted • '+formatVideoSize(item.size||0)+'</div><div class="video-card-actions"><button type="button" data-action="delete">Delete</button></div>';
+      const body=document.createElement("div");body.className="video-card-body";body.innerHTML='<div class="video-card-title">'+escapeHtml(item.name||"Video")+'</div><div class="video-card-meta">🔐 Encrypted • '+formatVideoSize(item.size||0)+'</div><div class="video-card-actions"><button type="button" data-action="fullscreen">⛶ Full Screen</button><button type="button" data-action="delete">🗑️ Delete</button></div>';
       card.append(v,body);grid.appendChild(card);
       try{const blob=await decryptVideo(item);const url=URL.createObjectURL(blob);v.src=url;v.onloadeddata=()=>URL.revokeObjectURL(url);}catch(e){body.querySelector(".video-card-meta").textContent="🔐 Encrypted video • unable to decrypt";}
+      body.querySelector('[data-action="fullscreen"]').onclick=()=>openVideoFullscreen(v);
       body.querySelector('[data-action="delete"]').onclick=()=>deleteVideo(item.id);
     }
   };req.onerror=()=>{grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';};
   }catch(e){grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';}
 }
 function formatVideoSize(bytes){if(bytes<1024*1024)return Math.round(bytes/1024)+" KB";return (bytes/(1024*1024)).toFixed(1)+" MB";}
+function openVideoFullscreen(video){
+  if(!video) return;
+  try{
+    if(video.requestFullscreen) video.requestFullscreen();
+    else if(video.webkitEnterFullscreen) video.webkitEnterFullscreen();
+    else if(video.webkitRequestFullscreen) video.webkitRequestFullscreen();
+    else alert("Full screen video is not supported by this browser.");
+  }catch(e){ console.warn("Fullscreen unavailable",e); }
+}
 async function deleteVideo(id){if(!confirm("Delete this video from the encrypted vault?"))return;const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");tx.objectStore(VIDEO_STORE).delete(id);tx.oncomplete=()=>loadVideoGallery();}
 
 function setPresenceEnabled(v){localStorage.setItem(PRESENCE_ENABLED_KEY,v?"true":"false");updatePresenceSummary();}
@@ -6114,6 +6114,7 @@ async function sendChatMessage(){
     }
 
     addChatMessage("me",text);
+    notifyActivity("New message",text);
     input.value="";
     input.style.height="auto";
 
@@ -6842,6 +6843,22 @@ function loadMemories(){
             card.dataset.year=
                 memory.year;
 
+            card.style.cursor="pointer";
+            card.setAttribute("role","button");
+            card.setAttribute("tabindex","0");
+            card.onclick=function(){
+                openLightbox(
+                    memory.image,
+                    memory.title,
+                    memory.description || "A saved friendship memory. 📸"
+                );
+            };
+            card.onkeydown=function(e){
+                if(e.key==="Enter" || e.key===" "){
+                    e.preventDefault();
+                    card.click();
+                }
+            };
 
             card.innerHTML=`
 
@@ -7281,6 +7298,39 @@ function revealMessage(title,text){
    DAILY MESSAGE
 ========================================================= */
 
+function notifyActivity(title,message){
+    try{
+        if("Notification" in window && Notification.permission==="granted"){
+            showNotification(title,message||"FRIENDSHIP FOREVER has a new update.");
+        }
+    }catch(error){console.warn("Activity notification failed:",error);}
+}
+
+function addAutomaticDailyUpdate(){
+    const key="friendship_daily_auto_updates_v1";
+    const today=getTodayKey();
+    let updates=[];
+    try{updates=JSON.parse(localStorage.getItem(key)||"[]");}catch(e){updates=[];}
+    if(!Array.isArray(updates))updates=[];
+    if(!updates.some(x=>x&&x.date===today)){
+        const templates=[
+            "Daily update: Your friendship space is ready for another day of memories. ✨",
+            "Daily update: Keep your favourite moments, messages and notes close. 💙",
+            "Daily update: A new day, another chapter in your friendship story. 📖",
+            "Daily update: Your private friendship space has been updated for today. 🤝"
+        ];
+        const day=Math.floor(Date.now()/86400000);
+        updates.push({date:today,text:templates[day%templates.length],createdAt:new Date().toISOString()});
+        updates=updates.slice(-30);
+        localStorage.setItem(key,JSON.stringify(updates));
+    }
+    const list=document.getElementById("dailyAutoUpdateList");
+    if(list){
+        const todayItem=updates.find(x=>x&&x.date===today);
+        list.innerHTML=todayItem?`<div class="daily-auto-item"><small>${todayItem.date} • AUTOMATIC</small><p>${safe(todayItem.text)}</p></div>`:"<div class=\"empty-memory\">No automatic update yet.</div>";
+    }
+}
+
 const dailyMessages=[
 
     "Some friendships are gifts that don't need wrapping. 🫶",
@@ -7324,6 +7374,7 @@ function dailyMessage(){
 function showDaily(){
 
     dailyMessage();
+    addAutomaticDailyUpdate();
 
     scrollToId(
         "dailyMessage"
@@ -7429,4 +7480,4 @@ applyAuthState();
 </script>
 
 </body>
-    </html>
+       </html>
