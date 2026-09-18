@@ -414,6 +414,10 @@ body.light .topbar{
     padding:100px 20px;
 }
 
+body[data-page]:not([data-page="home"]) .section.page-section{
+    padding:42px 20px 80px;
+}
+
 .section-header{
     text-align:center;
     margin-bottom:50px;
@@ -1085,7 +1089,19 @@ body.light .page-menu{
     display:none;
     flex-direction:column;
     width:100%;
-    min-height:100vh;
+    min-height:auto;
+    box-sizing:border-box;
+}
+
+/* Keep opened pages immediately visible below the fixed top bar.
+   The home hero keeps its original full-screen layout. */
+body[data-page]:not([data-page="home"]) .page-section{
+    padding-top:42px;
+    padding-bottom:80px;
+}
+
+body[data-page]:not([data-page="home"]) .page-section .section-header{
+    margin-top:0;
 }
 
 #home,
@@ -1684,6 +1700,10 @@ input,select,textarea{
 ========================================================= */
 
 @media(max-width:768px){
+
+    body[data-page]:not([data-page="home"]) .section.page-section{
+        padding:28px 16px 64px;
+    }
 
     .topbar{
         padding:12px 14px;
@@ -5210,9 +5230,21 @@ function navigatePage(id){
         loadGallery();
     }
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
+    requestAnimationFrame(()=>{
+        const target=document.getElementById(id);
+        if(!target){
+            window.scrollTo({top:0,behavior:"smooth"});
+            return;
+        }
+
+        const topbar=document.querySelector(".topbar");
+        const offset=(topbar ? topbar.getBoundingClientRect().height : 0)+12;
+        const y=Math.max(0,window.scrollY + target.getBoundingClientRect().top - offset);
+
+        window.scrollTo({
+            top:y,
+            behavior:"smooth"
+        });
     });
 
 }
@@ -7929,4 +7961,4 @@ applyAuthState();
 </script>
 
 </body>
-               </html>
+   </html>
