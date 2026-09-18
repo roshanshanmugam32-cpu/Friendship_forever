@@ -414,10 +414,6 @@ body.light .topbar{
     padding:100px 20px;
 }
 
-body[data-page]:not([data-page="home"]) .section.page-section{
-    padding:42px 20px 80px;
-}
-
 .section-header{
     text-align:center;
     margin-bottom:50px;
@@ -1089,19 +1085,43 @@ body.light .page-menu{
     display:none;
     flex-direction:column;
     width:100%;
-    min-height:auto;
-    box-sizing:border-box;
+    min-height:100vh;
 }
 
-/* Keep opened pages immediately visible below the fixed top bar.
-   The home hero keeps its original full-screen layout. */
-body[data-page]:not([data-page="home"]) .page-section{
-    padding-top:42px;
-    padding-bottom:80px;
+/* =========================================================
+   PAGE ENTRY ANIMATION / ZERO-GAP TOP POSITION
+========================================================= */
+.page-section.page-enter{
+    animation:pageEnter .42s cubic-bezier(.22,1,.36,1) both;
+    will-change:opacity,transform;
 }
 
-body[data-page]:not([data-page="home"]) .page-section .section-header{
-    margin-top:0;
+@keyframes pageEnter{
+    from{
+        opacity:0;
+        transform:translate3d(0,18px,0);
+    }
+    to{
+        opacity:1;
+        transform:translate3d(0,0,0);
+    }
+}
+
+@media(prefers-reduced-motion:reduce){
+    .page-section.page-enter{
+        animation:none;
+    }
+}
+
+@media(max-width:600px){
+    .page-menu-shell{
+        top:70px;
+        left:12px;
+    }
+
+    .page-section{
+        min-height:100svh;
+    }
 }
 
 #home,
@@ -1111,8 +1131,6 @@ body[data-page]:not([data-page="home"]) .page-section .section-header{
 }
 
 body[data-page="home"] #home,
-body[data-page="home"] #story,
-body[data-page="home"] #forever,
 body[data-page="story"] #story,
 body[data-page="birthdays"] #birthdays,
 body[data-page="journey"] #journey,
@@ -1136,13 +1154,11 @@ body[data-page]:not([data-page="home"]) .hero{
 }
 
 body[data-page="home"] #story{
-    padding-top:100px;
+    padding-top:0;
 }
 
 body[data-page="home"] #forever{
-    display:flex;
-    padding-top:70px;
-    border-top:1px solid rgba(255,255,255,.06);
+    display:none;
 }
 
 .page-menu-shell + main{
@@ -1700,10 +1716,6 @@ input,select,textarea{
 ========================================================= */
 
 @media(max-width:768px){
-
-    body[data-page]:not([data-page="home"]) .section.page-section{
-        padding:28px 16px 64px;
-    }
 
     .topbar{
         padding:12px 14px;
@@ -2517,402 +2529,6 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
 }
 
 /* =========================================================
-   MODERN ACCOUNT ACCESS REFINEMENT
-   Login-page visual layer only. Existing IDs and behavior preserved.
-========================================================= */
-#accountScreen .account-eyebrow{
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    margin:0 auto 10px;
-    padding:6px 10px;
-    border:1px solid rgba(156,108,255,.25);
-    border-radius:999px;
-    background:rgba(156,108,255,.08);
-    color:#cbb7ff;
-    font-size:9px;
-    font-weight:900;
-    letter-spacing:1.15px;
-}
-#accountScreen .account-eyebrow::before{
-    content:"";
-    width:6px;
-    height:6px;
-    border-radius:50%;
-    background:#a878ff;
-    box-shadow:0 0 12px rgba(168,120,255,.8);
-}
-#accountScreen .account-footer-note{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:7px;
-    margin-top:15px;
-    padding-top:13px;
-    border-top:1px solid rgba(255,255,255,.07);
-    color:var(--muted);
-    font-size:9px;
-    letter-spacing:.35px;
-}
-#accountScreen .account-footer-note span{
-    font-size:11px;
-}
-#accountScreen .login-box > h1{
-    text-wrap:balance;
-}
-#accountScreen .google-login-card,
-#accountScreen .biometric-card,
-#accountScreen .account-tabs,
-#accountScreen .account-form{
-    transition:border-color .22s ease,transform .22s ease,box-shadow .22s ease;
-}
-#accountScreen .google-login-card:hover{
-    border-color:rgba(255,255,255,.17);
-    box-shadow:0 16px 40px rgba(0,0,0,.18);
-}
-#accountScreen .field:focus{
-    border-color:rgba(168,120,255,.65);
-    box-shadow:0 0 0 3px rgba(168,120,255,.10);
-}
-@media(max-height:760px) and (min-width:561px){
-    #accountScreen{padding:12px 18px;align-items:flex-start;overflow-y:auto}
-    #accountScreen .login-box{margin:12px 0}
-}
-@media(max-width:560px){
-    #accountScreen .account-eyebrow{font-size:8px;letter-spacing:1px}
-    #accountScreen .account-footer-note{margin-top:12px;padding-top:11px}
-}
-
-/* =========================================================
-   PROFESSIONAL ACCOUNT / LOGIN SCREEN
-   Visual-only refinement — authentication IDs and behavior
-   are intentionally preserved.
-========================================================= */
-#accountScreen{
-    position:relative;
-    overflow:hidden;
-    padding:28px 18px;
-    background:
-        radial-gradient(circle at 50% 8%,rgba(132,83,255,.18),transparent 34%),
-        radial-gradient(circle at 85% 85%,rgba(255,82,157,.10),transparent 30%),
-        var(--bg2);
-}
-
-#accountScreen::before{
-    content:"";
-    position:absolute;
-    width:420px;
-    height:420px;
-    border-radius:50%;
-    top:-250px;
-    left:50%;
-    transform:translateX(-50%);
-    background:rgba(126,77,255,.12);
-    filter:blur(80px);
-    pointer-events:none;
-}
-
-#accountScreen .login-box{
-    position:relative;
-    z-index:1;
-    width:min(500px,100%);
-    padding:34px 30px 30px;
-    border:1px solid rgba(255,255,255,.13);
-    border-radius:30px;
-    background:linear-gradient(145deg,rgba(24,21,42,.94),rgba(13,12,25,.91));
-    box-shadow:0 30px 90px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.025) inset;
-    backdrop-filter:blur(30px);
-}
-
-#accountScreen .login-symbol{
-    width:76px;
-    height:76px;
-    margin:0 auto 17px;
-    border-radius:24px;
-    padding:12px;
-    background:linear-gradient(145deg,rgba(132,83,255,.22),rgba(255,82,157,.13));
-    border:1px solid rgba(255,255,255,.12);
-    box-shadow:0 18px 45px rgba(101,65,210,.22);
-    animation:none;
-}
-
-#accountScreen .login-symbol img{
-    width:100%;
-    height:100%;
-    object-fit:contain;
-    border-radius:16px;
-}
-
-#accountScreen .login-box h1{
-    font-size:30px;
-    font-weight:900;
-    letter-spacing:-.7px;
-    margin-bottom:7px;
-}
-
-#accountScreen .login-box .subtitle{
-    max-width:390px;
-    margin:0 auto 22px;
-    font-size:13px;
-    line-height:1.6;
-}
-
-#accountScreen .account-tabs{
-    margin-bottom:18px;
-    padding:4px;
-    border-radius:14px;
-    background:rgba(0,0,0,.24);
-}
-
-#accountScreen .account-tab-btn{
-    min-height:42px;
-    border-radius:10px;
-    font-size:12px;
-}
-
-#accountScreen .google-login-wrap{
-    margin:0 0 12px;
-}
-
-#accountScreen .google-login-card{
-    padding:15px;
-    border-radius:18px;
-    background:rgba(255,255,255,.045);
-    border-color:rgba(255,255,255,.10);
-    box-shadow:none;
-}
-
-#accountScreen .google-profile-preview{
-    margin-bottom:11px;
-}
-
-#accountScreen .google-profile-avatar{
-    width:40px;
-    height:40px;
-}
-
-#accountScreen .google-profile-title{
-    font-size:12px;
-}
-
-#accountScreen .google-profile-email{
-    font-size:11px;
-}
-
-#accountScreen .google-secure-badge{
-    font-size:8px;
-}
-
-#accountScreen .google-fallback-btn{
-    min-height:44px;
-    border-radius:12px;
-    margin-top:8px;
-}
-
-#accountScreen .google-divider{
-    margin:15px 0;
-    font-size:9px;
-    letter-spacing:.7px;
-}
-
-#accountScreen .account-form{
-    padding-top:2px;
-}
-
-#accountScreen .account-form label{
-    margin:9px 0 5px;
-    font-size:10px;
-    letter-spacing:.9px;
-}
-
-#accountScreen .field{
-    min-height:48px;
-    margin:0 0 4px;
-    padding:13px 15px;
-    border-radius:13px;
-    background:rgba(0,0,0,.22);
-}
-
-#accountScreen .primary-btn{
-    min-height:48px;
-    margin-top:10px;
-    border-radius:13px;
-    font-size:12px;
-    letter-spacing:.5px;
-}
-
-#accountScreen #accountError{
-    min-height:20px;
-    margin-top:10px;
-    font-size:11px;
-}
-
-@media (max-width:560px){
-    #accountScreen{
-        padding:16px 12px;
-    }
-    #accountScreen .login-box{
-        padding:28px 18px 22px;
-        border-radius:24px;
-    }
-    #accountScreen .login-symbol{
-        width:68px;
-        height:68px;
-        border-radius:21px;
-        padding:10px;
-    }
-    #accountScreen .login-box h1{
-        font-size:27px;
-    }
-    #accountScreen .login-box .subtitle{
-        font-size:12px;
-        margin-bottom:19px;
-    }
-    #accountScreen .google-login-card{
-        padding:12px;
-    }
-    #accountScreen .biometric-actions{
-        flex-direction:column;
-    }
-}
-
-/* =========================================================
-   LOGIN PAGE — FINAL MOBILE FIT / GOOGLE CARD FIX
-   Layout-only correction for the account gate.
-========================================================= */
-#accountScreen{
-    position:fixed;
-    inset:0;
-    z-index:5000;
-    box-sizing:border-box;
-    width:100%;
-    min-height:100dvh;
-    height:100dvh;
-    overflow-x:hidden;
-    overflow-y:auto;
-    overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch;
-}
-
-#accountScreen .login-box{
-    box-sizing:border-box;
-    flex:0 0 auto;
-    margin:0 auto;
-    max-width:500px;
-}
-
-#accountScreen .google-login-wrap{
-    box-sizing:border-box;
-    width:100%;
-    min-width:0;
-    margin:18px 0 10px;
-}
-
-#accountScreen .google-login-card{
-    box-sizing:border-box;
-    width:100%;
-    max-width:100%;
-    min-width:0;
-    overflow:hidden;
-}
-
-#accountScreen .google-profile-preview{
-    min-width:0;
-}
-
-#accountScreen .google-profile-preview > div:last-child{
-    min-width:0;
-    flex:1 1 auto;
-}
-
-#accountScreen .google-profile-email{
-    max-width:100%;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-#accountScreen .google-signin-host{
-    box-sizing:border-box;
-    width:100%;
-    max-width:100%;
-    min-width:0;
-    overflow:hidden;
-}
-
-#accountScreen .google-signin-host > div,
-#accountScreen .google-signin-host iframe{
-    box-sizing:border-box;
-    max-width:100% !important;
-}
-
-@media(max-width:560px){
-    #accountScreen{
-        padding:14px 12px;
-        align-items:flex-start;
-    }
-    #accountScreen .login-box{
-        width:100%;
-        max-width:500px;
-        margin:0 auto;
-        padding:27px 18px 22px;
-    }
-    #accountScreen .google-login-card{
-        padding:12px;
-        border-radius:18px;
-    }
-    #accountScreen .google-signin-host{
-        display:flex;
-        justify-content:center;
-    }
-}
-
-/* =========================================================
-   GOOGLE SIGN-IN — MOBILE CLIP FIX
-   Keep the rendered Google account control fully inside the
-   login card on narrow screens. Authentication behavior is unchanged.
-========================================================= */
-#accountScreen .google-login-card{
-    box-sizing:border-box;
-    overflow:hidden;
-}
-
-#accountScreen .google-signin-host{
-    width:100%;
-    min-width:0;
-    max-width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-#accountScreen .google-signin-host > div{
-    width:100% !important;
-    max-width:100% !important;
-    min-width:0 !important;
-    display:flex !important;
-    justify-content:center !important;
-}
-
-#accountScreen .google-signin-host iframe{
-    display:block;
-    width:100% !important;
-    max-width:100% !important;
-    min-width:0 !important;
-    box-sizing:border-box;
-}
-
-@media(max-width:560px){
-    #accountScreen .google-login-card{
-        padding:11px 10px;
-    }
-    #accountScreen .google-signin-host{
-        padding:0 1px;
-    }
-}
-
-/* =========================================================
    REAL-TIME CHAT
 ========================================================= */
 #chatFab{
@@ -3147,318 +2763,6 @@ body.light #chatPanel{
     }
 }
 
-
-/* FINAL GOOGLE ACCOUNT ALIGNMENT FIX */
-#accountScreen .google-login-wrap{
-    width:100%;
-    max-width:100%;
-    margin:18px auto 12px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    box-sizing:border-box;
-}
-
-#accountScreen .google-login-card{
-    width:100%;
-    max-width:100%;
-    margin:0 auto;
-    box-sizing:border-box;
-    overflow:hidden;
-}
-
-#accountScreen .google-profile-preview{
-    width:100%;
-    max-width:100%;
-    box-sizing:border-box;
-}
-
-#accountScreen .google-signin-host{
-    width:100%;
-    max-width:100%;
-    margin:0 auto;
-    padding:0;
-    box-sizing:border-box;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
-}
-
-#accountScreen .google-signin-host iframe{
-    display:block;
-    width:min(300px,100%) !important;
-    max-width:100% !important;
-    margin:0 auto !important;
-    box-sizing:border-box;
-}
-
-@media(max-width:600px){
-    #accountScreen{
-        padding:12px;
-        box-sizing:border-box;
-    }
-    #accountScreen .login-box{
-        width:100%;
-        max-width:470px;
-        box-sizing:border-box;
-    }
-    #accountScreen .google-login-wrap{
-        width:100%;
-        margin-left:auto;
-        margin-right:auto;
-    }
-    #accountScreen .google-login-card{
-        width:100%;
-        margin-left:auto;
-        margin-right:auto;
-    }
-}
-
-
-
-/* =========================================================
-   ANDROID MOBILE + GOOGLE ACCOUNT FINAL FIT
-   Layout-only refinement. Existing authentication behavior is preserved.
-========================================================= */
-html,body{
-    width:100%;
-    max-width:100%;
-    overflow-x:hidden;
-}
-
-#accountScreen{
-    width:100%;
-    min-width:0;
-    box-sizing:border-box;
-    padding:
-        max(12px, env(safe-area-inset-top))
-        max(12px, env(safe-area-inset-right))
-        max(16px, env(safe-area-inset-bottom))
-        max(12px, env(safe-area-inset-left));
-}
-
-#accountScreen .login-box{
-    width:100%;
-    max-width:500px;
-    min-width:0;
-    box-sizing:border-box;
-    overflow:hidden;
-}
-
-#accountScreen .account-tabs,
-#accountScreen .account-form,
-#accountScreen .google-login-wrap,
-#accountScreen .google-login-card{
-    width:100%;
-    max-width:100%;
-    min-width:0;
-    box-sizing:border-box;
-}
-
-/* Keep the Google card compact and centered. */
-#accountScreen .google-login-wrap{
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    margin-left:auto;
-    margin-right:auto;
-}
-
-#accountScreen .google-login-card{
-    margin-left:auto;
-    margin-right:auto;
-    padding:14px;
-    overflow:hidden;
-}
-
-#accountScreen .google-profile-preview{
-    width:100%;
-    min-width:0;
-    box-sizing:border-box;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    text-align:left;
-}
-
-#accountScreen .google-profile-preview > div:last-child{
-    min-width:0;
-    flex:0 1 auto;
-    max-width:calc(100% - 52px);
-}
-
-#accountScreen .google-profile-email{
-    min-width:0;
-    max-width:100%;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-}
-
-/* Use the Google control's intended compact width instead of stretching it. */
-#accountScreen .google-signin-host{
-    width:300px;
-    max-width:100%;
-    min-width:0;
-    min-height:44px;
-    margin:0 auto;
-    padding:0;
-    box-sizing:border-box;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
-}
-
-#accountScreen .google-signin-host > div{
-    width:300px !important;
-    max-width:100% !important;
-    min-width:0 !important;
-    margin:0 auto !important;
-    box-sizing:border-box !important;
-    display:flex !important;
-    justify-content:center !important;
-}
-
-#accountScreen .google-signin-host iframe{
-    display:block;
-    width:300px !important;
-    max-width:100% !important;
-    min-width:0 !important;
-    margin:0 auto !important;
-    box-sizing:border-box;
-}
-
-@media(max-width:560px){
-    #accountScreen{
-        align-items:flex-start;
-        padding:12px max(10px, env(safe-area-inset-right)) max(14px, env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left));
-    }
-
-    #accountScreen .login-box{
-        width:100%;
-        max-width:470px;
-        margin:0 auto;
-        padding:24px 14px 18px;
-        border-radius:24px;
-    }
-
-    #accountScreen .login-symbol{
-        width:64px;
-        height:64px;
-        margin-bottom:14px;
-        border-radius:20px;
-        padding:9px;
-    }
-
-    #accountScreen .login-box h1{
-        font-size:27px;
-    }
-
-    #accountScreen .login-box .subtitle{
-        max-width:100%;
-        font-size:12px;
-        line-height:1.55;
-        margin-bottom:17px;
-    }
-
-    #accountScreen .account-tabs{
-        margin-bottom:15px;
-    }
-
-    #accountScreen .account-tab-btn{
-        min-height:40px;
-    }
-
-    #accountScreen .field{
-        min-height:46px;
-        padding:12px 13px;
-        border-radius:13px;
-    }
-
-    #accountScreen .primary-btn{
-        min-height:46px;
-        margin-top:9px;
-        border-radius:13px;
-    }
-
-    #accountScreen .google-divider{
-        margin:13px 0;
-    }
-
-    #accountScreen .google-login-card{
-        padding:11px 10px;
-        border-radius:17px;
-    }
-
-    #accountScreen .google-profile-preview{
-        gap:9px;
-    }
-
-    #accountScreen .google-profile-avatar{
-        width:38px;
-        height:38px;
-        flex:0 0 38px;
-    }
-
-    #accountScreen .google-profile-title{
-        font-size:11px;
-    }
-
-    #accountScreen .google-profile-email{
-        font-size:10px;
-    }
-
-    #accountScreen .google-secure-badge{
-        font-size:7.5px;
-        padding:4px 7px;
-    }
-
-    #accountScreen .google-signin-host,
-    #accountScreen .google-signin-host > div,
-    #accountScreen .google-signin-host iframe{
-        width:280px !important;
-        max-width:100% !important;
-    }
-
-    #accountScreen .google-signin-host{
-        min-height:42px;
-    }
-
-    #accountScreen .google-fallback-btn{
-        min-height:42px;
-        margin-top:7px;
-        border-radius:11px;
-        font-size:11px;
-    }
-
-    #accountScreen .account-footer-note{
-        margin-top:11px;
-        padding-top:10px;
-        font-size:8.5px;
-    }
-}
-
-/* Small Android screens: keep the whole gate scrollable without horizontal movement. */
-@media(max-width:390px){
-    #accountScreen .login-box{
-        padding-left:12px;
-        padding-right:12px;
-    }
-
-    #accountScreen .account-tab-btn{
-        font-size:11px;
-    }
-
-    #accountScreen .google-login-card{
-        padding-left:8px;
-        padding-right:8px;
-    }
-}
-
 </style>
 </head>
 
@@ -3510,13 +2814,11 @@ html,body{
             <img src="logo.png" alt="Friendship logo">
         </div>
 
-        <div class="account-eyebrow">SECURE ACCOUNT ACCESS</div>
-
         <h1>Welcome</h1>
 
         <p class="subtitle">
-            Sign in or create an account to continue.
-            Your account access stays simple and secure.
+            Create an account or sign in to continue
+            to your private friendship space.
         </p>
 
         <div class="account-tabs">
@@ -3534,6 +2836,45 @@ html,body{
                 onclick="switchAccountTab('signup')">
                 Sign Up
             </button>
+        </div>
+
+        <div class="google-login-wrap">
+            <div class="google-login-card">
+                <div class="google-profile-preview">
+                    <div class="google-profile-avatar" id="googleProfileAvatar">G</div>
+                    <div>
+                        <div class="google-profile-title">Google Account</div>
+                        <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
+                        <div class="google-secure-badge">✓ SECURE GOOGLE SIGN-IN</div>
+                    </div>
+                </div>
+                <div id="googleSignInButton" class="google-signin-host"></div>
+                <button type="button" id="googleFallbackButton" class="google-fallback-btn" onclick="startGoogleSignInFallback()">
+                    <span class="google-g-logo">G</span>
+                    <span>Use another Google account</span>
+                </button>
+                <div id="googleLoginStatus" class="google-login-status"></div>
+            </div>
+        </div>
+
+        <div class="google-divider"><span>OR USE YOUR SAVED ACCOUNT</span></div>
+
+        <div class="biometric-card" id="biometricCard">
+            <div class="biometric-icon">☝️</div>
+            <div class="biometric-title" id="biometricTitle">Fingerprint / Passkey Unlock</div>
+            <div class="biometric-subtitle" id="biometricSubtitle">Use your device fingerprint, face unlock, or screen lock to open Friendship Forever.</div>
+            <button type="button" class="biometric-btn" id="biometricButton" onclick="unlockWithBiometric()">
+                🔐 UNLOCK WITH BIOMETRIC
+            </button>
+            <div class="biometric-status" id="biometricStatus"></div>
+            <div class="biometric-actions">
+                <button type="button" class="biometric-secondary-btn" onclick="useAnotherSignInMethod()">
+                    ↪ USE ANOTHER OPTION
+                </button>
+                <button type="button" class="biometric-secondary-btn danger" onclick="googleAccountLogout()">
+                    ⎋ LOG OUT
+                </button>
+            </div>
         </div>
 
         <form
@@ -3601,50 +2942,12 @@ html,body{
 
         </form>
 
-        <div class="google-divider"><span>OR CONTINUE WITH GOOGLE</span></div>
-
-        <div class="google-login-wrap">
-            <div class="google-login-card">
-                <div class="google-profile-preview">
-                    <div class="google-profile-avatar" id="googleProfileAvatar">G</div>
-                    <div>
-                        <div class="google-profile-title">Google Account</div>
-                        <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
-                        <div class="google-secure-badge">✓ SECURE GOOGLE SIGN-IN</div>
-                    </div>
-                </div>
-                <div id="googleSignInButton" class="google-signin-host"></div>
-                <button type="button" id="googleFallbackButton" class="google-fallback-btn" onclick="startGoogleSignInFallback()">
-                    <span class="google-g-logo">G</span>
-                    <span>Use another Google account</span>
-                </button>
-                <div id="googleLoginStatus" class="google-login-status"></div>
-            </div>
-        </div>
-
-        <div class="biometric-card" id="biometricCard">
-            <div class="biometric-icon">☝️</div>
-            <div class="biometric-title" id="biometricTitle">Fingerprint / Passkey Unlock</div>
-            <div class="biometric-subtitle" id="biometricSubtitle">Use your device fingerprint, face unlock, or screen lock to open Friendship Forever.</div>
-            <button type="button" class="biometric-btn" id="biometricButton" onclick="unlockWithBiometric()">
-                🔐 UNLOCK WITH BIOMETRIC
-            </button>
-            <div class="biometric-status" id="biometricStatus"></div>
-            <div class="biometric-actions">
-                <button type="button" class="biometric-secondary-btn" onclick="useAnotherSignInMethod()">
-                    ↪ USE ANOTHER OPTION
-                </button>
-                <button type="button" class="biometric-secondary-btn danger" onclick="googleAccountLogout()">
-                    ⎋ LOG OUT
-                </button>
-            </div>
-        </div>
-
         <div id="accountError"></div>
 
-        <div class="account-footer-note">
-            <span>🔒</span> Secure sign-in · Account access only
-        </div>
+        <p class="account-note">
+            🔒 Your password is never stored — only a locally
+            derived security hash is kept on this device.
+        </p>
 
     </div>
 
@@ -5213,10 +4516,17 @@ function navigatePage(id){
         id="home";
     }
 
-    document.body.dataset.page=id;
-
     closePageMenu();
     closeSettingsPanel();
+
+    /* Always reset to the real top before revealing the new page.
+       This prevents the previous page's scroll position from creating
+       an empty area above the newly selected content. */
+    window.scrollTo(0,0);
+    document.documentElement.scrollTop=0;
+    document.body.scrollTop=0;
+
+    document.body.dataset.page=id;
 
     if(id==="daily"){
         dailyMessage();
@@ -5230,21 +4540,20 @@ function navigatePage(id){
         loadGallery();
     }
 
+    /* Restart a clean, short entry animation every time an option is clicked. */
+    const target=document.getElementById(id);
+    if(target){
+        target.classList.remove("page-enter");
+        void target.offsetWidth;
+        target.classList.add("page-enter");
+    }
+
+    /* A second frame guarantees the selected section begins at the top
+       even on Android browsers while the display state is changing. */
     requestAnimationFrame(()=>{
-        const target=document.getElementById(id);
-        if(!target){
-            window.scrollTo({top:0,behavior:"smooth"});
-            return;
-        }
-
-        const topbar=document.querySelector(".topbar");
-        const offset=(topbar ? topbar.getBoundingClientRect().height : 0)+12;
-        const y=Math.max(0,window.scrollY + target.getBoundingClientRect().top - offset);
-
-        window.scrollTo({
-            top:y,
-            behavior:"smooth"
-        });
+        window.scrollTo(0,0);
+        document.documentElement.scrollTop=0;
+        document.body.scrollTop=0;
     });
 
 }
@@ -6181,8 +5490,8 @@ function updateBiometricUI(){
         if(button) button.textContent=hasSavedPasskey() ? "🔐 UNLOCK WITH BIOMETRIC" : "☝️ SET UP FINGERPRINT / PASSKEY";
         const title=document.getElementById("biometricTitle");
         const subtitle=document.getElementById("biometricSubtitle");
-        if(title) title.textContent=hasSavedPasskey() ? "Welcome back" : "Secure this Google Account";
-        if(subtitle) subtitle.textContent=hasSavedPasskey() ? "Verify with your device fingerprint, face unlock, or screen lock to continue." : "After Google sign-in, register your device biometric once. Next time, biometric unlock can take you directly to Home.";
+        if(title) title.textContent=hasSavedPasskey() ? "Welcome back, Roshan" : "Secure this Google Account";
+        if(subtitle) subtitle.textContent=hasSavedPasskey() ? "Verify with your device fingerprint, face unlock, or screen lock to open Friendship Forever." : "After Google sign-in, register your device biometric once. Next time, biometric unlock will take you directly to Home.";
     }else{
         card.classList.remove("show");
     }
@@ -6392,7 +5701,7 @@ function initGoogleLogin(){
             size:"large",
             shape:"pill",
             text:"continue_with",
-            width:300
+            width:360
         });
     }
 
@@ -7961,4 +7270,4 @@ applyAuthState();
 </script>
 
 </body>
-   </html>
+       </html>
