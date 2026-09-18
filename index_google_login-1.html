@@ -1,0 +1,6761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+<meta name="theme-color" content="#080812">
+<meta name="description" content="FRIENDSHIP FOREVER — a private friendship memory space.">
+
+<!-- Replace logo.png with your logo file path if your logo has a different name/location. -->
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+
+<title>FRIENDSHIP FOREVER</title>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root{
+    --bg:#070711;
+    --bg2:#0e0d1c;
+    --card:rgba(255,255,255,.065);
+    --card2:rgba(255,255,255,.095);
+    --text:#ffffff;
+    --muted:#aaa8ba;
+    --accent:#9c6cff;
+    --accent2:#ff62a8;
+    --line:rgba(255,255,255,.1);
+    --shadow:0 25px 80px rgba(0,0,0,.45);
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    min-height:100vh;
+    font-family:"Outfit",sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(
+            circle at 10% 10%,
+            rgba(142,87,255,.16),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 90% 80%,
+            rgba(255,75,150,.13),
+            transparent 28%
+        ),
+        var(--bg);
+    overflow-x:hidden;
+    transition:.5s;
+}
+
+body.light{
+    --bg:#f5f3fb;
+    --bg2:#ffffff;
+    --card:rgba(0,0,0,.045);
+    --card2:rgba(0,0,0,.08);
+    --text:#16131f;
+    --muted:#656171;
+    --line:rgba(0,0,0,.1);
+}
+
+/* =========================================================
+   BACKGROUND
+========================================================= */
+
+#universe{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-10;
+    overflow:hidden;
+}
+
+.star{
+    position:absolute;
+    border-radius:50%;
+    background:white;
+    animation:twinkle var(--duration) infinite ease-in-out;
+}
+
+@keyframes twinkle{
+    0%,100%{
+        opacity:.15;
+        transform:scale(.5);
+    }
+    50%{
+        opacity:1;
+        transform:scale(1.5);
+    }
+}
+
+.float-orb{
+    position:absolute;
+    width:300px;
+    height:300px;
+    border-radius:50%;
+    filter:blur(80px);
+    opacity:.12;
+    animation:orbMove 15s infinite alternate ease-in-out;
+}
+
+.orb1{
+    background:#7b4dff;
+    left:-100px;
+    top:20%;
+}
+
+.orb2{
+    background:#ff4e9d;
+    right:-100px;
+    bottom:10%;
+    animation-delay:-5s;
+}
+
+@keyframes orbMove{
+    from{
+        transform:translate(0,0);
+    }
+    to{
+        transform:translate(100px,-70px);
+    }
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+#loginScreen{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.login-box{
+    width:min(470px,100%);
+    padding:42px 30px;
+    text-align:center;
+    border:1px solid var(--line);
+    border-radius:35px;
+    background:var(--card);
+    backdrop-filter:blur(30px);
+    box-shadow:var(--shadow);
+    animation:loginIn 1s ease;
+}
+
+@keyframes loginIn{
+    from{
+        opacity:0;
+        transform:translateY(40px) scale(.95);
+    }
+    to{
+        opacity:1;
+        transform:none;
+    }
+}
+
+.login-symbol{
+    width:95px;
+    height:95px;
+    margin:0 auto 20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-size:45px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            var(--accent2)
+        );
+    box-shadow:
+        0 0 60px rgba(150,90,255,.35);
+    animation:heartbeat 2.5s infinite;
+}
+
+@keyframes heartbeat{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.07);
+    }
+}
+
+.login-box h1{
+    font-size:32px;
+    margin-bottom:8px;
+}
+
+.login-box .subtitle{
+    color:var(--muted);
+    line-height:1.7;
+    margin-bottom:28px;
+}
+
+.field{
+    width:100%;
+    padding:15px 17px;
+    margin:7px 0;
+    border-radius:16px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.2);
+    color:var(--text);
+    outline:none;
+}
+
+.field:focus{
+    border-color:var(--accent);
+    box-shadow:0 0 25px rgba(150,90,255,.15);
+}
+
+.primary-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:17px;
+    margin-top:12px;
+    color:white;
+    font-weight:800;
+    background:
+        linear-gradient(
+            100deg,
+            #744cff,
+            #b05cff,
+            #ff529d
+        );
+    box-shadow:0 15px 35px rgba(125,70,255,.25);
+    transition:.3s;
+}
+
+.primary-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 20px 45px rgba(125,70,255,.4);
+}
+
+#error{
+    min-height:25px;
+    margin-top:12px;
+    color:#ff739f;
+}
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+    display:none;
+    min-height:100vh;
+}
+
+.topbar{
+    position:fixed;
+    top:0;
+    left:0;
+    right:0;
+    z-index:1000;
+    padding:14px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(5,5,15,.65);
+    backdrop-filter:blur(22px);
+    border-bottom:1px solid var(--line);
+}
+
+body.light .topbar{
+    background:rgba(255,255,255,.72);
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:900;
+    letter-spacing:1px;
+}
+
+.brand-dot{
+    width:35px;
+    height:35px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    background:
+        linear-gradient(
+            135deg,
+            var(--accent),
+            var(--accent2)
+        );
+}
+
+.top-actions{
+    display:flex;
+    gap:8px;
+}
+
+.icon-btn{
+    width:40px;
+    height:40px;
+    border-radius:13px;
+    border:1px solid var(--line);
+    background:var(--card);
+    color:var(--text);
+}
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    min-height:100vh;
+    padding:130px 20px 150px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.hero-content{
+    max-width:950px;
+}
+
+.eyebrow{
+    color:#c29cff;
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    font-weight:800;
+    margin-bottom:20px;
+}
+
+.hero h1{
+    font-size:clamp(48px,10vw,110px);
+    line-height:.88;
+    font-weight:950;
+    letter-spacing:-5px;
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #c58cff,
+            #ff82b8,
+            #fff
+        );
+    background-size:250% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradientMove 6s linear infinite;
+}
+
+@keyframes gradientMove{
+    to{
+        background-position:250% center;
+    }
+}
+
+.hero-title-small{
+    font-size:clamp(18px,3vw,27px);
+    margin-top:22px;
+    color:var(--muted);
+}
+
+.hero-description{
+    max-width:680px;
+    margin:25px auto;
+    color:var(--muted);
+    line-height:1.8;
+    font-size:17px;
+}
+
+.hero-actions{
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
+.hero-btn{
+    padding:14px 23px;
+    border-radius:30px;
+    border:1px solid var(--line);
+    color:var(--text);
+    background:var(--card);
+}
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.section{
+    max-width:1200px;
+    margin:auto;
+    padding:100px 20px;
+}
+
+.section-header{
+    text-align:center;
+    margin-bottom:50px;
+}
+
+.chapter-number{
+    color:#b88cff;
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    font-weight:900;
+}
+
+.section-header h2{
+    font-size:clamp(34px,6vw,62px);
+    margin:12px 0;
+}
+
+.section-header p{
+    max-width:650px;
+    margin:auto;
+    color:var(--muted);
+    line-height:1.7;
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+.profile-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.profile-card{
+    padding:35px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+    box-shadow:var(--shadow);
+}
+
+.profile-card h3{
+    font-size:27px;
+    margin-bottom:12px;
+}
+
+.profile-card p{
+    color:var(--muted);
+    line-height:1.8;
+}
+
+.profile-icon{
+    font-size:50px;
+    margin-bottom:20px;
+}
+
+/* =========================================================
+   BIRTHDAY
+========================================================= */
+
+.birthday-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+}
+
+.birthday-card{
+    padding:35px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+}
+
+.birthday-card::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    border-radius:50%;
+    background:var(--accent);
+    filter:blur(80px);
+    opacity:.13;
+    top:-80px;
+    right:-70px;
+}
+
+.person-icon{
+    width:90px;
+    height:90px;
+    margin:auto;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:50%;
+    font-size:40px;
+    background:linear-gradient(
+        135deg,
+        var(--accent),
+        var(--accent2)
+    );
+}
+
+.birthday-card h3{
+    font-size:27px;
+    margin-top:20px;
+}
+
+.birth-date{
+    color:#bc93ff;
+    margin-top:5px;
+}
+
+.age-number{
+    font-size:50px;
+    font-weight:950;
+    margin:20px 0;
+}
+
+.countdown{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:8px;
+}
+
+.time-box{
+    padding:12px 5px;
+    border-radius:15px;
+    background:rgba(0,0,0,.2);
+    border:1px solid var(--line);
+}
+
+.time-box strong{
+    display:block;
+    font-size:22px;
+}
+
+.time-box span{
+    font-size:10px;
+    color:var(--muted);
+    text-transform:uppercase;
+}
+
+/* =========================================================
+   STATS
+========================================================= */
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+}
+
+.stat{
+    padding:25px 15px;
+    text-align:center;
+    border-radius:22px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.stat-number{
+    font-size:35px;
+    font-weight:900;
+    color:#c493ff;
+}
+
+.stat-label{
+    color:var(--muted);
+    margin-top:5px;
+    font-size:13px;
+}
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+
+.timeline{
+    max-width:850px;
+    margin:auto;
+    position:relative;
+}
+
+.timeline::before{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:
+        linear-gradient(
+            #744cff,
+            #ff5ba5,
+            #744cff
+        );
+}
+
+.timeline-item{
+    width:50%;
+    padding:15px 35px;
+    position:relative;
+}
+
+.timeline-item:nth-child(odd){
+    text-align:right;
+}
+
+.timeline-item:nth-child(even){
+    margin-left:50%;
+}
+
+.timeline-dot{
+    width:16px;
+    height:16px;
+    position:absolute;
+    top:28px;
+    border-radius:50%;
+    background:white;
+    box-shadow:0 0 25px #a86cff;
+}
+
+.timeline-item:nth-child(odd) .timeline-dot{
+    right:-8px;
+}
+
+.timeline-item:nth-child(even) .timeline-dot{
+    left:-8px;
+}
+
+.timeline-card{
+    padding:22px;
+    border-radius:20px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.timeline-card .year{
+    color:#be8eff;
+    font-weight:900;
+    font-size:20px;
+    margin-bottom:6px;
+}
+
+.timeline-card p{
+    color:var(--muted);
+    line-height:1.6;
+}
+
+/* =========================================================
+   MEMORY
+========================================================= */
+
+.memory-tools{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+    margin-bottom:30px;
+}
+
+.memory-tools button{
+    padding:10px 16px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    color:var(--text);
+    background:var(--card);
+}
+
+.memory-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.memory-card{
+    overflow:hidden;
+    border-radius:24px;
+    background:var(--card);
+    border:1px solid var(--line);
+    transition:.35s;
+}
+
+.memory-card:hover{
+    transform:translateY(-8px);
+}
+
+.memory-card img{
+    width:100%;
+    height:220px;
+    object-fit:cover;
+    display:block;
+}
+
+.memory-content{
+    padding:20px;
+}
+
+.memory-content h3{
+    margin-bottom:5px;
+}
+
+.memory-content small{
+    color:#b68aff;
+}
+
+.memory-content p{
+    margin-top:10px;
+    color:var(--muted);
+    line-height:1.5;
+}
+
+.empty-memory{
+    grid-column:1/-1;
+    text-align:center;
+    padding:60px;
+    color:var(--muted);
+    border:1px dashed var(--line);
+    border-radius:25px;
+}
+
+/* =========================================================
+   DAILY MESSAGE
+========================================================= */
+
+.daily{
+    max-width:800px;
+    margin:auto;
+    text-align:center;
+    padding:45px;
+    border-radius:30px;
+    background:var(--card);
+    border:1px solid var(--line);
+}
+
+.daily-message{
+    font-size:24px;
+    line-height:1.7;
+}
+
+/* =========================================================
+   FINAL
+========================================================= */
+
+.final-section{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+}
+
+.final-content{
+    max-width:850px;
+}
+
+.final-content h2{
+    font-size:clamp(45px,9vw,95px);
+    line-height:.95;
+}
+
+.final-content p{
+    margin:25px auto;
+    max-width:650px;
+    color:var(--muted);
+    line-height:1.9;
+    font-size:18px;
+}
+
+.final-line{
+    font-size:24px;
+    color:#cb99ff;
+    letter-spacing:3px;
+}
+
+/* =========================================================
+   MODALS
+========================================================= */
+
+.modal{
+    position:fixed;
+    inset:0;
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:rgba(0,0,0,.78);
+    backdrop-filter:blur(12px);
+}
+
+.modal.show{
+    display:flex;
+}
+
+.modal-card{
+    width:min(570px,100%);
+    max-height:90vh;
+    overflow:auto;
+    padding:30px;
+    border-radius:28px;
+    background:#11101d;
+    border:1px solid rgba(255,255,255,.13);
+    box-shadow:0 30px 100px #000;
+}
+
+.modal-card h2{
+    margin-bottom:18px;
+}
+
+.modal-card p{
+    color:#bbb;
+    line-height:1.8;
+    white-space:pre-line;
+}
+
+.modal-close{
+    float:right;
+    border:none;
+    background:none;
+    color:white;
+    font-size:27px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:850px){
+
+    .profile-grid,
+    .birthday-grid{
+        grid-template-columns:1fr;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .memory-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .special-grid{
+        grid-template-columns:1fr 1fr;
+    }
+
+    .timeline::before{
+        left:8px;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(even){
+        width:100%;
+        margin-left:0;
+        padding-left:38px;
+        text-align:left;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-dot,
+    .timeline-item:nth-child(even) .timeline-dot{
+        left:0;
+        right:auto;
+    }
+}
+
+@media(max-width:600px){
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+    .section{
+        padding:75px 16px;
+    }
+
+    .memory-grid{
+        grid-template-columns:1fr;
+    }
+
+    .countdown{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+}
+
+/* =========================================================
+   PREMIUM NAVIGATION / PAGE VIEW SYSTEM
+========================================================= */
+
+:root{
+    --ra-glow:rgba(156,108,255,.35);
+    --ra-glow2:rgba(255,98,168,.25);
+}
+
+button{
+    cursor:pointer;
+    font:inherit;
+}
+
+.brand-button{
+    border:0;
+    background:transparent;
+    color:inherit;
+    text-align:left;
+    padding:0;
+}
+
+.brand-copy{
+    display:flex;
+    flex-direction:column;
+    line-height:1.05;
+    gap:4px;
+}
+
+.brand-copy strong{
+    font-size:13px;
+    letter-spacing:1.7px;
+}
+
+.brand-copy small{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:2.2px;
+}
+
+.icon-btn{
+    cursor:pointer;
+    transition:transform .25s ease,border-color .25s ease,background .25s ease,box-shadow .25s ease;
+}
+
+.icon-btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(196,147,255,.5);
+    box-shadow:0 8px 28px var(--ra-glow);
+}
+
+.page-menu-shell{
+    position:fixed;
+    top:78px;
+    left:20px;
+    z-index:2200;
+}
+
+.page-menu-trigger{
+    display:flex;
+    align-items:center;
+    gap:4px;
+    min-width:104px;
+    padding:9px 13px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:18px;
+    color:var(--text);
+    background:rgba(12,11,24,.72);
+    backdrop-filter:blur(22px);
+    box-shadow:0 12px 35px rgba(0,0,0,.22);
+    transition:.3s cubic-bezier(.22,1,.36,1);
+}
+
+body.light .page-menu-trigger{
+    background:rgba(255,255,255,.78);
+}
+
+.page-menu-trigger:hover{
+    transform:translateY(-2px);
+    border-color:rgba(196,147,255,.55);
+    box-shadow:0 14px 40px var(--ra-glow);
+}
+
+.page-menu-trigger span{
+    width:4px;
+    height:4px;
+    border-radius:50%;
+    background:currentColor;
+    box-shadow:0 0 8px currentColor;
+}
+
+.page-menu-trigger strong{
+    margin-left:7px;
+    font-size:11px;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+}
+
+.page-menu{
+    position:absolute;
+    top:calc(100% + 10px);
+    left:0;
+    width:min(360px,calc(100vw - 40px));
+    max-height:min(72vh,620px);
+    overflow:auto;
+    padding:9px;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:25px;
+    background:rgba(9,8,20,.88);
+    backdrop-filter:blur(28px);
+    box-shadow:0 28px 90px rgba(0,0,0,.48),0 0 45px rgba(132,80,255,.12);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(-12px) scale(.97);
+    transform-origin:top left;
+    transition:opacity .28s ease,transform .34s cubic-bezier(.22,1,.36,1),visibility .28s ease;
+}
+
+body.light .page-menu{
+    background:rgba(255,255,255,.92);
+}
+
+.page-menu.open{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+}
+
+.page-menu button{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:13px;
+    padding:12px;
+    margin:2px 0;
+    border:1px solid transparent;
+    border-radius:17px;
+    color:var(--text);
+    background:transparent;
+    text-align:left;
+    transition:.25s ease;
+}
+
+.page-menu button:hover{
+    background:linear-gradient(135deg,rgba(156,108,255,.16),rgba(255,98,168,.09));
+    border-color:rgba(196,147,255,.2);
+    transform:translateX(3px);
+}
+
+.page-menu button > span{
+    width:37px;
+    height:37px;
+    flex:0 0 37px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    background:var(--card2);
+    border:1px solid var(--line);
+    box-shadow:0 0 18px rgba(156,108,255,.08);
+}
+
+.page-menu button div{
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+}
+
+.page-menu button strong{
+    font-size:13px;
+}
+
+.page-menu button small{
+    color:var(--muted);
+    font-size:10px;
+}
+
+.page-section{
+    display:none;
+    flex-direction:column;
+    width:100%;
+    min-height:100vh;
+}
+
+#home,
+#story,
+#forever{
+    scroll-margin-top:120px;
+}
+
+body[data-page="home"] #home,
+body[data-page="home"] #story,
+body[data-page="home"] #forever,
+body[data-page="story"] #story,
+body[data-page="birthdays"] #birthdays,
+body[data-page="journey"] #journey,
+body[data-page="memories"] #memories,
+body[data-page="gallery"] #gallery,
+body[data-page="daily"] #daily,
+body[data-page="forever"] #forever{
+    display:flex;
+}
+
+body[data-page="home"] main{
+    min-height:100vh;
+}
+
+body[data-page]:not([data-page="home"]) main{
+    min-height:100vh;
+}
+
+body[data-page]:not([data-page="home"]) .hero{
+    display:none;
+}
+
+body[data-page="home"] #story{
+    padding-top:100px;
+}
+
+body[data-page="home"] #forever{
+    display:flex;
+    padding-top:70px;
+    border-top:1px solid rgba(255,255,255,.06);
+}
+
+.page-menu-shell + main{
+    position:relative;
+}
+
+.gallery-toolbar{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.gallery-upload-btn,
+.gallery-filter-btn,
+.upload-memory-btn{
+    border:1px solid var(--line);
+    border-radius:18px;
+    padding:12px 18px;
+    color:var(--text);
+    background:var(--card);
+    transition:.28s ease;
+}
+
+.gallery-upload-btn{
+    background:linear-gradient(135deg,rgba(116,76,255,.28),rgba(255,83,158,.18));
+}
+
+.gallery-upload-btn:hover,
+.gallery-filter-btn:hover,
+.upload-memory-btn:hover{
+    transform:translateY(-3px);
+    border-color:rgba(196,147,255,.55);
+    box-shadow:0 12px 35px rgba(125,70,255,.18);
+}
+
+.gallery-upload-btn span{
+    font-size:18px;
+    margin-right:5px;
+}
+
+.gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+
+.gallery-album-card{
+    position:relative;
+    overflow:hidden;
+    aspect-ratio:1/1;
+    border-radius:25px;
+    border:1px solid var(--line);
+    background:var(--card);
+    box-shadow:0 16px 50px rgba(0,0,0,.2);
+    cursor:pointer;
+    transform:translateZ(0);
+    transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s ease,border-color .35s ease;
+}
+
+.gallery-album-card:hover{
+    transform:translateY(-7px) scale(1.015);
+    border-color:rgba(196,147,255,.45);
+    box-shadow:0 22px 65px rgba(0,0,0,.32),0 0 30px rgba(156,108,255,.12);
+}
+
+.gallery-album-card img{
+    width:100%;
+    height:100%;
+    display:block;
+    object-fit:cover;
+    transition:transform .6s cubic-bezier(.22,1,.36,1);
+}
+
+.gallery-album-card:hover img{
+    transform:scale(1.08);
+}
+
+.gallery-album-overlay{
+    position:absolute;
+    inset:auto 0 0;
+    padding:42px 15px 15px;
+    background:linear-gradient(transparent,rgba(0,0,0,.78));
+    color:white;
+}
+
+.gallery-album-overlay strong,
+.gallery-album-overlay small{
+    display:block;
+}
+
+.gallery-album-overlay strong{
+    font-size:14px;
+}
+
+.gallery-album-overlay small{
+    margin-top:4px;
+    color:rgba(255,255,255,.72);
+    font-size:10px;
+}
+
+.gallery-empty{
+    grid-column:1/-1;
+    min-height:280px;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    padding:40px;
+    border:1px dashed var(--line);
+    border-radius:28px;
+    color:var(--muted);
+    background:rgba(255,255,255,.02);
+}
+
+.memory-photo-preview,
+.quick-upload-preview{
+    margin:14px 0;
+    border-radius:22px;
+    border:1px solid var(--line);
+    overflow:hidden;
+    background:rgba(0,0,0,.18);
+}
+
+.memory-photo-preview img,
+.quick-upload-preview img{
+    width:100%;
+    max-height:280px;
+    object-fit:cover;
+    display:block;
+}
+
+.quick-upload-preview{
+    max-width:600px;
+    margin:20px auto 0;
+    padding:8px;
+}
+
+.quick-upload-preview[hidden],
+.memory-photo-preview[hidden]{
+    display:none;
+}
+
+.settings-panel{
+    position:fixed;
+    inset:0;
+    z-index:3100;
+    display:flex;
+    justify-content:flex-end;
+    align-items:flex-start;
+    padding:78px 20px 20px;
+    background:rgba(0,0,0,.28);
+    backdrop-filter:blur(5px);
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+    transition:.25s ease;
+}
+
+.settings-panel.open{
+    opacity:1;
+    visibility:visible;
+    pointer-events:auto;
+}
+
+.settings-panel-card{
+    width:min(390px,100%);
+    padding:22px;
+    border:1px solid var(--line);
+    border-radius:26px;
+    background:rgba(16,14,29,.94);
+    backdrop-filter:blur(28px);
+    box-shadow:0 30px 90px rgba(0,0,0,.5);
+    transform:translateY(-10px) scale(.98);
+    transition:.3s cubic-bezier(.22,1,.36,1);
+}
+
+body.light .settings-panel-card{
+    background:rgba(255,255,255,.94);
+}
+
+.settings-panel.open .settings-panel-card{
+    transform:none;
+}
+
+.settings-panel-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:15px;
+}
+
+.settings-panel-head small{
+    color:#b88cff;
+    letter-spacing:2px;
+    font-size:9px;
+}
+
+.settings-panel-head h3{
+    margin-top:5px;
+    font-size:24px;
+}
+
+.settings-row{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:14px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    color:var(--text);
+    background:var(--card);
+    text-align:left;
+}
+
+.settings-row > span{
+    font-size:24px;
+}
+
+.settings-row div{
+    flex:1;
+}
+
+.settings-row small{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:10px;
+}
+
+.settings-status{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:15px;
+    color:var(--muted);
+    font-size:11px;
+}
+
+.status-dot{
+    width:8px;
+    height:8px;
+    border-radius:50%;
+    background:#61e6a8;
+    box-shadow:0 0 14px rgba(97,230,168,.8);
+}
+
+.profile-modal-card{
+    text-align:center;
+}
+
+.profile-modal-avatar{
+    width:86px;
+    height:86px;
+    margin:0 auto 20px;
+    display:grid;
+    place-items:center;
+    border-radius:25px;
+    font-weight:950;
+    font-size:24px;
+    letter-spacing:-1px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 0 45px rgba(156,108,255,.28);
+}
+
+.profile-modal-card h2{
+    margin-top:10px;
+}
+
+.profile-meta-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:22px;
+}
+
+.profile-meta-grid > div{
+    padding:15px;
+    border:1px solid var(--line);
+    border-radius:17px;
+    background:var(--card);
+}
+
+.profile-meta-grid small,
+.profile-meta-grid strong{
+    display:block;
+}
+
+.profile-meta-grid small{
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:1.5px;
+}
+
+.profile-meta-grid strong{
+    margin-top:5px;
+    font-size:13px;
+}
+
+@media(max-width:900px){
+    .gallery-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+    }
+}
+
+@media(max-width:600px){
+    .topbar{
+        padding:12px 14px;
+    }
+
+    .brand-copy strong{
+        font-size:11px;
+    }
+
+    .brand-copy small{
+        font-size:8px;
+    }
+
+    .brand-dot{
+        width:39px;
+        height:39px;
+    }
+
+    .page-menu-shell{
+        top:72px;
+        left:14px;
+    }
+
+    .page-menu{
+        width:calc(100vw - 28px);
+        max-height:70vh;
+    }
+
+    .gallery-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+
+    .settings-panel{
+        padding:70px 12px 12px;
+    }
+
+    .settings-panel-card{
+        width:100%;
+    }
+}
+
+
+
+/* =========================================================
+   MOBILE RESPONSIVENESS — GLOBAL SAFEGUARDS
+========================================================= */
+
+html{
+    overflow-x:hidden;
+}
+
+img{
+    max-width:100%;
+}
+
+input,select,textarea{
+    max-width:100%;
+}
+
+/* =========================================================
+   TABLETS & SMALL LAPTOPS  (<= 900px)
+========================================================= */
+
+@media(max-width:900px){
+
+    .gallery-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+    }
+
+    .hero h1{
+        letter-spacing:-3px;
+    }
+
+}
+
+/* =========================================================
+   MOBILE  (<= 768px)
+========================================================= */
+
+@media(max-width:768px){
+
+    .topbar{
+        padding:12px 14px;
+    }
+
+    .brand-copy small{
+        display:none;
+    }
+
+    .page-menu-shell{
+        top:70px;
+        left:12px;
+    }
+
+    .page-menu{
+        width:calc(100vw - 24px);
+        max-height:65vh;
+    }
+
+    .hero{
+        padding:110px 16px 90px;
+    }
+
+    .hero h1{
+        font-size:clamp(38px,12vw,68px);
+        letter-spacing:-2px;
+    }
+
+    .hero-title-small{
+        font-size:17px;
+    }
+
+    .hero-description{
+        font-size:15px;
+        margin:20px auto;
+    }
+
+    .hero-actions{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .hero-btn{
+        width:100%;
+    }
+
+    .section{
+        padding:70px 16px;
+    }
+
+    .section-header{
+        margin-bottom:35px;
+    }
+
+    .section-header h2{
+        font-size:clamp(30px,8vw,44px);
+    }
+
+    /* stack all grids vertically */
+    .profile-grid,
+    .birthday-grid,
+    .memory-grid{
+        grid-template-columns:1fr;
+        gap:18px;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+        gap:12px;
+    }
+
+    .gallery-grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+
+    .profile-card,
+    .birthday-card{
+        padding:26px 20px;
+    }
+
+    .profile-card h3,
+    .birthday-card h3{
+        font-size:22px;
+    }
+
+    .age-number{
+        font-size:38px;
+    }
+
+    .countdown{
+        grid-template-columns:repeat(4,1fr);
+        gap:6px;
+    }
+
+    .time-box{
+        padding:10px 4px;
+    }
+
+    .time-box strong{
+        font-size:18px;
+    }
+
+    .memory-tools{
+        gap:8px;
+    }
+
+    .memory-tools button{
+        padding:9px 13px;
+        font-size:13px;
+    }
+
+    .memory-card img{
+        height:190px;
+    }
+
+    .daily{
+        padding:30px 20px;
+    }
+
+    .daily-message{
+        font-size:18px;
+    }
+
+    .final-content h2{
+        font-size:clamp(38px,11vw,60px);
+    }
+
+    .final-content p{
+        font-size:15px;
+    }
+
+    .final-line{
+        font-size:18px;
+        letter-spacing:2px;
+    }
+
+    .modal-card{
+        padding:22px 18px;
+    }
+
+    .settings-panel{
+        padding:70px 12px 12px;
+    }
+
+    .settings-panel-card{
+        width:100%;
+    }
+
+    .profile-meta-grid{
+        grid-template-columns:1fr;
+    }
+
+    .timeline-item,
+    .timeline-item:nth-child(even){
+        padding-left:30px;
+    }
+
+}
+
+/* =========================================================
+   SMALL PHONES  (<= 480px)
+========================================================= */
+
+@media(max-width:480px){
+
+    .login-box{
+        padding:32px 20px;
+        border-radius:26px;
+    }
+
+    .login-box h1{
+        font-size:24px;
+    }
+
+    .hero h1{
+        font-size:clamp(34px,13vw,52px);
+        letter-spacing:-1px;
+    }
+
+    .stats{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .stat{
+        padding:18px 10px;
+    }
+
+    .stat-number{
+        font-size:26px;
+    }
+
+    .gallery-grid{
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    }
+
+    .gallery-album-overlay strong{
+        font-size:12px;
+    }
+
+    .countdown{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .timeline::before{
+        left:6px;
+    }
+
+    .timeline-card{
+        padding:16px;
+    }
+
+    .modal-card{
+        border-radius:20px;
+    }
+
+}
+
+/* ADVANCED UI POLISH */
+h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font-weight:700;}button,input,textarea,select{font-family:"Outfit",sans-serif;}.profile-card,.birthday-card,.stat,.timeline-card,.daily,.modal-card,.settings-panel-card,.page-menu{backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);}.bond-logo{box-shadow:0 0 30px rgba(156,108,255,.32),inset 0 0 20px rgba(255,255,255,.08);}.bond-logo svg{width:29px;height:29px;filter:drop-shadow(0 0 8px rgba(210,140,255,.7));}.orb3{background:#3dd6ff;right:28%;top:-80px;width:240px;height:240px;animation:orbBreathe 11s infinite ease-in-out alternate;}.neon-orb{position:absolute;width:10px;height:10px;border-radius:50%;background:#fff;box-shadow:0 0 18px 5px #b98cff;animation:neonFloat 7s infinite ease-in-out;opacity:.75;}.neon-orb-a{left:18%;top:35%;}.neon-orb-b{right:16%;top:22%;animation-delay:-3s;}.shooting-star{position:absolute;width:140px;height:2px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.9),transparent);transform:rotate(-25deg);opacity:0;animation:shoot 9s infinite ease-in;}.shooting-star-a{left:65%;top:18%;animation-delay:2s}.shooting-star-b{left:25%;top:55%;animation-delay:6s}@keyframes orbBreathe{0%,100%{opacity:.08;transform:scale(.92)}50%{opacity:.18;transform:scale(1.08)}}@keyframes neonFloat{0%,100%{transform:translate3d(0,0,0) scale(.7);opacity:.35}50%{transform:translate3d(35px,-25px,0) scale(1.35);opacity:1}}@keyframes shoot{0%,70%,100%{opacity:0;transform:translate3d(-20px,-20px,0) rotate(-25deg)}74%{opacity:1}84%{opacity:0;transform:translate3d(280px,160px,0) rotate(-25deg)}}.settings-row{cursor:pointer;transition:transform .25s ease,border-color .25s ease,box-shadow .25s ease;}.settings-row:hover{transform:translateX(3px);border-color:rgba(196,147,255,.4);box-shadow:0 10px 30px rgba(0,0,0,.16);}.settings-danger{margin-top:8px;}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition:none!important;}}
+
+/* =========================================================
+   FRIENDSHIP FOREVER — SPLASH SCREEN
+========================================================= */
+#splashScreen{
+    position:fixed;
+    inset:0;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    gap:18px;
+    padding:24px;
+    text-align:center;
+    background:
+        radial-gradient(circle at 50% 40%,rgba(156,108,255,.22),transparent 32%),
+        radial-gradient(circle at 20% 80%,rgba(255,98,168,.14),transparent 28%),
+        #070711;
+    transition:opacity .8s ease,visibility .8s ease;
+}
+#splashScreen.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+}
+.splash-logo{
+    width:clamp(125px,24vw,190px);
+    height:clamp(125px,24vw,190px);
+    object-fit:contain;
+    border-radius:32px;
+    filter:drop-shadow(0 0 35px rgba(196,147,255,.45));
+    animation:splashLogoIn 1s cubic-bezier(.22,1,.36,1) both,splashPulse 2.4s ease-in-out 1s infinite;
+}
+.splash-name{
+    font-family:"Space Grotesk","Outfit",sans-serif;
+    font-size:clamp(32px,8vw,72px);
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-2px;
+    background:linear-gradient(90deg,#fff,#c58cff,#ff82b8,#fff);
+    background-size:220% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    animation:gradientMove 5s linear infinite,splashTextIn .9s .18s ease both;
+}
+.splash-tagline{
+    color:rgba(255,255,255,.68);
+    font-size:12px;
+    letter-spacing:4px;
+    text-transform:uppercase;
+    animation:splashTextIn .9s .35s ease both;
+}
+@keyframes splashLogoIn{
+    from{opacity:0;transform:scale(.72) translateY(20px)}
+    to{opacity:1;transform:none}
+}
+@keyframes splashTextIn{
+    from{opacity:0;transform:translateY(14px)}
+    to{opacity:1;transform:none}
+}
+@keyframes splashPulse{
+    0%,100%{transform:scale(1)}
+    50%{transform:scale(1.035)}
+}
+
+/* =========================================================
+   LOGO / LIGHTBOX / DAILY NOTES / ACTIVE USER
+========================================================= */
+.login-symbol{
+    overflow:hidden;
+    background:linear-gradient(135deg,rgba(156,108,255,.2),rgba(255,98,168,.12));
+}
+.login-symbol img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:50%;
+}
+.brand-logo-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:12px;
+}
+.gallery-album-card img{
+    cursor:zoom-in;
+}
+.lightbox{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:28px;
+    background:rgba(0,0,0,.94);
+    backdrop-filter:blur(18px);
+}
+.lightbox.show{
+    display:flex;
+}
+.lightbox-image{
+    max-width:96vw;
+    max-height:88vh;
+    width:auto;
+    height:auto;
+    object-fit:contain;
+    border-radius:18px;
+    box-shadow:0 30px 100px rgba(0,0,0,.65);
+}
+.lightbox-close{
+    position:absolute;
+    top:18px;
+    right:18px;
+    width:48px;
+    height:48px;
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:15px;
+    background:rgba(20,18,32,.78);
+    color:#fff;
+    font-size:30px;
+    line-height:1;
+    cursor:pointer;
+}
+.lightbox-caption{
+    position:absolute;
+    left:20px;
+    right:20px;
+    bottom:18px;
+    text-align:center;
+    color:rgba(255,255,255,.82);
+    font-size:14px;
+}
+/* =========================================================
+   ENCRYPTED PRIVATE DATA UI
+========================================================= */
+.encryption-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin:0 auto 18px;
+    padding:8px 12px;
+    border:1px solid rgba(97,230,168,.22);
+    border-radius:999px;
+    background:rgba(97,230,168,.07);
+    color:#9ff0c5;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.2px;
+    text-transform:uppercase;
+}
+.encryption-badge::before{
+    content:"🔐";
+}
+.daily-notes-panel{
+    margin-top:22px;
+    text-align:left;
+}
+.daily-note-form{
+    display:grid;
+    gap:10px;
+}
+.daily-note-form textarea{
+    width:100%;
+    min-height:125px;
+    resize:vertical;
+}
+.daily-note-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    flex-wrap:wrap;
+    color:var(--muted);
+    font-size:12px;
+}
+.daily-note-add{
+    width:auto;
+    padding:13px 20px;
+}
+.notes-list{
+    display:grid;
+    gap:10px;
+    margin-top:18px;
+}
+.note-item{
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--card2);
+    animation:loginIn .35s ease;
+}
+.note-item small{
+    display:block;
+    margin-bottom:6px;
+    color:#c393ff;
+}
+.note-item p{
+    color:var(--text);
+    line-height:1.65;
+    white-space:pre-wrap;
+    word-break:break-word;
+}
+.active-user-banner{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:15px;
+    margin-top:20px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:var(--card);
+    text-align:left;
+}
+.active-user-indicator{
+    width:12px;
+    height:12px;
+    flex:0 0 12px;
+    border-radius:50%;
+    background:#61e6a8;
+    box-shadow:0 0 16px rgba(97,230,168,.8);
+}
+.active-user-banner strong,
+.active-user-banner small{
+    display:block;
+}
+.active-user-banner small{
+    margin-top:4px;
+    color:var(--muted);
+}
+.profile-active-card{
+    margin-top:18px;
+    padding:15px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--card);
+    text-align:left;
+}
+.profile-active-card small{
+    color:var(--muted);
+    display:block;
+    font-size:9px;
+    letter-spacing:1.5px;
+}
+.profile-active-card strong{
+    display:block;
+    margin-top:6px;
+}
+.notification-status{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:11px;
+    line-height:1.5;
+}
+@media(max-width:600px){
+    .splash-name{letter-spacing:-1px}
+    .lightbox{padding:15px}
+    .lightbox-image{max-width:100vw;max-height:82vh;border-radius:12px}
+    .lightbox-close{top:12px;right:12px}
+}
+
+/* =========================================================
+   ACCOUNT GATE (Sign In / Sign Up)
+========================================================= */
+#loginScreen{
+    display:none;
+}
+#accountScreen .google-login-wrap{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    margin:18px 0 12px;
+}
+
+#accountScreen .google-login-card{
+    width:100%;
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:20px;
+    padding:14px;
+    background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025));
+    box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+
+#accountScreen .google-profile-preview{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    margin-bottom:12px;
+}
+
+#accountScreen .google-profile-avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    color:#4285f4;
+    font-size:21px;
+    font-weight:900;
+    box-shadow:0 8px 25px rgba(0,0,0,.25);
+    overflow:hidden;
+}
+
+#accountScreen .google-profile-avatar img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+#accountScreen .google-profile-title{
+    font-size:13px;
+    font-weight:800;
+    letter-spacing:.2px;
+}
+
+#accountScreen .google-profile-email{
+    margin-top:2px;
+    color:var(--muted);
+    font-size:12px;
+    word-break:break-all;
+}
+
+#accountScreen .google-login-card .g_id_signin{
+    width:100%;
+}
+
+#accountScreen .google-login-card .g_id_signin > div{
+    width:100% !important;
+}
+
+#accountScreen .biometric-card{
+    display:none;
+    width:100%;
+    margin:16px 0 8px;
+    padding:18px;
+    border:1px solid rgba(156,108,255,.35);
+    border-radius:22px;
+    background:linear-gradient(145deg,rgba(156,108,255,.13),rgba(255,98,168,.06));
+    text-align:center;
+}
+
+#accountScreen .biometric-card.show{
+    display:block;
+}
+
+#accountScreen .biometric-icon{
+    width:64px;
+    height:64px;
+    margin:0 auto 10px;
+    border-radius:20px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:31px;
+    background:rgba(255,255,255,.09);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 12px 35px rgba(0,0,0,.22);
+}
+
+#accountScreen .biometric-title{
+    font-weight:800;
+    font-size:16px;
+}
+
+#accountScreen .biometric-subtitle{
+    margin:5px 0 14px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.5;
+}
+
+#accountScreen .biometric-btn{
+    width:100%;
+    border:0;
+    border-radius:14px;
+    padding:13px 16px;
+    color:#fff;
+    background:linear-gradient(100deg,#744cff,#b05cff,#ff529d);
+    font:800 13px "Outfit",sans-serif;
+    letter-spacing:.4px;
+    cursor:pointer;
+    box-shadow:0 12px 30px rgba(116,76,255,.25);
+    transition:transform .2s ease,box-shadow .2s ease;
+}
+
+#accountScreen .biometric-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 16px 35px rgba(116,76,255,.34);
+}
+
+#accountScreen .biometric-status{
+    margin-top:10px;
+    color:var(--muted);
+    font-size:11px;
+    min-height:16px;
+}
+
+#accountScreen .google-divider{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:13px 0;
+    color:var(--muted);
+    font-size:11px;
+}
+
+#accountScreen .google-divider::before,
+#accountScreen .google-divider::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+}
+
+#accountScreen{
+    display:none;
+    min-height:100vh;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+#accountScreen.show{
+    display:flex;
+}
+.account-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:22px;
+    padding:5px;
+    border:1px solid var(--line);
+    border-radius:16px;
+    background:rgba(0,0,0,.2);
+}
+.account-tab-btn{
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:transparent;
+    color:var(--muted);
+    font-weight:700;
+    letter-spacing:.5px;
+    transition:.25s ease;
+}
+.account-tab-btn.account-tab-active{
+    color:#fff;
+    background:linear-gradient(100deg,#744cff,#b05cff,#ff529d);
+    box-shadow:0 12px 28px rgba(125,70,255,.3);
+}
+.account-form{
+    text-align:left;
+}
+.account-form label{
+    display:block;
+    margin:10px 0 4px;
+    font-size:11px;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    color:var(--muted);
+}
+.account-form label:first-child{
+    margin-top:0;
+}
+.account-note{
+    margin-top:16px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.6;
+    text-align:center;
+}
+
+/* =========================================================
+   REAL-TIME CHAT
+========================================================= */
+#chatFab{
+    display:none;
+    position:fixed;
+    right:22px;
+    bottom:22px;
+    z-index:2400;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    border:none;
+    align-items:center;
+    justify-content:center;
+    font-size:26px;
+    color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+    box-shadow:0 15px 40px rgba(150,90,255,.45);
+    transition:.3s ease;
+}
+#chatFab.show{
+    display:flex;
+}
+#chatFab:hover{
+    transform:translateY(-3px) scale(1.04);
+    box-shadow:0 20px 50px rgba(150,90,255,.6);
+}
+#chatFab .chat-fab-badge{
+    position:absolute;
+    top:-4px;
+    right:-4px;
+    min-width:20px;
+    height:20px;
+    padding:0 5px;
+    border-radius:999px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    font-size:11px;
+    font-weight:800;
+    color:#fff;
+    background:#ff4d6d;
+    box-shadow:0 0 0 3px var(--bg2);
+}
+#chatFab .chat-fab-badge.show{
+    display:flex;
+}
+#chatPanel{
+    position:fixed;
+    right:22px;
+    bottom:96px;
+    z-index:2500;
+    width:min(360px,calc(100vw - 32px));
+    height:min(520px,calc(100vh - 140px));
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    border:1px solid var(--line);
+    border-radius:26px;
+    background:rgba(16,14,29,.96);
+    backdrop-filter:blur(28px);
+    box-shadow:0 30px 90px rgba(0,0,0,.55);
+    opacity:0;
+    visibility:hidden;
+    transform:translateY(16px) scale(.97);
+    transition:.25s cubic-bezier(.22,1,.36,1);
+}
+body.light #chatPanel{
+    background:rgba(255,255,255,.97);
+}
+#chatPanel.show{
+    opacity:1;
+    visibility:visible;
+    transform:none;
+}
+.chat-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+    background:rgba(255,255,255,.03);
+}
+.chat-header strong{
+    display:block;
+    font-size:14px;
+}
+.chat-header small{
+    display:block;
+    margin-top:2px;
+    color:var(--muted);
+    font-size:10px;
+}
+.chat-messages{
+    flex:1;
+    overflow-y:auto;
+    padding:16px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.chat-empty{
+    margin:auto;
+    text-align:center;
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+    padding:20px;
+}
+.chat-bubble{
+    max-width:82%;
+    padding:10px 14px;
+    border-radius:16px;
+    font-size:13.5px;
+    line-height:1.5;
+    word-break:break-word;
+    white-space:pre-wrap;
+    animation:loginIn .3s ease;
+}
+.chat-bubble.me{
+    align-self:flex-end;
+    color:#fff;
+    background:linear-gradient(100deg,#744cff,#b05cff,#ff529d);
+    border-bottom-right-radius:4px;
+}
+.chat-bubble.them{
+    align-self:flex-start;
+    background:var(--card2);
+    border:1px solid var(--line);
+    border-bottom-left-radius:4px;
+}
+.chat-bubble.system{
+    align-self:center;
+    max-width:95%;
+    text-align:center;
+    color:var(--muted);
+    background:transparent;
+    border:1px dashed var(--line);
+    font-size:11.5px;
+}
+.chat-bubble time{
+    display:block;
+    margin-top:4px;
+    font-size:9px;
+    opacity:.7;
+    letter-spacing:.5px;
+}
+.chat-input-row{
+    display:flex;
+    gap:8px;
+    padding:12px;
+    border-top:1px solid var(--line);
+}
+.chat-input-row textarea{
+    flex:1;
+    resize:none;
+    min-height:42px;
+    max-height:110px;
+    padding:11px 14px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:rgba(0,0,0,.2);
+    color:var(--text);
+    font-family:inherit;
+    outline:none;
+}
+.chat-send-btn{
+    width:44px;
+    height:44px;
+    flex:0 0 44px;
+    border:none;
+    border-radius:14px;
+    color:#fff;
+    font-size:17px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2));
+}
+
+/* =========================================================
+   BACKUP & RESTORE
+========================================================= */
+.backup-actions{
+    display:grid;
+    gap:12px;
+    margin-top:18px;
+}
+.backup-btn{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    width:100%;
+    padding:16px;
+    border:1px solid var(--line);
+    border-radius:18px;
+    background:var(--card);
+    color:var(--text);
+    text-align:left;
+}
+.backup-btn span{
+    font-size:22px;
+}
+.backup-btn strong{
+    display:block;
+}
+.backup-btn small{
+    display:block;
+    margin-top:3px;
+    color:var(--muted);
+    font-size:11px;
+}
+#backupFileInput{
+    display:none;
+}
+.backup-status{
+    min-height:20px;
+    margin-top:14px;
+    font-size:12px;
+    color:#9ff0c5;
+}
+
+@media(max-width:600px){
+    #chatPanel{
+        right:12px;
+        left:12px;
+        bottom:86px;
+        width:auto;
+        height:min(70vh,560px);
+    }
+    #chatFab{
+        right:16px;
+        bottom:16px;
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+<!-- =======================================================
+     BACKGROUND
+======================================================= -->
+
+<div id="universe">
+
+    <div class="float-orb orb1"></div>
+    <div class="float-orb orb2"></div><div class="float-orb orb3"></div><div class="neon-orb neon-orb-a"></div><div class="neon-orb neon-orb-b"></div><div class="shooting-star shooting-star-a"></div><div class="shooting-star shooting-star-b"></div>
+
+</div>
+
+
+
+<!-- =======================================================
+     SPLASH SCREEN
+     Replace logo.png below with your actual logo path.
+======================================================= -->
+<div id="splashScreen" aria-label="FRIENDSHIP FOREVER introduction">
+    <img
+        class="splash-logo"
+        src="logo.png"
+        alt="Friendship logo">
+    <div class="splash-name">FRIENDSHIP FOREVER</div>
+    <div class="splash-tagline">Memories • Moments • Friendship</div>
+</div>
+
+<!-- =======================================================
+     LOGIN
+======================================================= -->
+
+<!-- =======================================================
+     ACCOUNT GATE — SIGN IN / SIGN UP
+     Must be completed before the Friendship Login screen
+     is shown. Accounts are stored locally with a salted
+     PBKDF2 password hash (no plaintext password is stored).
+======================================================= -->
+
+<div id="accountScreen">
+
+    <div class="login-box">
+
+        <div class="login-symbol">
+            <img src="logo.png" alt="Friendship logo">
+        </div>
+
+        <h1>Welcome</h1>
+
+        <p class="subtitle">
+            Create an account or sign in to continue
+            to your private friendship space.
+        </p>
+
+        <div class="account-tabs">
+            <button
+                id="signInTabBtn"
+                type="button"
+                class="account-tab-btn account-tab-active"
+                onclick="switchAccountTab('signin')">
+                Sign In
+            </button>
+            <button
+                id="signUpTabBtn"
+                type="button"
+                class="account-tab-btn"
+                onclick="switchAccountTab('signup')">
+                Sign Up
+            </button>
+        </div>
+
+        <div class="google-login-wrap">
+            <div class="google-login-card">
+                <div class="google-profile-preview">
+                    <div class="google-profile-avatar" id="googleProfileAvatar">G</div>
+                    <div>
+                        <div class="google-profile-title">Google Account</div>
+                        <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
+                    </div>
+                </div>
+                <div id="googleSignInButton"></div>
+            </div>
+        </div>
+
+        <div class="google-divider"><span>OR USE YOUR SAVED ACCOUNT</span></div>
+
+        <div class="biometric-card" id="biometricCard">
+            <div class="biometric-icon">☝️</div>
+            <div class="biometric-title" id="biometricTitle">Fingerprint / Passkey Unlock</div>
+            <div class="biometric-subtitle" id="biometricSubtitle">Use your device fingerprint, face unlock, or screen lock to open Friendship Forever.</div>
+            <button type="button" class="biometric-btn" id="biometricButton" onclick="unlockWithBiometric()">
+                🔐 UNLOCK WITH BIOMETRIC
+            </button>
+            <div class="biometric-status" id="biometricStatus"></div>
+        </div>
+
+        <form
+            id="signInForm"
+            class="account-form"
+            onsubmit="event.preventDefault();signInAccount();">
+
+            <label for="signinUsername">Username</label>
+            <input
+                id="signinUsername"
+                class="field"
+                autocomplete="username"
+                placeholder="Your username">
+
+            <label for="signinPassword">Password</label>
+            <input
+                id="signinPassword"
+                class="field"
+                type="password"
+                autocomplete="current-password"
+                placeholder="Your password">
+
+            <button
+                class="primary-btn"
+                type="submit">
+                SIGN IN
+            </button>
+
+        </form>
+
+        <form
+            id="signUpForm"
+            class="account-form"
+            hidden
+            onsubmit="event.preventDefault();signUpAccount();">
+
+            <label for="signupUsername">Username</label>
+            <input
+                id="signupUsername"
+                class="field"
+                autocomplete="username"
+                placeholder="Choose a username">
+
+            <label for="signupPassword">Password</label>
+            <input
+                id="signupPassword"
+                class="field"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Choose a password (min 6 characters)">
+
+            <label for="signupConfirm">Confirm Password</label>
+            <input
+                id="signupConfirm"
+                class="field"
+                type="password"
+                autocomplete="new-password"
+                placeholder="Re-enter your password">
+
+            <button
+                class="primary-btn"
+                type="submit">
+                CREATE ACCOUNT
+            </button>
+
+        </form>
+
+        <div id="accountError"></div>
+
+        <p class="account-note">
+            🔒 Your password is never stored — only a locally
+            derived security hash is kept on this device.
+        </p>
+
+    </div>
+
+</div>
+
+<div id="loginScreen">
+
+    <div class="login-box">
+
+        <div class="login-symbol">
+            <!-- Replace logo.png with your actual logo path. -->
+            <img src="logo.png" alt="Friendship logo">
+        </div>
+
+        <h1>
+            FRIENDSHIP FOREVER
+        </h1>
+
+        <p class="subtitle">
+
+            Some friendships are ordinary.<br>
+            Some become unforgettable.
+
+            <br><br>
+
+            Enter the names and the year
+            to unlock this private world.
+
+        </p>
+
+        <input
+            id="loginName1"
+            class="field"
+            placeholder="Name 1">
+
+        <input
+            id="loginName2"
+            class="field"
+            placeholder="Name 2">
+
+        <input
+            id="loginYear"
+            class="field"
+            type="number"
+            placeholder="Friendship Year">
+
+        <button
+            class="primary-btn"
+            onclick="unlock()">
+
+            UNLOCK OUR STORY ✨
+
+        </button>
+
+        <div id="error"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     APP
+======================================================= -->
+
+<div id="app">
+
+
+<!-- TOP BAR -->
+
+<header class="topbar">
+
+    <button
+        class="brand brand-button"
+        onclick="navigatePage('home')"
+        aria-label="Go to Home">
+
+        <div class="brand-dot bond-logo" aria-hidden="true">
+            <!-- Replace logo.png with your actual logo path. -->
+            <img class="brand-logo-img" src="logo.png" alt="Friendship logo">
+        </div>
+
+        <span class="brand-copy">
+            <strong>FRIENDSHIP FOREVER</strong>
+            <small>ROSHAN × AASHIYA</small>
+        </span>
+
+    </button>
+
+    <div class="top-actions">
+
+        <button
+            class="icon-btn"
+            aria-label="Settings"
+            onclick="toggleSettingsPanel()">
+            ⚙️
+        </button>
+
+        <button
+            class="icon-btn"
+            aria-label="Profile"
+            onclick="showProfile()">
+            👤
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =======================================================
+     THREE-DOT PAGE NAVIGATION
+======================================================= -->
+
+<div class="page-menu-shell">
+
+    <button
+        class="page-menu-trigger"
+        onclick="togglePageMenu()"
+        aria-label="Open page navigation"
+        aria-expanded="false">
+
+        <span></span>
+        <span></span>
+        <span></span>
+
+        <strong>Explore</strong>
+
+    </button>
+
+    <div
+        id="pageMenu"
+        class="page-menu"
+        aria-hidden="true">
+
+        <button onclick="navigatePage('home')">
+            <span>🏠</span>
+            <div><strong>Home</strong><small>Intro • Story • Forever</small></div>
+        </button>
+
+        <button onclick="navigatePage('story')">
+            <span>📖</span>
+            <div><strong>Story</strong><small>Our friendship chapter</small></div>
+        </button>
+
+        <button onclick="navigatePage('journey')">
+            <span>🗓️</span>
+            <div><strong>Journey</strong><small>2019 → 2026</small></div>
+        </button>
+
+<button onclick="navigatePage('birthdays')">
+            <span>🎂</span>
+            <div><strong>Birthdays</strong><small>Two special dates</small></div>
+        </button>
+
+        
+
+        <button onclick="navigatePage('memories')">
+            <span>📸</span>
+            <div><strong>Memory Vault</strong><small>Upload and save memories</small></div>
+        </button>
+
+        <button onclick="navigatePage('gallery')">
+            <span>🖼️</span>
+            <div><strong>Gallery</strong><small>Album-style memories</small></div>
+        </button>
+
+        
+
+        
+
+        
+
+        <button onclick="navigatePage('daily')">
+            <span>💌</span>
+            <div><strong>Daily Note</strong><small>Today's friendship message</small></div>
+        </button>
+
+        <button onclick="navigatePage('forever')">
+            <span>♾️</span>
+            <div><strong>Forever</strong><small>The ending that continues</small></div>
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<!-- =======================================================
+     HOME
+======================================================= -->
+
+<main>
+
+<section
+    id="home"
+    class="hero">
+
+    <div class="hero-content">
+
+        <div class="eyebrow">
+            A friendship story • since 2019
+        </div>
+
+        <h1>
+            FRIENDSHIP<br>
+            FOREVER.
+        </h1>
+
+        <div class="hero-title-small">
+            Aashiya Begum × Roshan Raj
+        </div>
+
+        <p class="hero-description">
+
+            Two birthdays.
+            Two personalities.
+            Two different journeys.
+
+            <br><br>
+
+            But somewhere between ordinary days
+            and countless little moments,
+            a pure friendship became something
+            worth remembering forever.
+
+        </p>
+
+        <div class="hero-actions">
+
+            <button
+                class="hero-btn"
+                onclick="navigatePage('story')">
+                📖 Start Story
+            </button>
+
+            <button
+                class="hero-btn"
+                onclick="navigatePage('birthdays')">
+                🎂 Birthdays
+            </button>
+
+        </div>
+
+        <div class="active-user-banner" id="activeUserBanner">
+            <span class="active-user-indicator"></span>
+            <div>
+                <strong id="activeUserNames">Active friendship session</strong>
+                <small id="activeUserMeta">Waiting for login...</small>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 1 — STORY
+======================================================= -->
+
+<section
+    id="story"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 01
+        </div>
+
+        <h2>
+            The Story
+        </h2>
+
+        <p>
+            It all started in 2019.
+        </p>
+
+    </div>
+
+
+    <div class="profile-grid">
+
+        <div class="profile-card">
+
+            <div class="profile-icon">
+                👩🏻
+            </div>
+
+            <h3>
+                Aashiya Begum
+            </h3>
+
+            <p>
+
+                A person who became a special part
+                of this friendship story.
+
+                <br><br>
+
+                Her birthday is
+                <strong>10 August 2006</strong>.
+
+                <br><br>
+
+                The beautiful thing about a person
+                isn't just their personality.
+
+                It's the memories,
+                conversations,
+                laughter and comfort
+                they create with another person.
+
+            </p>
+
+        </div>
+
+
+        <div class="profile-card">
+
+            <div class="profile-icon">
+                👦🏻
+            </div>
+
+            <h3>
+                Roshan Raj
+            </h3>
+
+            <p>
+
+                The other half of this friendship story.
+
+                <br><br>
+
+                Birthday:
+                <strong>16 December 2006</strong>.
+
+                <br><br>
+
+                And since 2019,
+                this friendship has collected
+                conversations,
+                memories,
+                funny moments,
+                emotional moments
+                and countless little stories.
+
+            </p>
+
+        </div>
+
+    </div>
+
+<section class="section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Friendship Stats
+        </div>
+
+        <h2>
+            The Numbers
+        </h2>
+
+    </div>
+
+
+    <div class="stats">
+
+        <div class="stat">
+
+            <div
+                id="friendYears"
+                class="stat-number">
+                7+
+            </div>
+
+            <div class="stat-label">
+                Years of Friendship
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div
+                id="friendDays"
+                class="stat-number">
+                --
+            </div>
+
+            <div class="stat-label">
+                Days Together
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+                ∞
+            </div>
+
+            <div class="stat-label">
+                Memories
+            </div>
+
+        </div>
+
+
+        <div class="stat">
+
+            <div class="stat-number">
+                1
+            </div>
+
+            <div class="stat-label">
+                Pure Friendship
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+</section>
+
+
+
+
+
+<!-- =======================================================
+     CHAPTER 3 — TIMELINE
+======================================================= -->
+
+<section
+    id="journey"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 02
+        </div>
+
+        <h2>
+            Our Journey
+        </h2>
+
+        <p>
+            2019 → 2026
+        </p>
+
+    </div>
+
+
+    <div class="timeline">
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2019
+                </div>
+
+                <h3>
+                    The Beginning
+                </h3>
+
+                <p>
+                    A simple beginning
+                    that nobody knew
+                    would become a beautiful story.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2020
+                </div>
+
+                <h3>
+                    A Different Chapter
+                </h3>
+
+                <p>
+                    Life changed,
+                    days changed,
+                    but friendship continued.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2021
+                </div>
+
+                <h3>
+                    More Understanding
+                </h3>
+
+                <p>
+                    More conversations,
+                    more understanding,
+                    more memories.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2022
+                </div>
+
+                <h3>
+                    Growing Together
+                </h3>
+
+                <p>
+                    Different experiences,
+                    same friendship.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2023
+                </div>
+
+                <h3>
+                    More Memories
+                </h3>
+
+                <p>
+                    More random conversations,
+                    jokes and unforgettable moments.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2024
+                </div>
+
+                <h3>
+                    Still Here
+                </h3>
+
+                <p>
+                    Time moved forward.
+                    The friendship stayed.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2025
+                </div>
+
+                <h3>
+                    Another Chapter
+                </h3>
+
+                <p>
+                    New days.
+                    New memories.
+                    Same bond.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="timeline-item">
+
+            <div class="timeline-dot"></div>
+
+            <div class="timeline-card">
+
+                <div class="year">
+                    2026
+                </div>
+
+                <h3>
+                    Here We Are
+                </h3>
+
+                <p>
+                    The story is still being written.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =======================================================
+     CHAPTER 2 — BIRTHDAYS
+======================================================= -->
+
+<section
+    id="birthdays"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 03
+        </div>
+
+        <h2>
+            Two Birthdays 🎂
+        </h2>
+
+        <p>
+            Two special dates.
+            Two different journeys.
+        </p>
+
+    </div>
+
+
+    <div class="birthday-grid">
+
+        <!-- AASHIYA -->
+
+        <div class="birthday-card">
+
+            <div class="person-icon">
+                👩🏻
+            </div>
+
+            <h3>
+                Aashiya Begum
+            </h3>
+
+            <div class="birth-date">
+                10 August 2006
+            </div>
+
+            <div
+                id="aashiyaAge"
+                class="age-number">
+                --
+            </div>
+
+            <div
+                id="aashiyaCountdown"
+                class="countdown">
+
+            </div>
+
+        </div>
+
+
+        <!-- ROSHAN -->
+
+        <div class="birthday-card">
+
+            <div class="person-icon">
+                👦🏻
+            </div>
+
+            <h3>
+                Roshan Raj
+            </h3>
+
+            <div class="birth-date">
+                16 December 2006
+            </div>
+
+            <div
+                id="roshanAge"
+                class="age-number">
+                --
+            </div>
+
+            <div
+                id="roshanCountdown"
+                class="countdown">
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CHAPTER 4 — PERSONALITY
+======================================================= -->
+
+
+
+
+<!-- =======================================================
+     CHAPTER 5 — MEMORY VAULT
+======================================================= -->
+
+<section
+    id="memories"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 04
+        </div>
+
+        <h2>
+            Memory Vault 📸
+        </h2>
+
+        <p>
+            Save your favourite memories inside this world.
+        </p>
+
+    </div>
+
+
+    <div class="memory-tools">
+
+        <button
+            class="upload-memory-btn"
+            onclick="triggerMemoryUpload()">
+            📤 Upload Picture
+        </button>
+
+        <button onclick="openMemoryModal()">
+            + Add Memory
+        </button>
+
+        <button onclick="filterMemories('all')">
+            All
+        </button>
+
+        <button onclick="filterMemories('2019')">
+            2019
+        </button>
+
+        <button onclick="filterMemories('2020')">
+            2020
+        </button>
+
+        <button onclick="filterMemories('2021')">
+            2021
+        </button>
+
+        <button onclick="filterMemories('2022')">
+            2022
+        </button>
+
+        <button onclick="filterMemories('2023')">
+            2023
+        </button>
+
+        <button onclick="filterMemories('2024')">
+            2024
+        </button>
+
+        <button onclick="filterMemories('2025')">
+            2025
+        </button>
+
+        <button onclick="filterMemories('2026')">
+            2026
+        </button>
+
+    </div>
+
+
+    <div
+        id="memoryGrid"
+        class="memory-grid">
+
+    </div>
+
+    <input
+        id="quickMemoryUpload"
+        type="file"
+        accept="image/*"
+        hidden
+        onchange="handleQuickMemoryUpload(event)">
+
+    <div
+        id="quickUploadPreview"
+        class="quick-upload-preview"
+        hidden>
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     GALLERY — ALBUM VIEW
+======================================================= -->
+
+<section
+    id="gallery"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 05 • Gallery
+        </div>
+
+        <h2>
+            Friendship Gallery 🖼️
+        </h2>
+
+        <p>
+            A clean album view for every saved friendship memory.
+        </p>
+
+    </div>
+
+    <div class="gallery-toolbar">
+
+        <button
+            class="gallery-upload-btn"
+            onclick="triggerMemoryUpload()">
+            <span>＋</span>
+            Upload Picture
+        </button>
+
+        <button
+            class="gallery-filter-btn"
+            onclick="navigatePage('memories')">
+            📸 Open Memory Vault
+        </button>
+
+    </div>
+
+    <div
+        id="galleryGrid"
+        class="gallery-grid">
+    </div>
+
+</section>
+
+
+
+
+
+<!-- =======================================================
+     DAILY MESSAGE
+======================================================= -->
+
+<section
+    id="daily"
+    class="section page-section">
+
+    <div class="section-header">
+
+        <div class="chapter-number">
+            Chapter 06 • Daily
+        </div>
+
+        <h2>
+            Daily Friendship Notes ✨
+        </h2>
+
+        <p>
+            Write your own memories and messages. You can add up to 5 notes each day.
+        </p>
+
+    </div>
+
+    <div class="daily">
+
+        <div
+            id="dailyMessage"
+            class="daily-message">
+            Loading...
+        </div>
+
+        <div class="daily-notes-panel">
+
+            <div class="encryption-badge">Encrypted on this device</div>
+
+            <div class="daily-note-form">
+                <textarea
+                    id="dailyNoteInput"
+                    class="field"
+                    rows="5"
+                    maxlength="1000"
+                    placeholder="Write today's friendship note..."></textarea>
+
+                <div class="daily-note-meta">
+                    <span id="dailyNoteCount">0 / 5 notes used today</span>
+                    <button
+                        class="primary-btn daily-note-add"
+                        type="button"
+                        onclick="addDailyNote()">
+                        + ADD NOTE
+                    </button>
+                </div>
+            </div>
+
+            <div
+                id="dailyNotesList"
+                class="notes-list">
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     FINAL
+======================================================= -->
+
+<section
+    id="forever"
+    class="final-section page-section">
+
+    <div class="final-content">
+
+        <div class="eyebrow">
+            Chapter 07 • The Final Chapter
+        </div>
+
+        <h2>
+            2019<br>
+            → 2026
+        </h2>
+
+        <div class="final-line">
+            AND THE STORY CONTINUES...
+        </div>
+
+        <p>
+
+            Years passed.
+
+            People changed.
+
+            Life moved forward.
+
+            <br><br>
+
+            But somewhere in all those years,
+            a simple friendship became a collection
+            of memories that can never be recreated
+            in exactly the same way.
+
+            <br><br>
+
+            That's what makes it special.
+
+            <br><br>
+
+            <strong>
+                Not because it was perfect.
+                But because it was real.
+            </strong>
+
+        </p>
+
+        <div
+            style="
+            font-size:55px;
+            margin-top:30px;
+            ">
+            🫶
+        </div>
+
+        <div
+            style="
+            margin-top:15px;
+            color:#c99aff;
+            font-size:20px;
+            letter-spacing:3px;
+            ">
+            PURE • CLOSE • UNBREAKABLE
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+
+
+<!-- =======================================================
+     MEMORY MODAL
+======================================================= -->
+
+<div
+    id="memoryModal"
+    class="modal">
+
+    <div class="modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('memoryModal')">
+            ×
+        </button>
+
+        <h2>
+            Add A Memory 📸
+        </h2>
+
+        <input
+            id="memoryTitle"
+            class="field"
+            placeholder="Memory title">
+
+        <select
+            id="memoryYear"
+            class="field">
+
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
+            <option value="2022">2022</option>
+            <option value="2023">2023</option>
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+            <option value="2026">2026</option>
+
+        </select>
+
+        <input
+            id="memoryDate"
+            class="field"
+            type="date">
+
+        <input
+            id="memoryPhoto"
+            class="field"
+            type="file"
+            accept="image/*">
+
+        <div
+            id="memoryPhotoPreview"
+            class="memory-photo-preview"
+            hidden>
+        </div>
+
+        <textarea
+            id="memoryDescription"
+            class="field"
+            rows="5"
+            placeholder="Write about this memory">
+        </textarea>
+
+        <button
+            class="primary-btn"
+            onclick="saveMemory()">
+            SAVE MEMORY ❤️
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MESSAGE MODAL
+======================================================= -->
+
+<div
+    id="messageModal"
+    class="modal">
+
+    <div class="modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('messageModal')">
+            ×
+        </button>
+
+        <h2 id="messageTitle">
+            Friendship Message
+        </h2>
+
+        <p id="messageText">
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     SETTINGS PANEL
+======================================================= -->
+
+<div
+    id="settingsPanel"
+    class="settings-panel"
+    aria-hidden="true">
+    <div class="settings-panel-card">
+        <div class="settings-panel-head"><div><small>APP CONTROL CENTER</small><h3>Settings</h3></div><button class="modal-close" onclick="toggleSettingsPanel()">×</button></div>
+        <button class="settings-row" onclick="showProfile();toggleSettingsPanel();"><span>👤</span><div><strong>Account Details</strong><small>View profile information</small></div><b>›</b></button>
+        <button class="settings-row" onclick="toggleTheme()"><span>🌓</span><div><strong>Appearance</strong><small>Switch between light and dark mode</small></div><b>↔</b></button>
+        <button class="settings-row" onclick="enableNotifications()"><span>🔔</span><div><strong>Notifications</strong><small>Enable birthday, message and update alerts</small></div><b>›</b></button>
+        <button class="settings-row" onclick="openBackupModal()"><span>💾</span><div><strong>Backup & Restore</strong><small>Save or restore your photos and memories</small></div><b>›</b></button>
+        <button class="settings-row" onclick="showPrivacyInfo()"><span>🔒</span><div><strong>Privacy</strong><small>Saved memories stay in this browser, encrypted</small></div><b>›</b></button>
+        <button class="settings-row settings-danger" onclick="logoutApp()"><span>↪️</span><div><strong>Log Out</strong><small>Return to the private unlock screen</small></div><b>›</b></button>
+        <button class="settings-row settings-danger" onclick="accountSignOut()"><span>🚪</span><div><strong>Sign Out of Account</strong><small>Fully sign out of this device</small></div><b>›</b></button>
+    </div>
+</div>
+
+<!-- =======================================================
+     PROFILE MODAL
+======================================================= -->
+
+<div
+    id="profileModal"
+    class="modal">
+
+    <div class="modal-card profile-modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('profileModal')">
+            ×
+        </button>
+
+        <div class="profile-modal-avatar">
+            R×A
+        </div>
+
+        <div class="chapter-number">
+            FRIENDSHIP PROFILE
+        </div>
+
+        <h2>
+            Roshan Raj × Aashiya Begum
+        </h2>
+
+        <p>
+            A pure friendship story that began in 2019 and continues to create memories.
+        </p>
+
+        <div class="profile-meta-grid">
+            <div><small>STARTED</small><strong>2019</strong></div>
+            <div><small>STATUS</small><strong>ACTIVE</strong></div>
+        </div>
+
+        <div class="profile-active-card">
+            <small>CURRENTLY LOGGED IN</small>
+            <strong id="profileActiveNames">—</strong>
+            <small id="profileActiveMeta">No active session</small>
+        </div>
+
+        <div class="profile-active-card">
+            <small>ACCOUNT</small>
+            <strong id="profileAccountName">—</strong>
+            <small id="profileAccountMeta">Not signed in</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     BACKUP & RESTORE MODAL
+======================================================= -->
+
+<div
+    id="backupModal"
+    class="modal">
+
+    <div class="modal-card">
+
+        <button
+            class="modal-close"
+            onclick="closeModal('backupModal')">
+            ×
+        </button>
+
+        <h2>Backup & Restore 💾</h2>
+
+        <p>
+            Download an encrypted backup of every uploaded photo and
+            memory so nothing is ever lost, then restore it any time
+            — on this device or a new one.
+        </p>
+
+        <div class="backup-actions">
+
+            <button
+                class="backup-btn"
+                type="button"
+                onclick="downloadBackup()">
+                <span>⬇️</span>
+                <div>
+                    <strong>Download Backup</strong>
+                    <small>Save an encrypted .json file of your photos & memories</small>
+                </div>
+            </button>
+
+            <button
+                class="backup-btn"
+                type="button"
+                onclick="document.getElementById('backupFileInput').click()">
+                <span>⬆️</span>
+                <div>
+                    <strong>Restore from Backup</strong>
+                    <small>Load a previously downloaded backup file</small>
+                </div>
+            </button>
+
+            <input
+                id="backupFileInput"
+                type="file"
+                accept="application/json"
+                onchange="restoreBackupFile(event)">
+
+        </div>
+
+        <div id="backupStatus" class="backup-status"></div>
+
+        <p class="account-note">
+            🔐 Backups stay encrypted. Restoring works with the same
+            Friendship names & year used to create them.
+        </p>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     GALLERY — FULL-SCREEN LIGHTBOX
+======================================================= -->
+
+<div
+    id="galleryLightbox"
+    class="lightbox">
+
+    <button
+        class="lightbox-close"
+        aria-label="Close full-screen photo"
+        onclick="closeLightbox()">
+        ×
+    </button>
+
+    <img
+        id="lightboxImage"
+        class="lightbox-image"
+        src=""
+        alt="Friendship memory">
+
+    <div
+        id="lightboxCaption"
+        class="lightbox-caption">
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     REAL CHAT
+======================================================= -->
+
+<button
+    id="chatFab"
+    type="button"
+    aria-label="Open chat"
+    onclick="toggleChatPanel()">
+    💬
+    <span id="chatFabBadge" class="chat-fab-badge">0</span>
+</button>
+
+<div
+    id="chatPanel"
+    role="dialog"
+    aria-label="Chat">
+
+    <div class="chat-header">
+        <div>
+            <strong>Chat</strong>
+            <small id="chatHeaderStatus">Local — ready to connect</small>
+        </div>
+        <button
+            class="modal-close"
+            aria-label="Close chat"
+            onclick="toggleChatPanel(false)">
+            ×
+        </button>
+    </div>
+
+    <div id="chatMessages" class="chat-messages">
+        <div class="chat-empty" id="chatEmptyState">
+            No messages yet. Say hi 👋
+        </div>
+    </div>
+
+    <div class="chat-input-row">
+        <textarea
+            id="chatInput"
+            rows="1"
+            placeholder="Type a message..."
+            onkeydown="handleChatKeydown(event)"></textarea>
+        <button
+            class="chat-send-btn"
+            type="button"
+            aria-label="Send message"
+            onclick="sendChatMessage()">
+            ➤
+        </button>
+    </div>
+
+</div>
+
+
+<script>
+
+
+
+/* =========================================================
+   FRIENDSHIP FOREVER — APP CONFIG
+========================================================= */
+
+// Replace this with your real VAPID public key when connecting
+// the site to a Web Push backend.
+const VAPID_PUBLIC_KEY = "REPLACE_WITH_YOUR_VAPID_PUBLIC_KEY";
+
+let activeSession = null;
+let pushRegistration = null;
+
+document.addEventListener("DOMContentLoaded",function(){
+    const splash=document.getElementById("splashScreen");
+
+    setTimeout(function(){
+        if(splash){
+            splash.classList.add("hide");
+            setTimeout(function(){
+                splash.remove();
+            },900);
+        }
+    },3000);
+
+    registerPushServiceWorker();
+});
+
+function registerPushServiceWorker(){
+    if(!("serviceWorker" in navigator)){
+        return;
+    }
+
+    navigator.serviceWorker.register("./sw.js")
+        .then(function(registration){
+            pushRegistration=registration;
+        })
+        .catch(function(error){
+            console.warn("Service worker registration failed:",error);
+        });
+}
+
+function urlBase64ToUint8Array(base64String){
+    const padding="=".repeat((4-base64String.length%4)%4);
+    const base64=(base64String+padding)
+        .replace(/-/g,"+")
+        .replace(/_/g,"/");
+    const rawData=window.atob(base64);
+    return Uint8Array.from([...rawData].map(char=>char.charCodeAt(0)));
+}
+
+async function enableNotifications(){
+    if(!("Notification" in window)){
+        alert("Notifications are not supported in this browser.");
+        return;
+    }
+
+    const permission=await Notification.requestPermission();
+
+    if(permission!=="granted"){
+        alert("Notification permission was not granted.");
+        return;
+    }
+
+    if(pushRegistration && "PushManager" in window){
+        try{
+            if(VAPID_PUBLIC_KEY!=="REPLACE_WITH_YOUR_VAPID_PUBLIC_KEY"){
+                let subscription=await pushRegistration.pushManager.getSubscription();
+
+                if(!subscription){
+                    subscription=await pushRegistration.pushManager.subscribe({
+                        userVisibleOnly:true,
+                        applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+                    });
+                }
+
+                // Send this subscription JSON to your push backend.
+                // Example endpoint: POST /api/push/subscribe
+                console.log("Push subscription:",subscription.toJSON());
+            }
+        }catch(error){
+            console.warn("Push subscription failed:",error);
+        }
+    }
+
+    showNotification("Notifications Enabled","FRIENDSHIP FOREVER is ready for alerts.");
+}
+
+function showNotification(title,message){
+    if(!("Notification" in window) || Notification.permission!=="granted"){
+        return;
+    }
+
+    const options={
+        body:message,
+        icon:"logo.png",
+        badge:"logo.png",
+        tag:"friendship-forever",
+        renotify:true
+    };
+
+    if(pushRegistration && pushRegistration.showNotification){
+        pushRegistration.showNotification(title,options);
+    }else{
+        new Notification(title,options);
+    }
+}
+
+function notifyBirthday(name){
+    showNotification(
+        "FRIENDSHIP FOREVER",
+        "🎂 Today is "+name+"'s birthday. Send a friendship wish!"
+    );
+}
+
+/* =========================================================
+   PREMIUM PAGE NAVIGATION
+========================================================= */
+
+const raPages=["home","story","journey","birthdays","memories","gallery","daily","forever"];
+
+function togglePageMenu(){
+
+    const menu=document.getElementById("pageMenu");
+    const trigger=document.querySelector(".page-menu-trigger");
+
+    if(!menu) return;
+
+    const open=menu.classList.toggle("open");
+
+    menu.setAttribute("aria-hidden",String(!open));
+
+    if(trigger){
+        trigger.setAttribute("aria-expanded",String(open));
+    }
+
+}
+
+function closePageMenu(){
+
+    const menu=document.getElementById("pageMenu");
+    const trigger=document.querySelector(".page-menu-trigger");
+
+    if(menu){
+        menu.classList.remove("open");
+        menu.setAttribute("aria-hidden","true");
+    }
+
+    if(trigger){
+        trigger.setAttribute("aria-expanded","false");
+    }
+
+}
+
+function navigatePage(id){
+
+    if(!raPages.includes(id)){
+        id="home";
+    }
+
+    document.body.dataset.page=id;
+
+    closePageMenu();
+    closeSettingsPanel();
+
+    if(id==="daily"){
+        dailyMessage();
+    }
+
+    if(id==="memories"){
+        loadMemories();
+    }
+
+    if(id==="gallery"){
+        loadGallery();
+    }
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+function toggleSettingsPanel(){
+
+    const panel=document.getElementById("settingsPanel");
+
+    if(!panel) return;
+
+    const open=panel.classList.toggle("open");
+
+    panel.setAttribute("aria-hidden",String(!open));
+
+    closePageMenu();
+
+}
+
+function closeSettingsPanel(){
+
+    const panel=document.getElementById("settingsPanel");
+
+    if(panel){
+        panel.classList.remove("open");
+        panel.setAttribute("aria-hidden","true");
+    }
+
+}
+
+function showProfile(){
+
+    closePageMenu();
+    closeSettingsPanel();
+
+    updateActiveUserUI();
+
+    document
+        .getElementById("profileModal")
+        .classList
+        .add("show");
+
+}
+
+document.addEventListener("click",function(event){
+
+    const shell=document.querySelector(".page-menu-shell");
+    const panel=document.getElementById("settingsPanel");
+
+    if(shell && !shell.contains(event.target)){
+        closePageMenu();
+    }
+
+    if(
+        panel &&
+        panel.classList.contains("open") &&
+        event.target===panel
+    ){
+        closeSettingsPanel();
+    }
+
+});
+
+document.addEventListener("keydown",function(event){
+
+    if(event.key==="Escape"){
+        closePageMenu();
+        closeSettingsPanel();
+        closeLightbox();
+    }
+
+});
+
+
+/* =========================================================
+   STAR GENERATOR
+========================================================= */
+
+const universe=
+    document.getElementById("universe");
+
+for(let i=0;i<220;i++){
+
+    const star=
+        document.createElement("div");
+
+    star.className="star";
+
+    const size=
+        Math.random()*3+1;
+
+    star.style.width=size+"px";
+    star.style.height=size+"px";
+
+    star.style.left=
+        Math.random()*100+"%";
+
+    star.style.top=
+        Math.random()*100+"%";
+
+    star.style.setProperty(
+        "--duration",
+        (Math.random()*4+2)+"s"
+    );
+
+    star.style.animationDelay=
+        Math.random()*5+"s";
+
+    universe.appendChild(star);
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function normalize(value){
+
+    return value
+        .trim()
+        .replace(/\s+/g," ")
+        .toUpperCase();
+
+}
+
+
+async function unlock(){
+
+    const a=
+        normalize(
+            document.getElementById(
+                "loginName1"
+            ).value
+        );
+
+    const b=
+        normalize(
+            document.getElementById(
+                "loginName2"
+            ).value
+        );
+
+    const year=
+        document.getElementById(
+            "loginYear"
+        ).value;
+
+    const validNames=
+        (
+            a==="ROSHAN RAJ" &&
+            b==="AASHIYA BEGUM"
+        )
+        ||
+        (
+            a==="AASHIYA BEGUM" &&
+            b==="ROSHAN RAJ"
+        );
+
+    if(
+        validNames &&
+        year==="2019"
+    ){
+
+        activeSession={
+            name1:document.getElementById("loginName1").value.trim(),
+            name2:document.getElementById("loginName2").value.trim(),
+            year:year,
+            loginTime:new Date()
+        };
+
+        localStorage.setItem(
+            "friendship_active_session",
+            JSON.stringify({
+                name1:activeSession.name1,
+                name2:activeSession.name2,
+                year:activeSession.year,
+                loginTime:activeSession.loginTime.toISOString()
+            })
+        );
+
+        await initializeEncryptionKey(a,b,year);
+        updateActiveUserUI();
+
+        applyAuthState();
+
+        startApp().catch(function(error){
+            console.error("Secure app startup failed:",error);
+            document.getElementById("error").textContent="Secure storage could not be initialized. Use HTTPS or localhost and try again.";
+            activeSession=null;
+            friendshipCryptoKey=null;
+            localStorage.removeItem("friendship_active_session");
+            applyAuthState();
+        });
+
+
+    }else{
+
+        document.getElementById(
+            "error"
+        ).textContent=
+        "Access denied — check the two names and year.";
+
+    }
+
+}
+
+
+/* =========================================================
+   APP START
+========================================================= */
+
+async function startApp(){
+
+    await loadEncryptedMemories();
+
+    updateBirthdayData();
+
+    updateFriendshipDays();
+
+    loadMemories();
+
+    dailyMessage();
+
+    await loadDailyNotes();
+
+    await loadChatMessages();
+
+    updateActiveUserUI();
+
+    checkBirthdayNotification();
+
+}
+
+
+/* =========================================================
+   SCROLL
+========================================================= */
+
+function scrollToId(id){
+
+    const element=
+        document.getElementById(id);
+
+    if(element){
+
+        element.scrollIntoView({
+            behavior:"smooth"
+        });
+
+    }
+
+}
+
+
+/* =========================================================
+   AGE
+========================================================= */
+
+function getAge(year,month,day){
+
+    const today=
+        new Date();
+
+    let age=
+        today.getFullYear()-year;
+
+    const birthday=
+        new Date(
+            today.getFullYear(),
+            month-1,
+            day
+        );
+
+    if(today<birthday){
+
+        age--;
+
+    }
+
+    return age;
+
+}
+
+
+/* =========================================================
+   NEXT BIRTHDAY
+========================================================= */
+
+function getNextBirthday(month,day){
+
+    const now=
+        new Date();
+
+    let next=
+        new Date(
+            now.getFullYear(),
+            month-1,
+            day,
+            0,
+            0,
+            0
+        );
+
+    if(next<=now){
+
+        next=
+            new Date(
+                now.getFullYear()+1,
+                month-1,
+                day,
+                0,
+                0,
+                0
+            );
+
+    }
+
+    return next;
+
+}
+
+
+/* =========================================================
+   COUNTDOWN HTML
+========================================================= */
+
+function countdownHTML(target){
+
+    const now=
+        new Date();
+
+    let difference=
+        target-now;
+
+    if(difference<0){
+        difference=0;
+    }
+
+    const days=
+        Math.floor(
+            difference/
+            (1000*60*60*24)
+        );
+
+    const hours=
+        Math.floor(
+            (difference/
+            (1000*60*60))%24
+        );
+
+    const minutes=
+        Math.floor(
+            (difference/
+            (1000*60))%60
+        );
+
+    const seconds=
+        Math.floor(
+            (difference/
+            1000)%60
+        );
+
+    return `
+
+        <div class="time-box">
+            <strong>${days}</strong>
+            <span>Days</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${hours}</strong>
+            <span>Hours</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${minutes}</strong>
+            <span>Minutes</span>
+        </div>
+
+        <div class="time-box">
+            <strong>${seconds}</strong>
+            <span>Seconds</span>
+        </div>
+
+    `;
+
+}
+
+
+/* =========================================================
+   BIRTHDAY UPDATE
+========================================================= */
+
+function updateBirthdayData(){
+
+    document.getElementById(
+        "aashiyaAge"
+    ).textContent=
+        getAge(
+            2006,
+            8,
+            10
+        );
+
+    document.getElementById(
+        "roshanAge"
+    ).textContent=
+        getAge(
+            2006,
+            12,
+            16
+        );
+
+    document.getElementById(
+        "aashiyaCountdown"
+    ).innerHTML=
+        countdownHTML(
+            getNextBirthday(
+                8,
+                10
+            )
+        );
+
+    document.getElementById(
+        "roshanCountdown"
+    ).innerHTML=
+        countdownHTML(
+            getNextBirthday(
+                12,
+                16
+            )
+        );
+
+}
+
+
+/* =========================================================
+   FRIENDSHIP DAYS
+========================================================= */
+
+function updateFriendshipDays(){
+
+    const start=
+        new Date(
+            2019,
+            0,
+            1
+        );
+
+    const today=
+        new Date();
+
+    const diff=
+        today-start;
+
+    const days=
+        Math.floor(
+            diff/
+            (1000*60*60*24)
+        );
+
+    document.getElementById(
+        "friendDays"
+    ).textContent=
+        days.toLocaleString();
+
+    document.getElementById(
+        "friendYears"
+    ).textContent=
+        (
+            today.getFullYear()-2019
+        )+"+";
+
+}
+
+
+/* Update every second */
+
+setInterval(
+    updateBirthdayData,
+    1000
+);
+
+
+function showPrivacyInfo(){closeSettingsPanel();document.getElementById("messageTitle").textContent="Privacy & Encryption";document.getElementById("messageText").textContent="Your private Daily Notes and saved friendship memories are encrypted in this browser with AES-GCM. The encryption key is derived from the login names and friendship year and is kept only in memory while you are logged in.";document.getElementById("messageModal").classList.add("show");}
+function logoutApp(){
+    closeSettingsPanel();
+    closeModal("profileModal");
+    activeSession=null;
+    friendshipCryptoKey=null;
+    memories=[];
+    localStorage.removeItem("friendship_active_session");
+    document.body.dataset.page="home";
+    closeChatPanel();
+    applyAuthState();
+}
+
+/* =========================================================
+   ACCOUNT SYSTEM — SIGN IN / SIGN UP
+
+   Accounts are stored locally (per browser). Passwords are
+   never stored: only a random salt + a PBKDF2-SHA256 derived
+   hash are kept, so the real password cannot be recovered
+   from storage. Signing in (or up) unlocks access to the
+   existing Friendship Login screen — see applyAuthState().
+========================================================= */
+
+const FRIENDSHIP_ACCOUNTS_KEY="friendship_accounts_v1";
+const FRIENDSHIP_ACCOUNT_SESSION_KEY="friendship_account_session_v1";
+
+let currentAccount=null;
+
+function loadAccounts(){
+    try{
+        const raw=localStorage.getItem(FRIENDSHIP_ACCOUNTS_KEY);
+        const parsed=raw?JSON.parse(raw):{};
+        return (parsed && typeof parsed==="object")?parsed:{};
+    }catch(error){
+        return {};
+    }
+}
+
+function saveAccounts(accounts){
+    localStorage.setItem(FRIENDSHIP_ACCOUNTS_KEY,JSON.stringify(accounts));
+}
+
+async function hashAccountPassword(password,saltBytes){
+    if(!window.crypto || !window.crypto.subtle){
+        throw new Error("Web Crypto API is unavailable. Use HTTPS or localhost.");
+    }
+
+    const encoder=new TextEncoder();
+
+    const baseKey=await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(password),
+        "PBKDF2",
+        false,
+        ["deriveBits"]
+    );
+
+    const bits=await crypto.subtle.deriveBits(
+        {
+            name:"PBKDF2",
+            salt:saltBytes,
+            iterations:150000,
+            hash:"SHA-256"
+        },
+        baseKey,
+        256
+    );
+
+    return base64FromBytes(new Uint8Array(bits));
+}
+
+function setAccountError(message){
+    const errorEl=document.getElementById("accountError");
+    if(errorEl){
+        errorEl.textContent=message||"";
+    }
+}
+
+function switchAccountTab(tab){
+    const signInTab=document.getElementById("signInTabBtn");
+    const signUpTab=document.getElementById("signUpTabBtn");
+    const signInForm=document.getElementById("signInForm");
+    const signUpForm=document.getElementById("signUpForm");
+
+    setAccountError("");
+
+    if(tab==="signup"){
+        signUpTab.classList.add("account-tab-active");
+        signInTab.classList.remove("account-tab-active");
+        signUpForm.hidden=false;
+        signInForm.hidden=true;
+    }else{
+        signInTab.classList.add("account-tab-active");
+        signUpTab.classList.remove("account-tab-active");
+        signInForm.hidden=false;
+        signUpForm.hidden=true;
+    }
+}
+
+async function signUpAccount(){
+    setAccountError("");
+
+    const usernameInput=document.getElementById("signupUsername");
+    const passwordInput=document.getElementById("signupPassword");
+    const confirmInput=document.getElementById("signupConfirm");
+
+    const username=usernameInput.value.trim();
+    const password=passwordInput.value;
+    const confirm=confirmInput.value;
+    const key=username.toLowerCase();
+
+    if(username.length<3){
+        setAccountError("Choose a username with at least 3 characters.");
+        return;
+    }
+
+    if(password.length<6){
+        setAccountError("Password must be at least 6 characters.");
+        return;
+    }
+
+    if(password!==confirm){
+        setAccountError("Passwords do not match.");
+        return;
+    }
+
+    const accounts=loadAccounts();
+
+    if(accounts[key]){
+        setAccountError("That username is already taken. Try signing in.");
+        return;
+    }
+
+    const saltBytes=new Uint8Array(16);
+    crypto.getRandomValues(saltBytes);
+
+    let hash;
+
+    try{
+        hash=await hashAccountPassword(password,saltBytes);
+    }catch(error){
+        console.error("Account creation failed:",error);
+        setAccountError("Secure storage is unavailable. Use HTTPS or localhost.");
+        return;
+    }
+
+    accounts[key]={
+        username:username,
+        salt:base64FromBytes(saltBytes),
+        hash:hash,
+        createdAt:new Date().toISOString()
+    };
+
+    saveAccounts(accounts);
+    setActiveAccountSession(username);
+
+    usernameInput.value="";
+    passwordInput.value="";
+    confirmInput.value="";
+
+    applyAuthState();
+}
+
+async function signInAccount(){
+    setAccountError("");
+
+    const usernameInput=document.getElementById("signinUsername");
+    const passwordInput=document.getElementById("signinPassword");
+
+    const username=usernameInput.value.trim();
+    const password=passwordInput.value;
+    const key=username.toLowerCase();
+
+    const accounts=loadAccounts();
+    const account=accounts[key];
+
+    if(!account){
+        setAccountError("Account not found. Try Sign Up instead.");
+        return;
+    }
+
+    let hash;
+
+    try{
+        hash=await hashAccountPassword(password,bytesFromBase64(account.salt));
+    }catch(error){
+        console.error("Sign in failed:",error);
+        setAccountError("Secure storage is unavailable. Use HTTPS or localhost.");
+        return;
+    }
+
+    if(hash!==account.hash){
+        setAccountError("Incorrect password.");
+        return;
+    }
+
+    setActiveAccountSession(account.username);
+
+    usernameInput.value="";
+    passwordInput.value="";
+
+    applyAuthState();
+}
+
+function setActiveAccountSession(username){
+    currentAccount={
+        username:username,
+        googleEmail:"",
+        googleName:username,
+        googlePicture:"",
+        loginTime:new Date()
+    };
+    googleBiometricUnlocked=false;
+
+    localStorage.setItem(
+        FRIENDSHIP_ACCOUNT_SESSION_KEY,
+        JSON.stringify({
+            username:username,
+            loginTime:currentAccount.loginTime.toISOString()
+        })
+    );
+}
+
+function restoreAccountSession(){
+    const saved=localStorage.getItem(FRIENDSHIP_ACCOUNT_SESSION_KEY);
+
+    if(!saved){
+        return;
+    }
+
+    try{
+        const data=JSON.parse(saved);
+
+        if(data && data.username){
+            currentAccount={
+                username:data.username,
+                googleEmail:data.googleEmail||"",
+                googleName:data.googleName||data.username,
+                googlePicture:data.googlePicture||"",
+                loginTime:data.loginTime?new Date(data.loginTime):new Date()
+            };
+            googleBiometricUnlocked=false;
+        }
+    }catch(error){
+        localStorage.removeItem(FRIENDSHIP_ACCOUNT_SESSION_KEY);
+    }
+}
+
+function accountSignOut(){
+    closeSettingsPanel();
+    closeModal("profileModal");
+    closeChatPanel();
+
+    currentAccount=null;
+    googleBiometricUnlocked=false;
+    activeSession=null;
+    friendshipCryptoKey=null;
+    memories=[];
+
+    localStorage.removeItem(FRIENDSHIP_ACCOUNT_SESSION_KEY);
+    localStorage.removeItem("friendship_active_session");
+
+    document.body.dataset.page="home";
+
+    applyAuthState();
+}
+
+function updateAccountProfileUI(){
+    const nameEl=document.getElementById("profileAccountName");
+    const metaEl=document.getElementById("profileAccountMeta");
+
+    if(!nameEl || !metaEl){
+        return;
+    }
+
+    if(!currentAccount){
+        nameEl.textContent="—";
+        metaEl.textContent="Not signed in";
+        return;
+    }
+
+    nameEl.textContent=currentAccount.username;
+
+    const loginTime=currentAccount.loginTime instanceof Date
+        ? currentAccount.loginTime
+        : new Date(currentAccount.loginTime);
+
+    metaEl.textContent=isNaN(loginTime.getTime())
+        ? "Signed in on this device"
+        : "Signed in "+loginTime.toLocaleString();
+}
+
+/* =========================================================
+   AUTH GATE — decides which screen is visible:
+   Account Gate → Friendship Login → App
+========================================================= */
+
+function applyAuthState(){
+    const accountScreen=document.getElementById("accountScreen");
+    const loginScreen=document.getElementById("loginScreen");
+    const app=document.getElementById("app");
+    const chatFab=document.getElementById("chatFab");
+
+    updateAccountProfileUI();
+    updateBiometricUI();
+
+    if(!currentAccount){
+        if(accountScreen){
+            accountScreen.classList.add("show");
+            accountScreen.style.display="flex";
+        }
+        if(loginScreen) loginScreen.style.display="none";
+        if(app) app.style.display="none";
+        if(chatFab) chatFab.classList.remove("show");
+        return;
+    }
+
+    if(currentAccount.googleEmail===ALLOWED_GOOGLE_EMAIL && !googleBiometricUnlocked){
+        if(accountScreen){
+            accountScreen.classList.add("show");
+            accountScreen.style.display="flex";
+        }
+        if(loginScreen) loginScreen.style.display="none";
+        if(app) app.style.display="none";
+        if(chatFab) chatFab.classList.remove("show");
+        return;
+    }
+
+    if(accountScreen){
+        accountScreen.classList.remove("show");
+        accountScreen.style.display="none";
+    }
+
+    const friendshipActive=!!(activeSession && friendshipCryptoKey);
+
+    if(!friendshipActive){
+        if(loginScreen) loginScreen.style.display="flex";
+        if(app) app.style.display="none";
+        if(chatFab) chatFab.classList.remove("show");
+        return;
+    }
+
+    if(loginScreen) loginScreen.style.display="none";
+    if(app) app.style.display="block";
+    if(chatFab) chatFab.classList.add("show");
+}
+
+/* =========================================================
+   GOOGLE LOGIN + DEVICE BIOMETRIC / PASSKEY
+========================================================= */
+
+const GOOGLE_CLIENT_ID="685455478511-lvt2q9humsse63ngt0vlgqgn1mtpt025.apps.googleusercontent.com";
+const ALLOWED_GOOGLE_EMAIL="roshanrajr580@gmail.com";
+const GOOGLE_PASSKEY_KEY="friendship_google_passkey_v1";
+let googleBiometricUnlocked=false;
+
+function setBiometricStatus(message){
+    const el=document.getElementById("biometricStatus");
+    if(el) el.textContent=message||"";
+}
+
+function updateBiometricUI(){
+    const card=document.getElementById("biometricCard");
+    const googleEmail=document.getElementById("googleProfileEmail");
+    const googleAvatar=document.getElementById("googleProfileAvatar");
+    const button=document.getElementById("biometricButton");
+
+    if(!card) return;
+
+    if(currentAccount && currentAccount.googleEmail===ALLOWED_GOOGLE_EMAIL){
+        card.classList.add("show");
+        if(googleEmail) googleEmail.textContent=ALLOWED_GOOGLE_EMAIL;
+        if(googleAvatar){
+            if(currentAccount.googlePicture){
+                googleAvatar.innerHTML='<img src="'+currentAccount.googlePicture.replace(/"/g,"&quot;")+'" alt="Google profile">';
+            }else{
+                googleAvatar.textContent="R";
+            }
+        }
+        if(button) button.textContent=hasSavedPasskey() ? "🔐 UNLOCK WITH BIOMETRIC" : "☝️ SET UP FINGERPRINT / PASSKEY";
+    }else{
+        card.classList.remove("show");
+    }
+}
+
+function hasSavedPasskey(){
+    return !!localStorage.getItem(GOOGLE_PASSKEY_KEY);
+}
+
+function randomChallenge(){
+    const challenge=new Uint8Array(32);
+    crypto.getRandomValues(challenge);
+    return challenge;
+}
+
+async function makePasskeyUserId(email){
+    const data=new TextEncoder().encode(email);
+    return new Uint8Array(await crypto.subtle.digest("SHA-256",data));
+}
+
+async function registerGooglePasskey(){
+    if(!window.isSecureContext || !navigator.credentials || !window.PublicKeyCredential){
+        throw new Error("Biometric passkeys require HTTPS and a supported browser/device.");
+    }
+
+    const credential=await navigator.credentials.create({
+        publicKey:{
+            challenge:randomChallenge(),
+            rp:{
+                name:"FRIENDSHIP FOREVER",
+                id:location.hostname
+            },
+            user:{
+                id:await makePasskeyUserId(ALLOWED_GOOGLE_EMAIL),
+                name:ALLOWED_GOOGLE_EMAIL,
+                displayName:"Roshan Raj"
+            },
+            pubKeyCredParams:[
+                {type:"public-key",alg:-7},
+                {type:"public-key",alg:-257}
+            ],
+            authenticatorSelection:{
+                residentKey:"preferred",
+                userVerification:"required"
+            },
+            timeout:60000,
+            attestation:"none"
+        }
+    });
+
+    if(!credential) throw new Error("Passkey registration was cancelled.");
+
+    localStorage.setItem(
+        GOOGLE_PASSKEY_KEY,
+        JSON.stringify({
+            id:base64FromBytes(new Uint8Array(credential.rawId)),
+            createdAt:new Date().toISOString(),
+            email:ALLOWED_GOOGLE_EMAIL
+        })
+    );
+}
+
+async function authenticateGooglePasskey(){
+    if(!window.isSecureContext || !navigator.credentials || !window.PublicKeyCredential){
+        throw new Error("Biometric passkeys require HTTPS and a supported browser/device.");
+    }
+
+    const saved=JSON.parse(localStorage.getItem(GOOGLE_PASSKEY_KEY)||"null");
+    if(!saved || !saved.id) throw new Error("No saved passkey is available.");
+
+    const credential=await navigator.credentials.get({
+        publicKey:{
+            challenge:randomChallenge(),
+            rpId:location.hostname,
+            allowCredentials:[{
+                type:"public-key",
+                id:bytesFromBase64(saved.id),
+                transports:["internal"]
+            }],
+            userVerification:"required",
+            timeout:60000
+        }
+    });
+
+    if(!credential) throw new Error("Biometric verification was cancelled.");
+    return true;
+}
+
+async function unlockGoogleSessionAfterBiometric(){
+    restoreActiveSession();
+
+    if(!activeSession){
+        setBiometricStatus("Fingerprint is ready. Complete the existing Friendship profile setup once to protect your private encrypted data.");
+        return false;
+    }
+
+    try{
+        await initializeEncryptionKey(
+            activeSession.name1,
+            activeSession.name2,
+            activeSession.year
+        );
+    }catch(error){
+        console.error("Encryption setup failed:",error);
+        setBiometricStatus("Secure storage could not be initialized. Please use HTTPS.");
+        return false;
+    }
+
+    googleBiometricUnlocked=true;
+    applyAuthState();
+    startApp().catch(function(error){
+        console.error("Secure app startup failed:",error);
+    });
+    return true;
+}
+
+async function unlockWithBiometric(){
+    if(!currentAccount || currentAccount.googleEmail!==ALLOWED_GOOGLE_EMAIL){
+        setAccountError("Please continue with the authorized Google account first.");
+        return;
+    }
+
+    try{
+        setBiometricStatus(hasSavedPasskey() ? "Waiting for device biometric verification…" : "Registering your device biometric / passkey…");
+
+        if(!hasSavedPasskey()){
+            await registerGooglePasskey();
+            setBiometricStatus("Fingerprint / passkey registered. Verifying…");
+        }else{
+            await authenticateGooglePasskey();
+        }
+
+        await unlockGoogleSessionAfterBiometric();
+    }catch(error){
+        console.error("Biometric authentication failed:",error);
+        setBiometricStatus(error && error.message ? error.message : "Biometric verification failed. Try again.");
+    }
+}
+
+function initGoogleLogin(){
+    if(!window.google || !google.accounts || !google.accounts.id){
+        setTimeout(initGoogleLogin,500);
+        return;
+    }
+
+    google.accounts.id.initialize({
+        client_id:GOOGLE_CLIENT_ID,
+        callback:handleGoogleCredential,
+        login_hint:ALLOWED_GOOGLE_EMAIL,
+        auto_select:false
+    });
+
+    const button=document.getElementById("googleSignInButton");
+
+    if(button){
+        button.innerHTML="";
+        google.accounts.id.renderButton(button,{
+            theme:"filled_black",
+            size:"large",
+            shape:"pill",
+            text:"continue_with",
+            width:360
+        });
+    }
+
+    updateBiometricUI();
+}
+
+function base64UrlDecode(value){
+    const base64=value.replace(/-/g,"+").replace(/_/g,"/");
+    const padded=base64+"=".repeat((4-base64.length%4)%4);
+    return decodeURIComponent(atob(padded).split("").map(function(char){
+        return "%"+("00"+char.charCodeAt(0).toString(16)).slice(-2);
+    }).join(""));
+}
+
+function handleGoogleCredential(response){
+    try{
+        if(!response || !response.credential){
+            throw new Error("Google credential was not received.");
+        }
+
+        const parts=response.credential.split(".");
+        if(parts.length<2){
+            throw new Error("Invalid Google credential.");
+        }
+
+        const payload=JSON.parse(base64UrlDecode(parts[1]));
+        const email=String(payload.email||"").toLowerCase();
+
+        if(email!==ALLOWED_GOOGLE_EMAIL){
+            throw new Error("This Friendship Forever profile is restricted to roshanrajr580@gmail.com.");
+        }
+
+        currentAccount={
+            username:email,
+            googleEmail:email,
+            googleName:payload.name||"Roshan Raj",
+            googlePicture:payload.picture||"",
+            loginTime:new Date()
+        };
+
+        localStorage.setItem(
+            FRIENDSHIP_ACCOUNT_SESSION_KEY,
+            JSON.stringify({
+                username:email,
+                googleEmail:email,
+                googleName:currentAccount.googleName,
+                googlePicture:currentAccount.googlePicture,
+                loginTime:currentAccount.loginTime.toISOString()
+            })
+        );
+
+        setAccountError("");
+        setBiometricStatus(hasSavedPasskey() ? "Google account verified. Use your device biometric to continue." : "Google account verified. Set up your device fingerprint / passkey to continue.");
+        updateBiometricUI();
+        applyAuthState();
+    }catch(error){
+        console.error("Google sign-in failed:",error);
+        setAccountError(error && error.message ? error.message : "Google sign-in failed. Please try again.");
+    }
+}
+
+/* =========================================================
+   REAL CHAT
+
+   Messages are persisted locally (encrypted with the same
+   AES-GCM key used for private memories/notes) so they
+   survive reloads. sendChatMessage() also calls
+   deliverChatMessage(), a real network call to /api/chat —
+   wire up a backend there (e.g. a Vercel serverless
+   function) to make replies live; until then the panel
+   still works fully as a persisted, functional message log.
+========================================================= */
+
+const FRIENDSHIP_CHAT_KEY="friendship_chat_encrypted_v1";
+
+let chatMessages=[];
+let chatBackendChecked=false;
+let chatBackendAvailable=false;
+
+async function loadChatMessages(){
+    chatMessages=[];
+
+    if(!friendshipCryptoKey){
+        return;
+    }
+
+    const encrypted=localStorage.getItem(FRIENDSHIP_CHAT_KEY);
+
+    if(!encrypted){
+        return;
+    }
+
+    try{
+        const stored=await decryptJSON(JSON.parse(encrypted));
+        chatMessages=Array.isArray(stored)?stored:[];
+    }catch(error){
+        console.warn("Encrypted chat history could not be opened.",error);
+        chatMessages=[];
+    }
+}
+
+async function saveChatMessages(){
+    if(!friendshipCryptoKey){
+        return;
+    }
+
+    const payload=await encryptJSON(chatMessages);
+    localStorage.setItem(FRIENDSHIP_CHAT_KEY,JSON.stringify(payload));
+}
+
+function renderChatMessages(){
+    const list=document.getElementById("chatMessages");
+    const emptyState=document.getElementById("chatEmptyState");
+
+    if(!list){
+        return;
+    }
+
+    if(chatMessages.length===0){
+        list.innerHTML="";
+        const empty=document.createElement("div");
+        empty.className="chat-empty";
+        empty.id="chatEmptyState";
+        empty.textContent="No messages yet. Say hi 👋";
+        list.appendChild(empty);
+        return;
+    }
+
+    list.innerHTML="";
+
+    chatMessages.forEach(function(message){
+        const bubble=document.createElement("div");
+        bubble.className="chat-bubble "+(message.sender||"me");
+
+        const textNode=document.createElement("div");
+        textNode.textContent=message.text;
+        bubble.appendChild(textNode);
+
+        const time=document.createElement("time");
+        const sentAt=new Date(message.time);
+        time.textContent=isNaN(sentAt.getTime())
+            ? ""
+            : sentAt.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+        bubble.appendChild(time);
+
+        list.appendChild(bubble);
+    });
+
+    list.scrollTop=list.scrollHeight;
+}
+
+function addChatMessage(sender,text){
+    chatMessages.push({
+        sender:sender,
+        text:text,
+        time:new Date().toISOString()
+    });
+
+    saveChatMessages().catch(function(error){
+        console.error("Could not save chat message:",error);
+    });
+
+    renderChatMessages();
+}
+
+async function toggleChatPanel(forceOpen){
+    const panel=document.getElementById("chatPanel");
+
+    if(!panel){
+        return;
+    }
+
+    const shouldOpen=typeof forceOpen==="boolean"
+        ? forceOpen
+        : !panel.classList.contains("show");
+
+    if(shouldOpen){
+        panel.classList.add("show");
+
+        if(chatMessages.length===0){
+            await loadChatMessages();
+        }
+
+        renderChatMessages();
+
+        const badge=document.getElementById("chatFabBadge");
+        if(badge){
+            badge.classList.remove("show");
+            badge.textContent="0";
+        }
+
+        const input=document.getElementById("chatInput");
+        if(input){
+            input.focus();
+        }
+    }else{
+        panel.classList.remove("show");
+    }
+}
+
+function closeChatPanel(){
+    const panel=document.getElementById("chatPanel");
+    if(panel){
+        panel.classList.remove("show");
+    }
+}
+
+function handleChatKeydown(event){
+    if(event.key==="Enter" && !event.shiftKey){
+        event.preventDefault();
+        sendChatMessage();
+    }
+}
+
+async function sendChatMessage(){
+    const input=document.getElementById("chatInput");
+
+    if(!input){
+        return;
+    }
+
+    const text=input.value.trim();
+
+    if(!text){
+        return;
+    }
+
+    addChatMessage("me",text);
+    input.value="";
+    input.style.height="auto";
+
+    deliverChatMessage(text);
+}
+
+// Real integration point: sends the message to a backend so it
+// can be delivered to another person / device in real time.
+// Point this at your own endpoint (a Vercel serverless function,
+// a websocket bridge, etc). Until a backend responds, the chat
+// still works as a fully functional, persisted local log.
+async function deliverChatMessage(text){
+    const statusEl=document.getElementById("chatHeaderStatus");
+
+    try{
+        const response=await fetch("/api/chat",{
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body:JSON.stringify({
+                text:text,
+                sender:currentAccount?currentAccount.username:"guest",
+                session:activeSession
+                    ? activeSession.name1+" x "+activeSession.name2
+                    : null
+            })
+        });
+
+        if(!response.ok){
+            throw new Error("Backend responded with "+response.status);
+        }
+
+        chatBackendAvailable=true;
+        if(statusEl) statusEl.textContent="Connected";
+
+        const data=await response.json().catch(function(){ return null; });
+
+        if(data && typeof data.reply==="string" && data.reply.trim()){
+            addChatMessage("them",data.reply.trim());
+
+            const panel=document.getElementById("chatPanel");
+            if(panel && !panel.classList.contains("show")){
+                const badge=document.getElementById("chatFabBadge");
+                if(badge){
+                    badge.textContent=String(
+                        Number(badge.textContent||"0")+1
+                    );
+                    badge.classList.add("show");
+                }
+            }
+        }
+
+    }catch(error){
+        chatBackendAvailable=false;
+
+        if(statusEl) statusEl.textContent="Local — ready to connect";
+
+        if(!chatBackendChecked){
+            chatBackendChecked=true;
+            addChatMessage(
+                "system",
+                "This chat is saved on your device. Connect a backend at /api/chat to enable live replies."
+            );
+        }
+    }
+}
+
+/* =========================================================
+   BACKUP & RESTORE
+
+   Downloads/uploads a JSON snapshot of every encrypted
+   memory (with photos) and daily note stored on this
+   device, plus the encryption salt they depend on — so
+   photos and memories can be restored later without
+   anything being lost, even on a new browser or device.
+========================================================= */
+
+function openBackupModal(){
+    closeSettingsPanel();
+    const status=document.getElementById("backupStatus");
+    if(status) status.textContent="";
+    document.getElementById("backupModal").classList.add("show");
+}
+
+function downloadBackup(){
+    const status=document.getElementById("backupStatus");
+
+    const backup={
+        version:1,
+        createdAt:new Date().toISOString(),
+        cryptoSalt:localStorage.getItem(FRIENDSHIP_CRYPTO_SALT_KEY)||null,
+        memories:localStorage.getItem(FRIENDSHIP_MEMORIES_KEY)||null,
+        chat:localStorage.getItem(FRIENDSHIP_CHAT_KEY)||null,
+        dailyNotes:{}
+    };
+
+    for(let i=0;i<localStorage.length;i++){
+        const storageKey=localStorage.key(i);
+        if(storageKey && storageKey.indexOf(FRIENDSHIP_NOTES_PREFIX)===0){
+            backup.dailyNotes[storageKey]=localStorage.getItem(storageKey);
+        }
+    }
+
+    const blob=new Blob(
+        [JSON.stringify(backup,null,2)],
+        {type:"application/json"}
+    );
+
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement("a");
+    link.href=url;
+    link.download="friendship-forever-backup-"+getTodayKey()+".json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+
+    if(status){
+        status.textContent="✅ Backup downloaded. Keep this file safe.";
+    }
+}
+
+async function restoreBackupFile(event){
+    const status=document.getElementById("backupStatus");
+    const file=event.target.files && event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    try{
+        const text=await file.text();
+        const backup=JSON.parse(text);
+
+        if(!backup || typeof backup!=="object"){
+            throw new Error("Invalid backup file.");
+        }
+
+        if(backup.cryptoSalt){
+            localStorage.setItem(FRIENDSHIP_CRYPTO_SALT_KEY,backup.cryptoSalt);
+        }
+
+        if(backup.memories){
+            localStorage.setItem(FRIENDSHIP_MEMORIES_KEY,backup.memories);
+        }
+
+        if(backup.chat){
+            localStorage.setItem(FRIENDSHIP_CHAT_KEY,backup.chat);
+        }
+
+        if(backup.dailyNotes && typeof backup.dailyNotes==="object"){
+            Object.keys(backup.dailyNotes).forEach(function(key){
+                localStorage.setItem(key,backup.dailyNotes[key]);
+            });
+        }
+
+        if(friendshipCryptoKey){
+            await loadEncryptedMemories();
+            loadMemories();
+            loadGallery();
+            await loadDailyNotes();
+            await loadChatMessages();
+            renderChatMessages();
+        }
+
+        if(status){
+            status.textContent="✅ Backup restored successfully. Nothing was deleted.";
+        }
+
+    }catch(error){
+        console.error("Restore failed:",error);
+        if(status){
+            status.textContent="⚠️ This backup file could not be read.";
+        }
+    }
+
+    event.target.value="";
+}
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function toggleTheme(){
+
+    document
+        .body
+        .classList
+        .toggle("light");
+
+    const mode=
+        document.body.classList.contains(
+            "light"
+        )
+        ? "light"
+        : "dark";
+
+    localStorage.setItem(
+        "ra_theme",
+        mode
+    );
+
+
+}
+
+
+(function(){
+
+    const theme=
+        localStorage.getItem(
+            "ra_theme"
+        );
+
+    if(theme==="light"){
+
+        document
+            .body
+            .classList
+            .add("light");
+
+    }
+
+})();
+
+
+/* =========================================================
+   FRIENDSHIP FOREVER — LOCAL ENCRYPTION
+
+   Private notes and memories are encrypted with AES-GCM.
+   The key is derived from the two login names + friendship year
+   using PBKDF2. The encryption key never gets stored in localStorage.
+========================================================= */
+
+let friendshipCryptoKey=null;
+const FRIENDSHIP_CRYPTO_SALT_KEY="friendship_crypto_salt_v1";
+const FRIENDSHIP_MEMORIES_KEY="friendship_memories_encrypted_v1";
+const FRIENDSHIP_NOTES_PREFIX="friendship_daily_notes_encrypted_v1_";
+
+function base64FromBytes(bytes){
+    let binary="";
+    bytes.forEach(function(byte){ binary+=String.fromCharCode(byte); });
+    return btoa(binary);
+}
+
+function bytesFromBase64(value){
+    const binary=atob(value);
+    const bytes=new Uint8Array(binary.length);
+    for(let i=0;i<binary.length;i++){
+        bytes[i]=binary.charCodeAt(i);
+    }
+    return bytes;
+}
+
+function getCryptoSalt(){
+    let salt=localStorage.getItem(FRIENDSHIP_CRYPTO_SALT_KEY);
+
+    if(!salt){
+        const bytes=new Uint8Array(16);
+        crypto.getRandomValues(bytes);
+        salt=base64FromBytes(bytes);
+        localStorage.setItem(FRIENDSHIP_CRYPTO_SALT_KEY,salt);
+    }
+
+    return bytesFromBase64(salt);
+}
+
+async function initializeEncryptionKey(name1,name2,year){
+    if(!window.crypto || !window.crypto.subtle){
+        throw new Error("Web Crypto API is unavailable. Use HTTPS or localhost.");
+    }
+
+    const identity=[normalize(name1),normalize(name2)]
+        .sort()
+        .join("|")+"|"+String(year);
+
+    const encoder=new TextEncoder();
+    const baseKey=await crypto.subtle.importKey(
+        "raw",
+        encoder.encode(identity),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+    );
+
+    friendshipCryptoKey=await crypto.subtle.deriveKey(
+        {
+            name:"PBKDF2",
+            salt:getCryptoSalt(),
+            iterations:200000,
+            hash:"SHA-256"
+        },
+        baseKey,
+        {
+            name:"AES-GCM",
+            length:256
+        },
+        false,
+        ["encrypt","decrypt"]
+    );
+}
+
+async function encryptJSON(value){
+    if(!friendshipCryptoKey){
+        throw new Error("Encryption key is not initialized.");
+    }
+
+    const iv=new Uint8Array(12);
+    crypto.getRandomValues(iv);
+
+    const encoded=new TextEncoder().encode(JSON.stringify(value));
+    const encrypted=await crypto.subtle.encrypt(
+        {name:"AES-GCM",iv:iv},
+        friendshipCryptoKey,
+        encoded
+    );
+
+    return {
+        version:1,
+        algorithm:"AES-GCM",
+        iv:base64FromBytes(iv),
+        data:base64FromBytes(new Uint8Array(encrypted))
+    };
+}
+
+async function decryptJSON(payload){
+    if(!friendshipCryptoKey || !payload || !payload.iv || !payload.data){
+        throw new Error("Encrypted data is unavailable.");
+    }
+
+    const decrypted=await crypto.subtle.decrypt(
+        {name:"AES-GCM",iv:bytesFromBase64(payload.iv)},
+        friendshipCryptoKey,
+        bytesFromBase64(payload.data)
+    );
+
+    return JSON.parse(new TextDecoder().decode(decrypted));
+}
+
+async function saveEncryptedMemories(){
+    const payload=await encryptJSON(memories);
+    localStorage.setItem(FRIENDSHIP_MEMORIES_KEY,JSON.stringify(payload));
+}
+
+async function loadEncryptedMemories(){
+    memories=[];
+
+    const encrypted=localStorage.getItem(FRIENDSHIP_MEMORIES_KEY);
+
+    if(encrypted){
+        try{
+            memories=await decryptJSON(JSON.parse(encrypted));
+            if(!Array.isArray(memories)) memories=[];
+            return;
+        }catch(error){
+            console.warn("Encrypted memories could not be opened.",error);
+            alert("Private memories could not be decrypted. Please use the same login details used to create them.");
+            return;
+        }
+    }
+
+    // One-time migration from the older unencrypted memory storage.
+    const legacy=localStorage.getItem("friendship_memories");
+
+    if(legacy){
+        try{
+            const oldMemories=JSON.parse(legacy);
+            memories=Array.isArray(oldMemories)?oldMemories:[];
+            await saveEncryptedMemories();
+            localStorage.removeItem("friendship_memories");
+        }catch(error){
+            console.warn("Legacy memory migration failed.",error);
+        }
+    }
+}
+
+async function getEncryptedDailyNotes(){
+    if(!friendshipCryptoKey) return [];
+
+    const key=FRIENDSHIP_NOTES_PREFIX+getTodayKey();
+    const encrypted=localStorage.getItem(key);
+
+    if(encrypted){
+        try{
+            const notes=await decryptJSON(JSON.parse(encrypted));
+            return Array.isArray(notes)?notes:[];
+        }catch(error){
+            console.warn("Encrypted daily notes could not be opened.",error);
+            return [];
+        }
+    }
+
+    // One-time migration from the previous plaintext daily-note key.
+    const legacyKey="friendship_daily_notes_"+getTodayKey();
+    const legacy=localStorage.getItem(legacyKey);
+
+    if(legacy){
+        try{
+            const notes=JSON.parse(legacy);
+            const safeNotes=Array.isArray(notes)?notes:[];
+            await saveEncryptedDailyNotes(safeNotes);
+            localStorage.removeItem(legacyKey);
+            return safeNotes;
+        }catch(error){
+            console.warn("Legacy daily-note migration failed.",error);
+        }
+    }
+
+    return [];
+}
+
+async function saveEncryptedDailyNotes(notes){
+    const payload=await encryptJSON(notes);
+    localStorage.setItem(
+        FRIENDSHIP_NOTES_PREFIX+getTodayKey(),
+        JSON.stringify(payload)
+    );
+}
+
+/* =========================================================
+   MEMORY SYSTEM
+========================================================= */
+
+let memories=[];
+
+
+function openMemoryModal(){
+
+    document
+        .getElementById(
+            "memoryModal"
+        )
+        .classList
+        .add("show");
+
+}
+
+
+function closeModal(id){
+
+    document
+        .getElementById(id)
+        .classList
+        .remove("show");
+
+}
+
+
+function saveMemory(){
+
+    const title=
+        document
+        .getElementById(
+            "memoryTitle"
+        )
+        .value
+        .trim();
+
+    const year=
+        document
+        .getElementById(
+            "memoryYear"
+        )
+        .value;
+
+    const date=
+        document
+        .getElementById(
+            "memoryDate"
+        )
+        .value;
+
+    const description=
+        document
+        .getElementById(
+            "memoryDescription"
+        )
+        .value
+        .trim();
+
+    const file=
+        document
+        .getElementById(
+            "memoryPhoto"
+        )
+        .files[0];
+
+
+    if(!title){
+
+
+        return;
+
+    }
+
+
+    if(!file){
+
+
+        return;
+
+    }
+
+
+    const reader=
+        new FileReader();
+
+
+    reader.onload=async function(event){
+
+        const memory={
+
+            id:Date.now(),
+
+            title:title,
+
+            year:year,
+
+            date:date,
+
+            description:description,
+
+            image:event.target.result
+
+        };
+
+
+        memories.push(memory);
+
+
+        try{
+            await saveEncryptedMemories();
+        }catch(error){
+            console.error("Could not encrypt memory:",error);
+            memories.pop();
+            alert("This memory could not be encrypted and saved.");
+            return;
+        }
+
+
+        loadMemories();
+        loadGallery();
+
+        showNotification(
+            "FRIENDSHIP FOREVER",
+            "📸 A new friendship memory was added."
+        );
+
+        closeModal(
+            "memoryModal"
+        );
+
+
+        document.getElementById(
+            "memoryTitle"
+        ).value="";
+
+        document.getElementById(
+            "memoryDate"
+        ).value="";
+
+        document.getElementById(
+            "memoryDescription"
+        ).value="";
+
+        document.getElementById(
+            "memoryPhoto"
+        ).value="";
+
+        const quickUpload=
+            document.getElementById("quickMemoryUpload");
+
+        if(quickUpload){
+            quickUpload.value="";
+        }
+
+        const photoPreview=
+            document.getElementById("memoryPhotoPreview");
+
+        if(photoPreview){
+            photoPreview.hidden=true;
+            photoPreview.innerHTML="";
+        }
+
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
+
+
+
+/* =========================================================
+   QUICK PICTURE UPLOAD / PREVIEW
+========================================================= */
+
+function triggerMemoryUpload(){
+
+    const input=document.getElementById("quickMemoryUpload");
+
+    if(input){
+        input.click();
+    }
+
+}
+
+function renderPhotoPreview(file){
+
+    if(!file || !file.type.startsWith("image/")){
+        return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=function(event){
+
+        const preview=
+            document.getElementById("memoryPhotoPreview");
+
+        if(preview){
+
+            preview.hidden=false;
+
+            preview.innerHTML=`
+                <img
+                    src="${event.target.result}"
+                    alt="Selected friendship memory preview">
+            `;
+
+        }
+
+    };
+
+    reader.readAsDataURL(file);
+
+}
+
+function handleQuickMemoryUpload(event){
+
+    const file=event.target.files[0];
+
+    if(!file){
+        return;
+    }
+
+    renderPhotoPreview(file);
+
+    const modal=
+        document.getElementById("memoryModal");
+
+    if(modal){
+        modal.classList.add("show");
+    }
+
+    const modalInput=
+        document.getElementById("memoryPhoto");
+
+    if(modalInput){
+
+        const transfer=new DataTransfer();
+        transfer.items.add(file);
+        modalInput.files=transfer.files;
+
+    }
+
+
+}
+
+document.addEventListener("change",function(event){
+
+    if(event.target && event.target.id==="memoryPhoto"){
+        renderPhotoPreview(event.target.files[0]);
+    }
+
+});
+
+
+/* =========================================================
+   LOAD MEMORIES
+========================================================= */
+
+function loadMemories(){
+
+    const grid=
+        document.getElementById(
+            "memoryGrid"
+        );
+
+    if(memories.length===0){
+
+        grid.innerHTML=`
+
+            <div class="empty-memory">
+
+                📸 No memories added yet.
+
+                <br><br>
+
+                Add your first friendship memory.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    grid.innerHTML="";
+
+
+    memories
+        .slice()
+        .reverse()
+        .forEach(memory=>{
+
+            const card=
+                document.createElement(
+                    "div"
+                );
+
+            card.className=
+                "memory-card";
+
+            card.dataset.year=
+                memory.year;
+
+
+            card.innerHTML=`
+
+                <img
+                    src="${memory.image}"
+                    alt="Friendship memory">
+
+                <div class="memory-content">
+
+                    <h3>
+                        ${safe(memory.title)}
+                    </h3>
+
+                    <small>
+                        ${memory.year}
+                        ${memory.date
+                            ? " • "+memory.date
+                            : ""}
+                    </small>
+
+                    <p>
+                        ${safe(
+                            memory.description || ""
+                        )}
+                    </p>
+
+                </div>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        });
+
+}
+
+
+
+/* =========================================================
+   GALLERY ALBUM
+========================================================= */
+
+function loadGallery(){
+
+    const grid=document.getElementById("galleryGrid");
+
+    if(!grid){
+        return;
+    }
+
+    if(memories.length===0){
+
+        grid.innerHTML=`
+            <div class="gallery-empty">
+                <div>
+                    <div style="font-size:52px;margin-bottom:12px;">🖼️</div>
+                    <strong>No photos in the album yet.</strong>
+                    <p style="margin-top:8px;">Upload your first friendship picture.</p>
+                </div>
+            </div>
+        `;
+
+        return;
+
+    }
+
+    grid.innerHTML="";
+
+    memories
+        .slice()
+        .reverse()
+        .forEach(memory=>{
+
+            const card=document.createElement("div");
+
+            card.className="gallery-album-card";
+
+            card.innerHTML=`
+                <img
+                    src="${memory.image}"
+                    alt="${safe(memory.title)}">
+
+                <div class="gallery-album-overlay">
+                    <strong>${safe(memory.title)}</strong>
+                    <small>
+                        ${safe(memory.year)}
+                        ${memory.date ? " • "+safe(memory.date) : ""}
+                    </small>
+                </div>
+            `;
+
+            card.onclick=function(){
+                openLightbox(
+                    memory.image,
+                    memory.title,
+                    memory.description || "A saved friendship memory. 📸"
+                );
+            };
+
+            grid.appendChild(card);
+
+        });
+
+}
+
+
+/* =========================================================
+   FILTER
+========================================================= */
+
+function filterMemories(year){
+
+    const cards=
+        document.querySelectorAll(
+            ".memory-card"
+        );
+
+
+    cards.forEach(card=>{
+
+        if(
+            year==="all" ||
+            card.dataset.year===year
+        ){
+
+            card.style.display=
+                "block";
+
+        }else{
+
+            card.style.display=
+                "none";
+
+        }
+
+    });
+
+}
+
+
+
+/* =========================================================
+   GALLERY LIGHTBOX
+========================================================= */
+
+function openLightbox(image,title,description){
+    const lightbox=document.getElementById("galleryLightbox");
+    const imageElement=document.getElementById("lightboxImage");
+    const caption=document.getElementById("lightboxCaption");
+
+    if(!lightbox || !imageElement){
+        return;
+    }
+
+    imageElement.src=image;
+    imageElement.alt=title || "Friendship memory";
+    caption.textContent=description
+        ? title+" — "+description
+        : title;
+
+    lightbox.classList.add("show");
+    document.body.style.overflow="hidden";
+}
+
+function closeLightbox(){
+    const lightbox=document.getElementById("galleryLightbox");
+
+    if(lightbox){
+        lightbox.classList.remove("show");
+    }
+
+    document.body.style.overflow="";
+}
+
+document.addEventListener("click",function(event){
+    const lightbox=document.getElementById("galleryLightbox");
+
+    if(lightbox && event.target===lightbox){
+        closeLightbox();
+    }
+});
+
+/* =========================================================
+   ACTIVE USER DETAILS
+========================================================= */
+
+function restoreActiveSession(){
+    const saved=localStorage.getItem("friendship_active_session");
+
+    if(!saved){
+        return;
+    }
+
+    try{
+        const data=JSON.parse(saved);
+
+        if(data && data.name1 && data.name2){
+            activeSession={
+                name1:data.name1,
+                name2:data.name2,
+                year:data.year || "2019",
+                loginTime:data.loginTime
+                    ? new Date(data.loginTime)
+                    : new Date()
+            };
+        }
+    }catch(error){
+        localStorage.removeItem("friendship_active_session");
+    }
+}
+
+function updateActiveUserUI(){
+    if(!activeSession){
+        restoreActiveSession();
+    }
+
+    const names=document.getElementById("activeUserNames");
+    const meta=document.getElementById("activeUserMeta");
+    const profileNames=document.getElementById("profileActiveNames");
+    const profileMeta=document.getElementById("profileActiveMeta");
+
+    if(!activeSession){
+        return;
+    }
+
+    const displayNames=
+        activeSession.name1+" × "+activeSession.name2;
+
+    const loginTime=activeSession.loginTime instanceof Date
+        ? activeSession.loginTime
+        : new Date(activeSession.loginTime);
+
+    const formattedTime=
+        isNaN(loginTime.getTime())
+        ? "Current session"
+        : loginTime.toLocaleString();
+
+    if(names){
+        names.textContent=displayNames;
+    }
+
+    if(meta){
+        meta.textContent=
+            "Active now • Friendship year "+activeSession.year+
+            " • Logged in "+formattedTime;
+    }
+
+    if(profileNames){
+        profileNames.textContent=displayNames;
+    }
+
+    if(profileMeta){
+        profileMeta.textContent=
+            "Active now • Logged in "+formattedTime;
+    }
+}
+
+/* =========================================================
+   DAILY NOTES — MAXIMUM 5 PER DAY
+========================================================= */
+
+function getTodayKey(){
+    const today=new Date();
+
+    return today.getFullYear()+"-"+
+        String(today.getMonth()+1).padStart(2,"0")+"-"+
+        String(today.getDate()).padStart(2,"0");
+}
+
+async function getDailyNotes(){
+    return await getEncryptedDailyNotes();
+}
+
+async function saveDailyNotes(notes){
+    await saveEncryptedDailyNotes(notes);
+}
+
+async function addDailyNote(){
+    const input=document.getElementById("dailyNoteInput");
+
+    if(!input){
+        return;
+    }
+
+    const text=input.value.trim();
+
+    if(!text){
+        alert("Please write something before adding a note.");
+        input.focus();
+        return;
+    }
+
+    if(!friendshipCryptoKey){
+        alert("Private encryption is not ready. Please log in again.");
+        return;
+    }
+
+    const notes=await getDailyNotes();
+
+    if(notes.length>=5){
+        alert("Daily Notes limit reached. You can add a maximum of 5 notes per day.");
+        return;
+    }
+
+    notes.push({
+        text:text,
+        createdAt:new Date().toISOString()
+    });
+
+    await saveDailyNotes(notes);
+
+    input.value="";
+    await loadDailyNotes();
+}
+
+async function loadDailyNotes(){
+    const list=document.getElementById("dailyNotesList");
+    const counter=document.getElementById("dailyNoteCount");
+
+    if(!list || !counter){
+        return;
+    }
+
+    const notes=await getDailyNotes();
+
+    counter.textContent=
+        notes.length+" / 5 notes used today • encrypted";
+
+    if(notes.length===0){
+        list.innerHTML=
+            '<div class="empty-memory">No personal notes added today yet.</div>';
+        return;
+    }
+
+    list.innerHTML="";
+
+    notes.slice().reverse().forEach(function(note){
+        const item=document.createElement("div");
+        item.className="note-item";
+
+        const small=document.createElement("small");
+        const created=new Date(note.createdAt);
+        small.textContent=
+            isNaN(created.getTime())
+            ? "Today's encrypted note"
+            : created.toLocaleTimeString([], {
+                hour:"2-digit",
+                minute:"2-digit"
+            });
+
+        const paragraph=document.createElement("p");
+        paragraph.textContent=note.text;
+
+        item.appendChild(small);
+        item.appendChild(paragraph);
+        list.appendChild(item);
+    });
+}
+
+/* =========================================================
+   BIRTHDAY NOTIFICATION
+========================================================= */
+
+function checkBirthdayNotification(){
+    const today=new Date();
+    const month=today.getMonth()+1;
+    const day=today.getDate();
+    const todayKey=getTodayKey();
+
+    let birthdayName="";
+
+    if(month===8 && day===10){
+        birthdayName="Aashiya Begum";
+    }else if(month===12 && day===16){
+        birthdayName="Roshan Raj";
+    }
+
+    if(!birthdayName){
+        return;
+    }
+
+    const notifiedKey=
+        localStorage.getItem("friendship_birthday_notified");
+
+    if(notifiedKey===todayKey){
+        return;
+    }
+
+    localStorage.setItem(
+        "friendship_birthday_notified",
+        todayKey
+    );
+
+    notifyBirthday(birthdayName);
+}
+
+/* =========================================================
+   SAFE HTML
+========================================================= */
+
+function safe(value){
+
+    return String(value)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+
+}
+
+
+
+
+/* =========================================================
+   MESSAGE REVEAL
+========================================================= */
+
+function revealMessage(title,text){
+
+    document.getElementById(
+        "messageTitle"
+    ).textContent=title;
+
+    document.getElementById(
+        "messageText"
+    ).textContent=text;
+
+    document.getElementById(
+        "messageModal"
+    ).classList.add("show");
+
+}
+
+/* =========================================================
+   DAILY MESSAGE
+========================================================= */
+
+const dailyMessages=[
+
+    "Some friendships are gifts that don't need wrapping. 🫶",
+
+    "The best memories are usually the unplanned ones. ✨",
+
+    "Years change. Genuine friendship can remain. 🤝",
+
+    "Never underestimate the value of one good friend. 💙",
+
+    "A simple conversation can become a lifelong memory. 🌌",
+
+    "2019 was a beginning. The story is still continuing. 📖",
+
+    "Pure friendship doesn't need to be explained. It is felt. 🫶"
+
+];
+
+
+function dailyMessage(){
+
+    const day=
+        Math.floor(
+            Date.now()/
+            (1000*60*60*24)
+        );
+
+    const message=
+        dailyMessages[
+            day%dailyMessages.length
+        ];
+
+    document.getElementById(
+        "dailyMessage"
+    ).textContent=
+        message;
+
+}
+
+
+function showDaily(){
+
+    dailyMessage();
+
+    scrollToId(
+        "dailyMessage"
+    );
+
+
+}
+
+
+
+/* =========================================================
+   MODAL OUTSIDE CLICK
+========================================================= */
+
+document
+    .querySelectorAll(".modal")
+    .forEach(modal=>{
+
+        modal.addEventListener(
+            "click",
+            function(e){
+
+                if(e.target===modal){
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   KEYBOARD EASTER EGG
+========================================================= */
+
+let keySequence="";
+
+
+document.addEventListener(
+    "keydown",
+    event=>{
+
+        keySequence+=
+            event.key.toUpperCase();
+
+        if(
+            keySequence.length>20
+        ){
+
+            keySequence=
+                keySequence.slice(-20);
+
+        }
+
+
+        if(
+            keySequence.includes(
+                "FRIENDSHIP"
+            )
+        ){
+
+            keySequence="";
+
+
+            document.body.animate(
+                [
+                    {
+                        filter:"brightness(1)"
+                    },
+                    {
+                        filter:"brightness(1.7)"
+                    },
+                    {
+                        filter:"brightness(1)"
+                    }
+                ],
+                {
+                    duration:900
+                }
+            );
+
+        }
+
+    });
+
+
+/* =========================================================
+   PAGE STATE INITIALIZATION
+========================================================= */
+
+document.body.dataset.page="home";
+initGoogleLogin();
+restoreAccountSession();
+restoreActiveSession();
+updateActiveUserUI();
+applyAuthState();
+
+</script>
+
+</body>
+    </html>
