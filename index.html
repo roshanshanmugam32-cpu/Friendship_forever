@@ -2804,6 +2804,21 @@ html, body { scroll-padding-top: 0 !important; }
   },true);
 })();
 </script>
+
+<style id="profile-devices-presence-enhancements">
+/* Modern three-dot navigation */
+.page-menu-trigger{position:relative;min-width:118px;height:46px;padding:0 16px 0 14px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));box-shadow:0 10px 30px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+.page-menu-trigger:hover{transform:translateY(-2px);border-color:rgba(196,147,255,.55);box-shadow:0 14px 34px rgba(0,0,0,.22),0 0 24px rgba(160,110,255,.12)}
+.page-menu-trigger>span{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;transition:transform .2s ease}.page-menu-trigger:hover>span:nth-child(1){transform:translateY(-2px)}.page-menu-trigger:hover>span:nth-child(3){transform:translateY(2px)}
+.page-menu-trigger strong{margin-left:7px;font-size:12px;letter-spacing:.8px}
+.profile-device-card{padding:15px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);margin:10px 0}.profile-device-card .device-head{display:flex;gap:12px;align-items:center}.device-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(180,130,255,.12);font-size:21px}.device-status{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:10px;color:#83e8ad}.device-status i{width:7px;height:7px;border-radius:50%;background:#45e38b;box-shadow:0 0 9px rgba(69,227,139,.7)}.device-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.device-meta div{padding:9px 10px;border-radius:12px;background:rgba(0,0,0,.12);min-width:0}.device-meta small{display:block;color:var(--muted);font-size:9px}.device-meta strong{display:block;margin-top:3px;font-size:11px;word-break:break-word}.presence-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(69,227,139,.09);border:1px solid rgba(69,227,139,.18);font-size:10px;color:#8cf0b5}.presence-pill i{width:7px;height:7px;border-radius:50%;background:#45e38b}.presence-offline{color:var(--muted);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08)}.presence-offline i{background:#8d93a5;box-shadow:none}
+@media(max-width:520px){.page-menu-trigger{min-width:104px;height:42px;border-radius:14px}.device-meta{grid-template-columns:1fr}.profile-settings-card{max-height:88vh;overflow:auto}}
+</style>
+
+<style id="encrypted-video-vault-styles">
+.video-vault-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}.video-upload-btn{border:1px solid rgba(255,255,255,.13);border-radius:15px;padding:12px 17px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));color:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.16)}.video-upload-btn span{font-size:18px}.video-security-badge{padding:10px 13px;border-radius:13px;background:rgba(69,227,139,.08);border:1px solid rgba(69,227,139,.18);font-size:11px;color:#91efb7}.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.video-card{overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);box-shadow:0 12px 30px rgba(0,0,0,.14)}.video-card video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#050509}.video-card-body{padding:12px}.video-card-title{font-size:13px;font-weight:700;word-break:break-word}.video-card-meta{font-size:10px;color:var(--muted);margin-top:4px}.video-card-actions{display:flex;gap:8px;margin-top:10px}.video-card-actions button{flex:1;border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:8px;background:rgba(255,255,255,.05);color:inherit;cursor:pointer}.video-empty{padding:45px 18px;text-align:center;border:1px dashed rgba(255,255,255,.13);border-radius:18px;color:var(--muted)}.video-vault-note{margin-top:15px;font-size:10px;line-height:1.6;color:var(--muted)}@media(max-width:620px){.video-grid{grid-template-columns:1fr}.video-vault-toolbar{align-items:stretch}.video-upload-btn{width:100%}.video-security-badge{width:100%;text-align:center}}
+</style>
+
 </head>
 
 
@@ -3153,6 +3168,11 @@ html, body { scroll-padding-top: 0 !important; }
         
 
         
+
+        <button onclick="navigatePage('video')">
+            <span>🎥</span>
+            <div><strong>Video</strong><small>Open video space</small></div>
+        </button>
 
         <button onclick="navigatePage('daily')">
             <span>💌</span>
@@ -3891,6 +3911,27 @@ html, body { scroll-padding-top: 0 !important; }
 
 
 <!-- =======================================================
+     VIDEO GALLERY — ENCRYPTED VIDEO VAULT
+======================================================= -->
+<section id="video" class="section page-section">
+  <div class="section-header">
+    <div class="chapter-number">Chapter 06 • Video</div>
+    <h2>Friendship Video Vault 🎥</h2>
+    <p>Upload videos, preview them here, and keep the saved video data encrypted on this device.</p>
+  </div>
+
+  <div class="video-vault-toolbar">
+    <button class="video-upload-btn" onclick="triggerVideoUpload()"><span>＋</span> Upload Video</button>
+    <div class="video-security-badge"><span>🔐</span> AES-GCM encrypted</div>
+  </div>
+  <input id="videoUploadInput" type="file" accept="video/*" hidden onchange="handleVideoUpload(event)">
+  <div id="videoGrid" class="video-grid"></div>
+  <div class="video-vault-note">Videos are encrypted before being stored in this browser's local vault. This protects stored data on this device; it does not provide cloud/server encryption or cross-device syncing.</div>
+</section>
+
+
+
+<!-- =======================================================
      DAILY MESSAGE
 ======================================================= -->
 
@@ -4192,6 +4233,16 @@ html, body { scroll-padding-top: 0 !important; }
         <button class="profile-setting-row profile-settings-main-row" onclick="toggleSettingsPanel();closeModal('profileModal')">
           <span>⚙️</span>
           <div><strong>Settings</strong><small>Open the app control center</small></div>
+          <b>›</b>
+        </button>
+        <button class="profile-setting-row" onclick="openProfileSetting('devices')">
+          <span>📱</span>
+          <div><strong>Devices</strong><small>Google account &amp; current device details</small></div>
+          <b>›</b>
+        </button>
+        <button class="profile-setting-row" onclick="openProfileSetting('activeStatus')">
+          <span>🟢</span>
+          <div><strong>Active Status</strong><small id="activeStatusSummary">Active on this device</small></div>
           <b>›</b>
         </button>
       </div>
@@ -4580,6 +4631,10 @@ function navigatePage(id){
         loadGallery();
     }
 
+    if(id==="video"){
+        loadVideoGallery();
+    }
+
     /* Restart a clean, short entry animation every time an option is clicked. */
     const target=document.getElementById(id);
     if(target){
@@ -4645,11 +4700,20 @@ function updateProfileSettingsUI(){
     document.getElementById("chatThemeSummary").textContent=s.chatTheme; document.getElementById("appIconSummary").textContent=s.appIcon;
     document.getElementById("appThemeSummary").textContent=s.appTheme; document.getElementById("toneSettingSummary").textContent=s.messageTone+" / "+s.groupTone+" / "+s.callTone;
     document.getElementById("downloadSettingSummary").textContent=s.autoDownload;
+    updatePresenceSummary();
 }
 function profileDetail(title,category,body){document.getElementById("profileDetailTitle").textContent=title;document.getElementById("profileDetailCategory").textContent=category;document.getElementById("profileDetailBody").innerHTML=body;document.getElementById("profileSettingModal").classList.add("show");}
 function openProfileSetting(type){
  const s=getProfileSettings();
- if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
+ if(type==="devices") {
+   const a=currentAccount||{}; const ua=navigator.userAgent||"Unknown browser";
+   const platform=navigator.platform||"Unknown device"; const login=a.loginTime?new Date(a.loginTime).toLocaleString():"Current session";
+   profileDetail("Devices","ACCOUNT",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">📱</div><div><strong>Current device</strong><div class="device-status"><i></i> Active now</div></div></div><div class="device-meta"><div><small>Google account</small><strong>${escapeHtml(a.googleEmail||"Not available")}</strong></div><div><small>Google name</small><strong>${escapeHtml(a.googleName||a.username||"Account")}</strong></div><div><small>Platform</small><strong>${escapeHtml(platform)}</strong></div><div><small>Browser</small><strong>${escapeHtml(getBrowserName())}</strong></div><div><small>Last sign-in</small><strong>${escapeHtml(login)}</strong></div><div><small>Session</small><strong>Current browser</strong></div></div></div><div class="profile-note">This section shows information available to this website from the Google sign-in session and browser. It does not access private Gmail messages or your complete Google device list.</div>`);
+ }
+ else if(type==="activeStatus") {
+   profileDetail("Active Status","PRESENCE",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">🟢</div><div><strong>Website presence</strong><div class="device-status"><i></i> <span id="detailPresenceText">Active now</span></div></div></div></div><div class="profile-control"><div><label>Show Active Status</label><small>When enabled, this website can mark your current session as active while you are using it.</small></div><input id="presenceToggle" type="checkbox" ${localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"checked":""} onchange="setPresenceEnabled(this.checked)"></div><div class="profile-note">Real-time status between different users requires a shared backend presence service. This page is prepared to use <code>/api/presence</code> when your backend provides it; without that service, status is local to this browser.</div>`);
+ }
+ else if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
  else if(type==="number") profileDetail("Change number","ACCOUNT",`<div class="profile-note">Your saved number is used only by this website. Changing it does not change your Google account or phone number.</div><div class="profile-control"><label>Number<input id="newProfileNumber" type="tel" value="${s.number||""}" placeholder="Enter number"></label></div><button class="profile-action primary" onclick="saveProfileNumber()">Save number</button>`);
  else if(type==="blocked") profileDetail("Blocked accounts","PRIVACY",`<div id="blockedList">${(s.blocked||[]).map((x,i)=>`<div class="profile-list-item"><span>${escapeHtml(x)}</span><button onclick="unblockProfile(${i})">Unblock</button></div>`).join("")||"<div class=\"profile-note\">No blocked accounts.</div>"}</div><button class="profile-action" onclick="addBlockedProfile()">+ Block an account</button>`);
  else if(type==="disappearing") profileDetail("Disappearing messages","PRIVACY",`<div class="profile-control"><div><label>Disappearing messages</label><small>New messages can expire automatically after the selected period.</small></div><input type="checkbox" ${s.disappearing?"checked":""} onchange="setDisappearing(this.checked)"></div><div class="profile-control"><label>Message timer</label><select id="disappearTime" onchange="setDisappearTime(this.value)"><option value="86400000" ${s.disappearingTime==86400000?"selected":""}>24 hours</option><option value="604800000" ${s.disappearingTime==604800000?"selected":""}>7 days</option><option value="7776000000" ${s.disappearingTime==7776000000?"selected":""}>90 days</option></select></div>`);
@@ -4664,6 +4728,60 @@ function openProfileSetting(type){
  else if(type==="download") profileDetail("Auto-download","STORAGE AND DATA",`<div class="profile-control"><label>Media auto-download</label><select onchange="setAutoDownload(this.value)"><option value="wifi">Wi-Fi</option><option value="wifi-mobile">Wi-Fi & mobile data</option><option value="never">Never</option></select></div><div class="profile-note">This preference is used by this site's media-loading logic. Existing local files are not deleted when you change it.</div>`);
  else if(type==="language") profileDetail("App language","APP LANGUAGE",`<div class="profile-control"><label>Language</label><select disabled><option>English (device's language)</option></select></div><div class="profile-note">The current website interface is English. The browser/device locale is not changed by this setting.</div>`);
 }
+const PRESENCE_ENABLED_KEY="friendship_presence_enabled_v1";
+function getBrowserName(){const u=navigator.userAgent||"";if(/Edg\//.test(u))return "Microsoft Edge";if(/Chrome\//.test(u))return "Google Chrome";if(/Firefox\//.test(u))return "Mozilla Firefox";if(/Safari\//.test(u)&&!/Chrome\//.test(u))return "Safari";return "Web browser";}
+function openVideoOption(){closePageMenu();navigatePage("video");} 
+
+const VIDEO_DB_NAME="friendship_video_vault_v1";
+const VIDEO_STORE="videos";
+const VIDEO_KEY_NAME="friendship_video_aes_key_v1";
+let videoDbPromise=null;
+function openVideoDb(){
+  if(videoDbPromise)return videoDbPromise;
+  videoDbPromise=new Promise((resolve,reject)=>{
+    const req=indexedDB.open(VIDEO_DB_NAME,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(VIDEO_STORE))db.createObjectStore(VIDEO_STORE,{keyPath:"id",autoIncrement:true});};
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+  });return videoDbPromise;
+}
+async function getVideoCryptoKey(){
+  let raw=localStorage.getItem(VIDEO_KEY_NAME);
+  if(!raw){const bytes=crypto.getRandomValues(new Uint8Array(32));raw=btoa(String.fromCharCode(...bytes));localStorage.setItem(VIDEO_KEY_NAME,raw);}
+  const rawBytes=Uint8Array.from(atob(raw),c=>c.charCodeAt(0));
+  return crypto.subtle.importKey("raw",rawBytes,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+}
+async function encryptVideoBlob(blob){const key=await getVideoCryptoKey();const iv=crypto.getRandomValues(new Uint8Array(12));const data=await blob.arrayBuffer();const encrypted=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,data);return {iv:Array.from(iv),data:new Uint8Array(encrypted),type:blob.type,size:blob.size};}
+async function decryptVideo(item){const key=await getVideoCryptoKey();const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(item.iv)},key,item.data);return new Blob([plain],{type:item.type||"video/mp4"});}
+function triggerVideoUpload(){const input=document.getElementById("videoUploadInput");if(input)input.click();}
+async function handleVideoUpload(event){
+  const files=Array.from(event.target.files||[]); if(!files.length)return;
+  try{const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");const store=tx.objectStore(VIDEO_STORE);for(const file of files){const enc=await encryptVideoBlob(file);store.add({name:file.name,type:file.type,size:file.size,created:Date.now(),iv:enc.iv,data:enc.data});}tx.oncomplete=()=>loadVideoGallery();}
+  catch(err){alert("Video could not be saved securely in this browser.");console.error(err);}finally{event.target.value="";}
+}
+async function loadVideoGallery(){
+  const grid=document.getElementById("videoGrid");if(!grid)return;
+  try{const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readonly");const req=tx.objectStore(VIDEO_STORE).getAll();req.onsuccess=async()=>{
+    const items=req.result||[];grid.innerHTML="";
+    if(!items.length){grid.innerHTML='<div class="video-empty"><div style="font-size:44px">🎥</div><strong>No videos yet</strong><p>Upload a video to create your private encrypted video gallery.</p></div>';return;}
+    for(const item of items.slice().reverse()){
+      const card=document.createElement("div");card.className="video-card";const v=document.createElement("video");v.controls=true;v.preload="metadata";v.setAttribute("playsinline","");
+      const body=document.createElement("div");body.className="video-card-body";body.innerHTML='<div class="video-card-title">'+escapeHtml(item.name||"Video")+'</div><div class="video-card-meta">🔐 Encrypted • '+formatVideoSize(item.size||0)+'</div><div class="video-card-actions"><button type="button" data-action="delete">Delete</button></div>';
+      card.append(v,body);grid.appendChild(card);
+      try{const blob=await decryptVideo(item);const url=URL.createObjectURL(blob);v.src=url;v.onloadeddata=()=>URL.revokeObjectURL(url);}catch(e){body.querySelector(".video-card-meta").textContent="🔐 Encrypted video • unable to decrypt";}
+      body.querySelector('[data-action="delete"]').onclick=()=>deleteVideo(item.id);
+    }
+  };req.onerror=()=>{grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';};
+  }catch(e){grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';}
+}
+function formatVideoSize(bytes){if(bytes<1024*1024)return Math.round(bytes/1024)+" KB";return (bytes/(1024*1024)).toFixed(1)+" MB";}
+async function deleteVideo(id){if(!confirm("Delete this video from the encrypted vault?"))return;const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");tx.objectStore(VIDEO_STORE).delete(id);tx.oncomplete=()=>loadVideoGallery();}
+
+function setPresenceEnabled(v){localStorage.setItem(PRESENCE_ENABLED_KEY,v?"true":"false");updatePresenceSummary();}
+function updatePresenceSummary(){const el=document.getElementById("activeStatusSummary");if(el)el.textContent=localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"Active on this device":"Active Status off";}
+function startLocalPresence(){if(!currentAccount)return;if(localStorage.getItem(PRESENCE_ENABLED_KEY)==="false")return;localStorage.setItem("friendship_presence_last_seen",String(Date.now()));updatePresenceSummary();}
+['pointerdown','keydown','touchstart','visibilitychange'].forEach(ev=>document.addEventListener(ev,()=>{if(document.visibilityState!=="hidden")startLocalPresence();},{passive:true}));
+setInterval(()=>{if(document.visibilityState!=="hidden")startLocalPresence();},30000);
+
 function escapeHtml(v){return String(v).replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));}
 function profileSetSecurity(v){let s=getProfileSettings();s.security=v;saveProfileSettings(s);updateProfileSettingsUI();}
 function saveProfileNumber(){let s=getProfileSettings();s.number=document.getElementById('newProfileNumber').value.trim();saveProfileSettings(s);updateProfileSettingsUI();closeModal('profileSettingModal');}
@@ -5453,6 +5571,7 @@ function applyAuthState(){
     updateAccountProfileUI();
     updateBiometricUI();
     updateGoogleAuthMode();
+    startLocalPresence();
 
     if(!currentAccount){
         if(accountScreen){
@@ -7310,4 +7429,4 @@ applyAuthState();
 </script>
 
 </body>
-   </html>
+    </html>
