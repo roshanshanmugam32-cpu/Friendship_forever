@@ -1376,6 +1376,35 @@ body.light .settings-panel-card{
     box-shadow:0 0 14px rgba(97,230,168,.8);
 }
 
+/* PROFILE SETTINGS EXPERIENCE */
+.profile-settings-card{text-align:left;max-width:620px;max-height:88vh;overflow:auto;padding:22px;}
+.profile-settings-head{display:flex;align-items:center;gap:14px;padding:6px 4px 20px;border-bottom:1px solid var(--line);}
+.profile-settings-avatar{width:72px;height:72px;border-radius:50%;overflow:hidden;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,var(--accent),var(--accent2));font-size:28px;font-weight:900;}
+.profile-settings-avatar img{width:100%;height:100%;object-fit:cover;}
+.profile-settings-head h2{margin:0;font-size:21px;}
+.profile-settings-head p{margin:4px 0 0;color:var(--muted);font-size:12px;word-break:break-all;}
+.profile-settings-section{margin-top:18px;}
+.profile-settings-section-title{font-size:10px;letter-spacing:1.5px;color:var(--muted);font-weight:900;margin:0 8px 7px;}
+.profile-setting-row{width:100%;display:flex;align-items:center;gap:13px;padding:13px 10px;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--text);text-align:left;cursor:pointer;}
+.profile-setting-row>span{width:28px;text-align:center;font-size:21px;}
+.profile-setting-row div{flex:1;min-width:0;}
+.profile-setting-row strong{display:block;font-size:13px;}
+.profile-setting-row small{display:block;color:var(--muted);font-size:10px;margin-top:3px;}
+.profile-setting-row b{font-size:22px;color:var(--muted);font-weight:400;}
+.profile-setting-row:hover{background:rgba(255,255,255,.04);}
+.profile-detail-card{max-width:500px;}
+.profile-detail-card h2{margin:7px 0 16px;}
+.profile-control{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:13px;border:1px solid var(--line);border-radius:14px;background:var(--card);margin:9px 0;}
+.profile-control label{font-size:13px;font-weight:700;}
+.profile-control small{display:block;color:var(--muted);font-size:10px;margin-top:3px;}
+.profile-control select,.profile-control input{max-width:190px;padding:9px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--text);}
+.profile-action{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--text);font-weight:800;cursor:pointer;margin-top:9px;}
+.profile-action.primary{background:linear-gradient(100deg,var(--accent),var(--accent2));color:#fff;border:0;}
+.profile-note{padding:12px;border-radius:12px;background:rgba(255,255,255,.04);color:var(--muted);font-size:11px;line-height:1.5;}
+.profile-list-item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px;}
+.profile-list-item button{border:0;background:transparent;color:#ff7898;cursor:pointer;font-weight:800;}
+@media(max-width:600px){.profile-settings-card{padding:17px;max-height:92vh}.profile-settings-avatar{width:62px;height:62px}.profile-settings-head h2{font-size:18px}.profile-control{align-items:flex-start;flex-direction:column}.profile-control select,.profile-control input{max-width:none;width:100%;}}
+
 .profile-modal-card{
     text-align:center;
 }
@@ -2992,12 +3021,7 @@ body.light #chatPanel{
 
         </div>
 
-        <div class="active-user-banner" id="activeUserBanner">
-            <span class="active-user-indicator"></span>
-            <div>
-                <strong id="activeUserNames">Active friendship session</strong>
-                <small id="activeUserMeta">Waiting for login...</small>
-            </div>
+
         </div>
 
     </div>
@@ -3933,55 +3957,57 @@ body.light #chatPanel{
      PROFILE MODAL
 ======================================================= -->
 
-<div
-    id="profileModal"
-    class="modal">
-
-    <div class="modal-card profile-modal-card">
-
-        <button
-            class="modal-close"
-            onclick="closeModal('profileModal')">
-            ×
-        </button>
-
-        <div class="profile-modal-avatar">
-            R×A
-        </div>
-
-        <div class="chapter-number">
-            FRIENDSHIP PROFILE
-        </div>
-
-        <h2>
-            Roshan Raj × Aashiya Begum
-        </h2>
-
-        <p>
-            A pure friendship story that began in 2019 and continues to create memories.
-        </p>
-
-        <div class="profile-meta-grid">
-            <div><small>STARTED</small><strong>2019</strong></div>
-            <div><small>STATUS</small><strong>ACTIVE</strong></div>
-        </div>
-
-        <div class="profile-active-card">
-            <small>CURRENTLY LOGGED IN</small>
-            <strong id="profileActiveNames">—</strong>
-            <small id="profileActiveMeta">No active session</small>
-        </div>
-
-        <div class="profile-active-card">
-            <small>ACCOUNT</small>
-            <strong id="profileAccountName">—</strong>
-            <small id="profileAccountMeta">Not signed in</small>
-        </div>
-
+<div id="profileModal" class="modal profile-settings-modal">
+  <div class="modal-card profile-settings-card">
+    <button class="modal-close" onclick="closeModal('profileModal')">×</button>
+    <div class="profile-settings-head">
+      <div class="profile-settings-avatar" id="profileGoogleAvatar">👤</div>
+      <div><h2 id="profileGoogleName">Account</h2><p id="profileGoogleEmail">Not signed in</p></div>
     </div>
 
+    <div class="profile-settings-list">
+      <div class="profile-settings-section"><div class="profile-settings-section-title">ACCOUNT</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('security')"><span>🔐</span><div><strong>Security notifications</strong><small id="securitySettingSummary">On</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('number')"><span>📱</span><div><strong>Change number</strong><small id="numberSettingSummary">Use your saved number</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">PRIVACY</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('blocked')"><span>🚫</span><div><strong>Blocked accounts</strong><small id="blockedSettingSummary">0 blocked</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('disappearing')"><span>⏳</span><div><strong>Disappearing messages</strong><small id="disappearingSettingSummary">Off</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">LISTS</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('people')"><span>👥</span><div><strong>Manage people and groups</strong><small>Manage saved participants</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">CHATS</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('history')"><span>💬</span><div><strong>Chat history</strong><small id="chatHistorySummary">View saved messages</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('backup')"><span>💾</span><div><strong>Backup</strong><small>Backup and restore your data</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">APPEARANCE</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('chatTheme')"><span>🎨</span><div><strong>Chat theme</strong><small id="chatThemeSummary">Default</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('appIcon')"><span>✨</span><div><strong>App icon</strong><small id="appIconSummary">Default</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('appTheme')"><span>🌙</span><div><strong>App theme</strong><small id="appThemeSummary">System / saved theme</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">NOTIFICATIONS</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('notifications')"><span>🔔</span><div><strong>Message, group & call tone</strong><small id="toneSettingSummary">Default tones</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">STORAGE AND DATA</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('network')"><span>📊</span><div><strong>Network usage</strong><small id="networkSettingSummary">Local usage statistics</small></div><b>›</b></button>
+        <button class="profile-setting-row" onclick="openProfileSetting('download')"><span>⬇️</span><div><strong>Auto-download</strong><small id="downloadSettingSummary">Wi-Fi & mobile rules</small></div><b>›</b></button>
+      </div>
+      <div class="profile-settings-section"><div class="profile-settings-section-title">APP LANGUAGE</div>
+        <button class="profile-setting-row" onclick="openProfileSetting('language')"><span>🌐</span><div><strong>English</strong><small>Device's language</small></div><b>›</b></button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div id="profileSettingModal" class="modal">
+  <div class="modal-card profile-detail-card">
+    <button class="modal-close" onclick="closeModal('profileSettingModal')">×</button>
+    <div class="chapter-number" id="profileDetailCategory">SETTINGS</div>
+    <h2 id="profileDetailTitle">Setting</h2>
+    <div id="profileDetailBody"></div>
+  </div>
+</div>
 
 <!-- =======================================================
      BACKUP & RESTORE MODAL
@@ -4347,18 +4373,62 @@ function closeSettingsPanel(){
 }
 
 function showProfile(){
-
     closePageMenu();
     closeSettingsPanel();
-
-    updateActiveUserUI();
-
-    document
-        .getElementById("profileModal")
-        .classList
-        .add("show");
-
+    updateProfileSettingsUI();
+    document.getElementById("profileModal").classList.add("show");
 }
+
+const PROFILE_SETTINGS_KEY="friendship_profile_settings_v1";
+function getProfileSettings(){
+    try{return Object.assign({security:true,number:"",blocked:[],disappearing:false,disappearingTime:86400000,chatTheme:"default",appIcon:"default",appTheme:localStorage.getItem("ra_theme")||"dark",messageTone:"default",groupTone:"default",callTone:"default",autoDownload:"wifi",networkSent:0,networkReceived:0,language:"English"},JSON.parse(localStorage.getItem(PROFILE_SETTINGS_KEY)||"{}"));}catch(e){return {security:true,number:"",blocked:[],disappearing:false,disappearingTime:86400000,chatTheme:"default",appIcon:"default",appTheme:"dark",messageTone:"default",groupTone:"default",callTone:"default",autoDownload:"wifi",networkSent:0,networkReceived:0,language:"English"};}
+}
+function saveProfileSettings(o){localStorage.setItem(PROFILE_SETTINGS_KEY,JSON.stringify(o));}
+function updateProfileSettingsUI(){
+    const s=getProfileSettings(), name=document.getElementById("profileGoogleName"), email=document.getElementById("profileGoogleEmail"), av=document.getElementById("profileGoogleAvatar");
+    if(currentAccount){name.textContent=currentAccount.googleName||currentAccount.username||"Account"; email.textContent=currentAccount.googleEmail||currentAccount.username||""; if(currentAccount.googlePicture){av.innerHTML="<img src=\""+currentAccount.googlePicture+"\" alt=\"Profile\">";}}
+    document.getElementById("securitySettingSummary").textContent=s.security?"On":"Off";
+    document.getElementById("numberSettingSummary").textContent=s.number||"Not set";
+    document.getElementById("blockedSettingSummary").textContent=(s.blocked||[]).length+" blocked";
+    document.getElementById("disappearingSettingSummary").textContent=s.disappearing?(s.disappearingTime/86400000)+" day(s)":"Off";
+    document.getElementById("chatThemeSummary").textContent=s.chatTheme; document.getElementById("appIconSummary").textContent=s.appIcon;
+    document.getElementById("appThemeSummary").textContent=s.appTheme; document.getElementById("toneSettingSummary").textContent=s.messageTone+" / "+s.groupTone+" / "+s.callTone;
+    document.getElementById("downloadSettingSummary").textContent=s.autoDownload;
+}
+function profileDetail(title,category,body){document.getElementById("profileDetailTitle").textContent=title;document.getElementById("profileDetailCategory").textContent=category;document.getElementById("profileDetailBody").innerHTML=body;document.getElementById("profileSettingModal").classList.add("show");}
+function openProfileSetting(type){
+ const s=getProfileSettings();
+ if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
+ else if(type==="number") profileDetail("Change number","ACCOUNT",`<div class="profile-note">Your saved number is used only by this website. Changing it does not change your Google account or phone number.</div><div class="profile-control"><label>Number<input id="newProfileNumber" type="tel" value="${s.number||""}" placeholder="Enter number"></label></div><button class="profile-action primary" onclick="saveProfileNumber()">Save number</button>`);
+ else if(type==="blocked") profileDetail("Blocked accounts","PRIVACY",`<div id="blockedList">${(s.blocked||[]).map((x,i)=>`<div class="profile-list-item"><span>${escapeHtml(x)}</span><button onclick="unblockProfile(${i})">Unblock</button></div>`).join("")||"<div class=\"profile-note\">No blocked accounts.</div>"}</div><button class="profile-action" onclick="addBlockedProfile()">+ Block an account</button>`);
+ else if(type==="disappearing") profileDetail("Disappearing messages","PRIVACY",`<div class="profile-control"><div><label>Disappearing messages</label><small>New messages can expire automatically after the selected period.</small></div><input type="checkbox" ${s.disappearing?"checked":""} onchange="setDisappearing(this.checked)"></div><div class="profile-control"><label>Message timer</label><select id="disappearTime" onchange="setDisappearTime(this.value)"><option value="86400000" ${s.disappearingTime==86400000?"selected":""}>24 hours</option><option value="604800000" ${s.disappearingTime==604800000?"selected":""}>7 days</option><option value="7776000000" ${s.disappearingTime==7776000000?"selected":""}>90 days</option></select></div>`);
+ else if(type==="people") profileDetail("Manage people and groups","LISTS",`<div class="profile-note">People are represented by the current Friendship session and saved local participants. Changes here are local to this device.</div><div class="profile-list-item"><span>${escapeHtml(activeSession?(activeSession.name1+" × "+activeSession.name2):"No active friendship session")}</span></div><button class="profile-action" onclick="closeModal('profileSettingModal');openBackupModal()">Manage saved data</button>`);
+ else if(type==="history") profileDetail("Chat history","CHATS",`<div class="profile-note">Your chat history is stored in the existing encrypted local chat store.</div><button class="profile-action primary" onclick="closeModal('profileSettingModal');toggleChatPanel(true)">Open chat history</button><button class="profile-action" onclick="clearLocalChatHistory()">Clear chat history</button>`);
+ else if(type==="backup") {closeModal('profileModal');openBackupModal();return;}
+ else if(type==="chatTheme") profileDetail("Chat theme","APPEARANCE",`<div class="profile-control"><label>Theme</label><select onchange="setChatTheme(this.value)"><option value="default" ${s.chatTheme==="default"?"selected":""}>Default</option><option value="soft" ${s.chatTheme==="soft"?"selected":""}>Soft</option><option value="midnight" ${s.chatTheme==="midnight"?"selected":""}>Midnight</option></select></div>`);
+ else if(type==="appIcon") profileDetail("App icon","APPEARANCE",`<div class="profile-control"><label>Icon style</label><select onchange="setAppIcon(this.value)"><option value="default">Default</option><option value="minimal">Minimal</option><option value="sparkle">Sparkle</option></select></div><div class="profile-note">The selected icon style is saved for this website. Browser-installed PWA icons may require a manifest/icon asset to change.</div>`);
+ else if(type==="appTheme") profileDetail("App theme","APPEARANCE",`<div class="profile-control"><label>App theme</label><select onchange="setAppTheme(this.value)"><option value="dark">Dark</option><option value="light">Light</option><option value="system">System</option></select></div>`);
+ else if(type==="notifications") profileDetail("Message, group & call tone","NOTIFICATIONS",`<div class="profile-control"><label>Message tone</label><select onchange="setTone('messageTone',this.value)"><option>default</option><option>soft</option><option>chime</option><option>silent</option></select></div><div class="profile-control"><label>Group tone</label><select onchange="setTone('groupTone',this.value)"><option>default</option><option>soft</option><option>chime</option><option>silent</option></select></div><div class="profile-control"><label>Call tone</label><select onchange="setTone('callTone',this.value)"><option>default</option><option>soft</option><option>chime</option><option>silent</option></select></div><button class="profile-action" onclick="testProfileTone()">Test message tone</button>`);
+ else if(type==="network") profileDetail("Network usage","STORAGE AND DATA",`<div class="profile-control"><div><label>Messages sent</label><small>${s.networkSent||0} local message operations</small></div></div><div class="profile-control"><div><label>Messages received</label><small>${s.networkReceived||0} local message operations</small></div></div><div class="profile-note">Browser JavaScript cannot accurately expose total device network traffic. These counters track this site's message operations.</div>`);
+ else if(type==="download") profileDetail("Auto-download","STORAGE AND DATA",`<div class="profile-control"><label>Media auto-download</label><select onchange="setAutoDownload(this.value)"><option value="wifi">Wi-Fi</option><option value="wifi-mobile">Wi-Fi & mobile data</option><option value="never">Never</option></select></div><div class="profile-note">This preference is used by this site's media-loading logic. Existing local files are not deleted when you change it.</div>`);
+ else if(type==="language") profileDetail("App language","APP LANGUAGE",`<div class="profile-control"><label>Language</label><select disabled><option>English (device's language)</option></select></div><div class="profile-note">The current website interface is English. The browser/device locale is not changed by this setting.</div>`);
+}
+function escapeHtml(v){return String(v).replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));}
+function profileSetSecurity(v){let s=getProfileSettings();s.security=v;saveProfileSettings(s);updateProfileSettingsUI();}
+function saveProfileNumber(){let s=getProfileSettings();s.number=document.getElementById('newProfileNumber').value.trim();saveProfileSettings(s);updateProfileSettingsUI();closeModal('profileSettingModal');}
+function addBlockedProfile(){let n=prompt('Enter the account/name to block:');if(n&&n.trim()){let s=getProfileSettings();s.blocked=s.blocked||[];if(!s.blocked.includes(n.trim()))s.blocked.push(n.trim());saveProfileSettings(s);openProfileSetting('blocked');updateProfileSettingsUI();}}
+function unblockProfile(i){let s=getProfileSettings();s.blocked.splice(i,1);saveProfileSettings(s);openProfileSetting('blocked');updateProfileSettingsUI();}
+function setDisappearing(v){let s=getProfileSettings();s.disappearing=v;saveProfileSettings(s);}
+function setDisappearTime(v){let s=getProfileSettings();s.disappearingTime=Number(v);saveProfileSettings(s);}
+function setChatTheme(v){let s=getProfileSettings();s.chatTheme=v;saveProfileSettings(s);document.body.dataset.chatTheme=v;updateProfileSettingsUI();}
+function setAppIcon(v){let s=getProfileSettings();s.appIcon=v;saveProfileSettings(s);document.documentElement.dataset.appIcon=v;updateProfileSettingsUI();}
+function setAppTheme(v){let s=getProfileSettings();s.appTheme=v;saveProfileSettings(s);let mode=v==='system'?(matchMedia('(prefers-color-scheme:light)').matches?'light':'dark'):v;document.body.classList.toggle('light',mode==='light');localStorage.setItem('ra_theme',mode);updateProfileSettingsUI();}
+function setTone(k,v){let s=getProfileSettings();s[k]=v;saveProfileSettings(s);updateProfileSettingsUI();}
+function testProfileTone(){let s=getProfileSettings();if(s.messageTone==='silent')return;let a=new AudioContext(),o=a.createOscillator(),g=a.createGain();o.frequency.value=s.messageTone==='chime'?880:s.messageTone==='soft'?520:660;o.connect(g);g.connect(a.destination);g.gain.value=.05;o.start();o.stop(a.currentTime+.18);}
+function setAutoDownload(v){let s=getProfileSettings();s.autoDownload=v;saveProfileSettings(s);updateProfileSettingsUI();}
+async function clearLocalChatHistory(){if(confirm('Clear the encrypted chat history on this device?')){localStorage.removeItem(FRIENDSHIP_CHAT_KEY);chatMessages=[];renderChatMessages();closeModal('profileSettingModal');updateProfileSettingsUI();}}
+
+
 
 document.addEventListener("click",function(event){
 
