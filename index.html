@@ -5108,9 +5108,11 @@ function updateGoogleAuthMode(){
     const biometric=document.getElementById("biometricCard");
 
     const returningGoogle=!!(currentAccount && currentAccount.googleEmail===ALLOWED_GOOGLE_EMAIL);
+    const otherGoogle=!!(currentAccount && currentAccount.googleEmail && !returningGoogle);
 
     if(accountScreen){
         accountScreen.classList.toggle("google-biometric-only",returningGoogle);
+        accountScreen.classList.toggle("google-other-account",otherGoogle);
     }
 
     if(googleWrap) googleWrap.style.display=returningGoogle ? "none" : "";
@@ -5298,17 +5300,23 @@ async function authenticateGooglePasskey(){
 async function unlockGoogleSessionAfterBiometric(){
     restoreActiveSession();
 
-    if(!activeSession){
-        setBiometricStatus("Your Google account is unlocked, but this device has no saved Friendship profile yet. Complete the Friendship profile once, then future unlocks will go directly to Home.");
-        return false;
-    }
-
     try{
-        await initializeEncryptionKey(
-            activeSession.name1,
-            activeSession.name2,
-            activeSession.year
-        );
+        if(activeSession){
+            await initializeEncryptionKey(
+                activeSession.name1,
+                activeSession.name2,
+                activeSession.year
+            );
+        }else{
+            // The authorized Google account does not use the Friendship
+            // Forever name/year profile gate. A private browser key is
+            // derived directly from the Google account identity instead.
+            await initializeEncryptionKey(
+                ALLOWED_GOOGLE_EMAIL,
+                "google-account",
+                "friendship-forever"
+            );
+        }
     }catch(error){
         console.error("Encryption setup failed:",error);
         setBiometricStatus("Secure storage could not be initialized. Please use HTTPS.");
@@ -5459,14 +5467,14 @@ function handleGoogleCredential(response){
         const payload=JSON.parse(base64UrlDecode(parts[1]));
         const email=String(payload.email||"").toLowerCase();
 
-        if(email!==ALLOWED_GOOGLE_EMAIL){
-            throw new Error("This Friendship Forever profile is restricted to roshanrajr580@gmail.com.");
+        if(!email){
+            throw new Error("Google account email was not received.");
         }
 
         currentAccount={
             username:email,
             googleEmail:email,
-            googleName:payload.name||"Roshan Raj",
+            googleName:payload.name||email,
             googlePicture:payload.picture||"",
             loginTime:new Date()
         };
@@ -5483,7 +5491,13 @@ function handleGoogleCredential(response){
         );
 
         setAccountError("");
-        setBiometricStatus(hasSavedPasskey() ? "Google account verified. Use your device biometric to continue." : "Google account verified. Set up your device fingerprint / passkey to continue.");
+
+        if(email===ALLOWED_GOOGLE_EMAIL){
+            setBiometricStatus(hasSavedPasskey() ? "Google account verified. Use your device biometric to continue." : "Google account verified. Set up your device fingerprint / passkey to continue.");
+        }else{
+            setBiometricStatus("");
+        }
+
         updateBiometricUI();
         updateGoogleAuthMode();
         applyAuthState();
