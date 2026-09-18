@@ -2764,6 +2764,46 @@ body.light #chatPanel{
 }
 
 </style>
+
+<style id="option-top-animation-fix">
+/* Option navigation: keep every selected section flush to the viewport top. */
+html, body { scroll-padding-top: 0 !important; }
+.section, [id^="section"], .page-section { scroll-margin-top: 0 !important; }
+.option-content-enter { animation: optionContentEnter .28s ease-out both; }
+@keyframes optionContentEnter { from { opacity: .35; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .option-content-enter { animation: none !important; } }
+</style>
+<script id="option-top-animation-script">
+(function(){
+  function findScrollable(){ return document.scrollingElement || document.documentElement; }
+  function topAfterOption(el){
+    if(!el) return;
+    requestAnimationFrame(function(){
+      var sc=findScrollable();
+      var r=el.getBoundingClientRect();
+      var y=Math.max(0, (sc.scrollTop || window.pageYOffset || 0) + r.top);
+      window.scrollTo({top:y,behavior:'smooth'});
+      el.classList.remove('option-content-enter');
+      void el.offsetWidth;
+      el.classList.add('option-content-enter');
+      setTimeout(function(){el.classList.remove('option-content-enter');},350);
+    });
+  }
+  document.addEventListener('click',function(e){
+    var option=e.target.closest('[data-section], [data-page], [data-target], .nav-item, .bottom-nav-item, .menu-item');
+    if(!option) return;
+    var targetId=option.getAttribute('data-section')||option.getAttribute('data-page')||option.getAttribute('data-target');
+    if(targetId && targetId.charAt(0)==='#') targetId=targetId.slice(1);
+    if(!targetId) {
+      var href=option.getAttribute('href');
+      if(href && href.charAt(0)==='#') targetId=href.slice(1);
+    }
+    if(targetId){
+      setTimeout(function(){topAfterOption(document.getElementById(targetId));},20);
+    }
+  },true);
+})();
+</script>
 </head>
 
 
@@ -7270,4 +7310,4 @@ applyAuthState();
 </script>
 
 </body>
-       </html>
+   </html>
