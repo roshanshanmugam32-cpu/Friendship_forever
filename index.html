@@ -2848,6 +2848,51 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
 }
 
 /* =========================================================
+   GOOGLE SIGN-IN — MOBILE CLIP FIX
+   Keep the rendered Google account control fully inside the
+   login card on narrow screens. Authentication behavior is unchanged.
+========================================================= */
+#accountScreen .google-login-card{
+    box-sizing:border-box;
+    overflow:hidden;
+}
+
+#accountScreen .google-signin-host{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+}
+
+#accountScreen .google-signin-host > div{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    display:flex !important;
+    justify-content:center !important;
+}
+
+#accountScreen .google-signin-host iframe{
+    display:block;
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    box-sizing:border-box;
+}
+
+@media(max-width:560px){
+    #accountScreen .google-login-card{
+        padding:11px 10px;
+    }
+    #accountScreen .google-signin-host{
+        padding:0 1px;
+    }
+}
+
+/* =========================================================
    REAL-TIME CHAT
 ========================================================= */
 #chatFab{
@@ -6003,7 +6048,7 @@ function initGoogleLogin(){
             size:"large",
             shape:"pill",
             text:"continue_with",
-            width:360
+            width:300
         });
     }
 
