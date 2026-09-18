@@ -2497,6 +2497,73 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
 }
 
 /* =========================================================
+   MODERN ACCOUNT ACCESS REFINEMENT
+   Login-page visual layer only. Existing IDs and behavior preserved.
+========================================================= */
+#accountScreen .account-eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:7px;
+    margin:0 auto 10px;
+    padding:6px 10px;
+    border:1px solid rgba(156,108,255,.25);
+    border-radius:999px;
+    background:rgba(156,108,255,.08);
+    color:#cbb7ff;
+    font-size:9px;
+    font-weight:900;
+    letter-spacing:1.15px;
+}
+#accountScreen .account-eyebrow::before{
+    content:"";
+    width:6px;
+    height:6px;
+    border-radius:50%;
+    background:#a878ff;
+    box-shadow:0 0 12px rgba(168,120,255,.8);
+}
+#accountScreen .account-footer-note{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:7px;
+    margin-top:15px;
+    padding-top:13px;
+    border-top:1px solid rgba(255,255,255,.07);
+    color:var(--muted);
+    font-size:9px;
+    letter-spacing:.35px;
+}
+#accountScreen .account-footer-note span{
+    font-size:11px;
+}
+#accountScreen .login-box > h1{
+    text-wrap:balance;
+}
+#accountScreen .google-login-card,
+#accountScreen .biometric-card,
+#accountScreen .account-tabs,
+#accountScreen .account-form{
+    transition:border-color .22s ease,transform .22s ease,box-shadow .22s ease;
+}
+#accountScreen .google-login-card:hover{
+    border-color:rgba(255,255,255,.17);
+    box-shadow:0 16px 40px rgba(0,0,0,.18);
+}
+#accountScreen .field:focus{
+    border-color:rgba(168,120,255,.65);
+    box-shadow:0 0 0 3px rgba(168,120,255,.10);
+}
+@media(max-height:760px) and (min-width:561px){
+    #accountScreen{padding:12px 18px;align-items:flex-start;overflow-y:auto}
+    #accountScreen .login-box{margin:12px 0}
+}
+@media(max-width:560px){
+    #accountScreen .account-eyebrow{font-size:8px;letter-spacing:1px}
+    #accountScreen .account-footer-note{margin-top:12px;padding-top:11px}
+}
+
+/* =========================================================
    PROFESSIONAL ACCOUNT / LOGIN SCREEN
    Visual-only refinement — authentication IDs and behavior
    are intentionally preserved.
@@ -2975,11 +3042,13 @@ body.light #chatPanel{
             <img src="logo.png" alt="Friendship logo">
         </div>
 
+        <div class="account-eyebrow">SECURE ACCOUNT ACCESS</div>
+
         <h1>Welcome</h1>
 
         <p class="subtitle">
-            Create an account or sign in to continue
-            to your private friendship space.
+            Sign in or create an account to continue.
+            Your account access stays simple and secure.
         </p>
 
         <div class="account-tabs">
@@ -3105,6 +3174,9 @@ body.light #chatPanel{
 
         <div id="accountError"></div>
 
+        <div class="account-footer-note">
+            <span>🔒</span> Secure sign-in · Account access only
+        </div>
 
     </div>
 
@@ -5629,8 +5701,8 @@ function updateBiometricUI(){
         if(button) button.textContent=hasSavedPasskey() ? "🔐 UNLOCK WITH BIOMETRIC" : "☝️ SET UP FINGERPRINT / PASSKEY";
         const title=document.getElementById("biometricTitle");
         const subtitle=document.getElementById("biometricSubtitle");
-        if(title) title.textContent=hasSavedPasskey() ? "Welcome back, Roshan" : "Secure this Google Account";
-        if(subtitle) subtitle.textContent=hasSavedPasskey() ? "Verify with your device fingerprint, face unlock, or screen lock to open Friendship Forever." : "After Google sign-in, register your device biometric once. Next time, biometric unlock will take you directly to Home.";
+        if(title) title.textContent=hasSavedPasskey() ? "Welcome back" : "Secure this Google Account";
+        if(subtitle) subtitle.textContent=hasSavedPasskey() ? "Verify with your device fingerprint, face unlock, or screen lock to continue." : "After Google sign-in, register your device biometric once. Next time, biometric unlock can take you directly to Home.";
     }else{
         card.classList.remove("show");
     }
@@ -7409,4 +7481,4 @@ applyAuthState();
 </script>
 
 </body>
-               </html>
+    </html>
