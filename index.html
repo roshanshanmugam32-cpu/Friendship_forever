@@ -2170,21 +2170,6 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     .lightbox-close{top:12px;right:12px}
 }
 
-
-/* GOOGLE PROFILE PROFESSIONAL ENHANCEMENT — profile presentation only */
-.profile-google-professional{margin:0 20px 4px;padding:12px 14px;border:1px solid rgba(66,133,244,.18);border-radius:16px;background:linear-gradient(135deg,rgba(66,133,244,.09),rgba(255,255,255,.025));}
-.profile-google-professional-top{display:flex;align-items:center;gap:9px;}
-.profile-google-mark{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:#fff;color:#4285f4;font:900 15px Arial,sans-serif;box-shadow:0 5px 16px rgba(0,0,0,.18);}
-.profile-google-professional strong{display:block;font-size:11px;letter-spacing:.15px;}
-.profile-google-professional small{display:block;margin-top:2px;color:var(--muted);font-size:9px;}
-.profile-google-status{margin-top:9px;display:flex;align-items:center;gap:6px;color:#61e6a8;font-size:9px;font-weight:800;}
-.profile-google-status-dot{width:7px;height:7px;border-radius:50%;background:#61e6a8;box-shadow:0 0 9px rgba(97,230,168,.7);}
-.profile-settings-avatar-wrap .profile-google-ring{position:absolute;inset:-4px;border-radius:29px;border:1px solid rgba(66,133,244,.34);pointer-events:none;}
-.profile-settings-avatar-wrap .profile-google-glyph{position:absolute;right:-5px;top:-5px;width:25px;height:25px;border-radius:8px;display:grid;place-items:center;background:#fff;color:#4285f4;border:2px solid var(--card);font:900 13px Arial,sans-serif;box-shadow:0 5px 15px rgba(0,0,0,.22);}
-.profile-google-account-label{display:inline-flex;align-items:center;gap:5px;margin-top:8px;padding:5px 8px;border-radius:999px;border:1px solid rgba(66,133,244,.22);background:rgba(66,133,244,.08);color:var(--text);font-size:9px;font-weight:800;}
-.profile-google-account-label span{color:#4285f4;font:900 12px Arial,sans-serif;}
-@media(max-width:600px){.profile-google-professional{margin-left:14px;margin-right:14px;}}
-
 /* =========================================================
    ACCOUNT GATE (Sign In / Sign Up)
 ========================================================= */
@@ -2509,6 +2494,199 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
     font-size:12px;
     line-height:1.6;
     text-align:center;
+}
+
+/* =========================================================
+   PROFESSIONAL ACCOUNT / LOGIN SCREEN
+   Visual-only refinement — authentication IDs and behavior
+   are intentionally preserved.
+========================================================= */
+#accountScreen{
+    position:relative;
+    overflow:hidden;
+    padding:28px 18px;
+    background:
+        radial-gradient(circle at 50% 8%,rgba(132,83,255,.18),transparent 34%),
+        radial-gradient(circle at 85% 85%,rgba(255,82,157,.10),transparent 30%),
+        var(--bg2);
+}
+
+#accountScreen::before{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:420px;
+    border-radius:50%;
+    top:-250px;
+    left:50%;
+    transform:translateX(-50%);
+    background:rgba(126,77,255,.12);
+    filter:blur(80px);
+    pointer-events:none;
+}
+
+#accountScreen .login-box{
+    position:relative;
+    z-index:1;
+    width:min(500px,100%);
+    padding:34px 30px 30px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:30px;
+    background:linear-gradient(145deg,rgba(24,21,42,.94),rgba(13,12,25,.91));
+    box-shadow:0 30px 90px rgba(0,0,0,.42),0 0 0 1px rgba(255,255,255,.025) inset;
+    backdrop-filter:blur(30px);
+}
+
+#accountScreen .login-symbol{
+    width:76px;
+    height:76px;
+    margin:0 auto 17px;
+    border-radius:24px;
+    padding:12px;
+    background:linear-gradient(145deg,rgba(132,83,255,.22),rgba(255,82,157,.13));
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:0 18px 45px rgba(101,65,210,.22);
+    animation:none;
+}
+
+#accountScreen .login-symbol img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    border-radius:16px;
+}
+
+#accountScreen .login-box h1{
+    font-size:30px;
+    font-weight:900;
+    letter-spacing:-.7px;
+    margin-bottom:7px;
+}
+
+#accountScreen .login-box .subtitle{
+    max-width:390px;
+    margin:0 auto 22px;
+    font-size:13px;
+    line-height:1.6;
+}
+
+#accountScreen .account-tabs{
+    margin-bottom:18px;
+    padding:4px;
+    border-radius:14px;
+    background:rgba(0,0,0,.24);
+}
+
+#accountScreen .account-tab-btn{
+    min-height:42px;
+    border-radius:10px;
+    font-size:12px;
+}
+
+#accountScreen .google-login-wrap{
+    margin:0 0 12px;
+}
+
+#accountScreen .google-login-card{
+    padding:15px;
+    border-radius:18px;
+    background:rgba(255,255,255,.045);
+    border-color:rgba(255,255,255,.10);
+    box-shadow:none;
+}
+
+#accountScreen .google-profile-preview{
+    margin-bottom:11px;
+}
+
+#accountScreen .google-profile-avatar{
+    width:40px;
+    height:40px;
+}
+
+#accountScreen .google-profile-title{
+    font-size:12px;
+}
+
+#accountScreen .google-profile-email{
+    font-size:11px;
+}
+
+#accountScreen .google-secure-badge{
+    font-size:8px;
+}
+
+#accountScreen .google-fallback-btn{
+    min-height:44px;
+    border-radius:12px;
+    margin-top:8px;
+}
+
+#accountScreen .google-divider{
+    margin:15px 0;
+    font-size:9px;
+    letter-spacing:.7px;
+}
+
+#accountScreen .account-form{
+    padding-top:2px;
+}
+
+#accountScreen .account-form label{
+    margin:9px 0 5px;
+    font-size:10px;
+    letter-spacing:.9px;
+}
+
+#accountScreen .field{
+    min-height:48px;
+    margin:0 0 4px;
+    padding:13px 15px;
+    border-radius:13px;
+    background:rgba(0,0,0,.22);
+}
+
+#accountScreen .primary-btn{
+    min-height:48px;
+    margin-top:10px;
+    border-radius:13px;
+    font-size:12px;
+    letter-spacing:.5px;
+}
+
+#accountScreen #accountError{
+    min-height:20px;
+    margin-top:10px;
+    font-size:11px;
+}
+
+@media (max-width:560px){
+    #accountScreen{
+        padding:16px 12px;
+    }
+    #accountScreen .login-box{
+        padding:28px 18px 22px;
+        border-radius:24px;
+    }
+    #accountScreen .login-symbol{
+        width:68px;
+        height:68px;
+        border-radius:21px;
+        padding:10px;
+    }
+    #accountScreen .login-box h1{
+        font-size:27px;
+    }
+    #accountScreen .login-box .subtitle{
+        font-size:12px;
+        margin-bottom:19px;
+    }
+    #accountScreen .google-login-card{
+        padding:12px;
+    }
+    #accountScreen .biometric-actions{
+        flex-direction:column;
+    }
 }
 
 /* =========================================================
@@ -2927,10 +3105,6 @@ body.light #chatPanel{
 
         <div id="accountError"></div>
 
-        <p class="account-note">
-            🔒 Your password is never stored — only a locally
-            derived security hash is kept on this device.
-        </p>
 
     </div>
 
@@ -4111,15 +4285,12 @@ body.light #chatPanel{
     <div class="profile-settings-head">
       <div class="profile-settings-avatar-wrap">
         <div class="profile-settings-avatar" id="profileGoogleAvatar">👤</div>
-        <span class="profile-google-ring" aria-hidden="true"></span>
         <span class="profile-online-dot" aria-hidden="true"></span>
-        <span class="profile-google-glyph" aria-hidden="true">G</span>
       </div>
       <div class="profile-settings-identity">
         <div class="profile-settings-eyebrow">FRIENDSHIP FOREVER ACCOUNT</div>
         <h2 id="profileGoogleName">Account</h2>
         <p id="profileGoogleEmail">Not signed in</p>
-        <div class="profile-google-account-label"><span>G</span> Google Account</div>
       </div>
     </div>
 
@@ -4130,13 +4301,6 @@ body.light #chatPanel{
         <small>Manage your account, privacy and app experience</small>
       </div>
       <span>›</span>
-    </div>
-    <div class="profile-google-professional">
-      <div class="profile-google-professional-top">
-        <div class="profile-google-mark">G</div>
-        <div><strong>Signed in with Google</strong><small>Your Google account is connected to this profile</small></div>
-      </div>
-      <div class="profile-google-status"><span class="profile-google-status-dot"></span>Account active on this device</div>
     </div>
 
     <div class="profile-settings-list">
@@ -7245,4 +7409,4 @@ applyAuthState();
 </script>
 
 </body>
-   </html>
+               </html>
