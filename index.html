@@ -2757,6 +2757,97 @@ h1,h2,h3,.brand-copy strong{font-family:"Space Grotesk","Outfit",sans-serif;font
 }
 
 /* =========================================================
+   LOGIN PAGE — FINAL MOBILE FIT / GOOGLE CARD FIX
+   Layout-only correction for the account gate.
+========================================================= */
+#accountScreen{
+    position:fixed;
+    inset:0;
+    z-index:5000;
+    box-sizing:border-box;
+    width:100%;
+    min-height:100dvh;
+    height:100dvh;
+    overflow-x:hidden;
+    overflow-y:auto;
+    overscroll-behavior:contain;
+    -webkit-overflow-scrolling:touch;
+}
+
+#accountScreen .login-box{
+    box-sizing:border-box;
+    flex:0 0 auto;
+    margin:0 auto;
+    max-width:500px;
+}
+
+#accountScreen .google-login-wrap{
+    box-sizing:border-box;
+    width:100%;
+    min-width:0;
+    margin:18px 0 10px;
+}
+
+#accountScreen .google-login-card{
+    box-sizing:border-box;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    overflow:hidden;
+}
+
+#accountScreen .google-profile-preview{
+    min-width:0;
+}
+
+#accountScreen .google-profile-preview > div:last-child{
+    min-width:0;
+    flex:1 1 auto;
+}
+
+#accountScreen .google-profile-email{
+    max-width:100%;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+#accountScreen .google-signin-host{
+    box-sizing:border-box;
+    width:100%;
+    max-width:100%;
+    min-width:0;
+    overflow:hidden;
+}
+
+#accountScreen .google-signin-host > div,
+#accountScreen .google-signin-host iframe{
+    box-sizing:border-box;
+    max-width:100% !important;
+}
+
+@media(max-width:560px){
+    #accountScreen{
+        padding:14px 12px;
+        align-items:flex-start;
+    }
+    #accountScreen .login-box{
+        width:100%;
+        max-width:500px;
+        margin:0 auto;
+        padding:27px 18px 22px;
+    }
+    #accountScreen .google-login-card{
+        padding:12px;
+        border-radius:18px;
+    }
+    #accountScreen .google-signin-host{
+        display:flex;
+        justify-content:center;
+    }
+}
+
+/* =========================================================
    REAL-TIME CHAT
 ========================================================= */
 #chatFab{
@@ -3068,45 +3159,6 @@ body.light #chatPanel{
             </button>
         </div>
 
-        <div class="google-login-wrap">
-            <div class="google-login-card">
-                <div class="google-profile-preview">
-                    <div class="google-profile-avatar" id="googleProfileAvatar">G</div>
-                    <div>
-                        <div class="google-profile-title">Google Account</div>
-                        <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
-                        <div class="google-secure-badge">✓ SECURE GOOGLE SIGN-IN</div>
-                    </div>
-                </div>
-                <div id="googleSignInButton" class="google-signin-host"></div>
-                <button type="button" id="googleFallbackButton" class="google-fallback-btn" onclick="startGoogleSignInFallback()">
-                    <span class="google-g-logo">G</span>
-                    <span>Use another Google account</span>
-                </button>
-                <div id="googleLoginStatus" class="google-login-status"></div>
-            </div>
-        </div>
-
-        <div class="google-divider"><span>OR USE YOUR SAVED ACCOUNT</span></div>
-
-        <div class="biometric-card" id="biometricCard">
-            <div class="biometric-icon">☝️</div>
-            <div class="biometric-title" id="biometricTitle">Fingerprint / Passkey Unlock</div>
-            <div class="biometric-subtitle" id="biometricSubtitle">Use your device fingerprint, face unlock, or screen lock to open Friendship Forever.</div>
-            <button type="button" class="biometric-btn" id="biometricButton" onclick="unlockWithBiometric()">
-                🔐 UNLOCK WITH BIOMETRIC
-            </button>
-            <div class="biometric-status" id="biometricStatus"></div>
-            <div class="biometric-actions">
-                <button type="button" class="biometric-secondary-btn" onclick="useAnotherSignInMethod()">
-                    ↪ USE ANOTHER OPTION
-                </button>
-                <button type="button" class="biometric-secondary-btn danger" onclick="googleAccountLogout()">
-                    ⎋ LOG OUT
-                </button>
-            </div>
-        </div>
-
         <form
             id="signInForm"
             class="account-form"
@@ -3171,6 +3223,45 @@ body.light #chatPanel{
             </button>
 
         </form>
+
+        <div class="google-divider"><span>OR CONTINUE WITH GOOGLE</span></div>
+
+        <div class="google-login-wrap">
+            <div class="google-login-card">
+                <div class="google-profile-preview">
+                    <div class="google-profile-avatar" id="googleProfileAvatar">G</div>
+                    <div>
+                        <div class="google-profile-title">Google Account</div>
+                        <div class="google-profile-email" id="googleProfileEmail">Continue with your Google account</div>
+                        <div class="google-secure-badge">✓ SECURE GOOGLE SIGN-IN</div>
+                    </div>
+                </div>
+                <div id="googleSignInButton" class="google-signin-host"></div>
+                <button type="button" id="googleFallbackButton" class="google-fallback-btn" onclick="startGoogleSignInFallback()">
+                    <span class="google-g-logo">G</span>
+                    <span>Use another Google account</span>
+                </button>
+                <div id="googleLoginStatus" class="google-login-status"></div>
+            </div>
+        </div>
+
+        <div class="biometric-card" id="biometricCard">
+            <div class="biometric-icon">☝️</div>
+            <div class="biometric-title" id="biometricTitle">Fingerprint / Passkey Unlock</div>
+            <div class="biometric-subtitle" id="biometricSubtitle">Use your device fingerprint, face unlock, or screen lock to open Friendship Forever.</div>
+            <button type="button" class="biometric-btn" id="biometricButton" onclick="unlockWithBiometric()">
+                🔐 UNLOCK WITH BIOMETRIC
+            </button>
+            <div class="biometric-status" id="biometricStatus"></div>
+            <div class="biometric-actions">
+                <button type="button" class="biometric-secondary-btn" onclick="useAnotherSignInMethod()">
+                    ↪ USE ANOTHER OPTION
+                </button>
+                <button type="button" class="biometric-secondary-btn danger" onclick="googleAccountLogout()">
+                    ⎋ LOG OUT
+                </button>
+            </div>
+        </div>
 
         <div id="accountError"></div>
 
@@ -7481,4 +7572,4 @@ applyAuthState();
 </script>
 
 </body>
-    </html>
+   </html>
