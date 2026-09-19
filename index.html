@@ -13,6 +13,7 @@
 <title>FRIENDSHIP FOREVER</title>
 
 <script src="https://accounts.google.com/gsi/client" async defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1091,27 +1092,7 @@ body.light .page-menu{
 /* =========================================================
    PAGE ENTRY ANIMATION / ZERO-GAP TOP POSITION
 ========================================================= */
-.page-section.page-enter{
-    animation:pageEnter .42s cubic-bezier(.22,1,.36,1) both;
-    will-change:opacity,transform;
-}
-
-@keyframes pageEnter{
-    from{
-        opacity:0;
-        transform:translate3d(0,18px,0);
-    }
-    to{
-        opacity:1;
-        transform:translate3d(0,0,0);
-    }
-}
-
-@media(prefers-reduced-motion:reduce){
-    .page-section.page-enter{
-        animation:none;
-    }
-}
+.page-section.page-enter{animation:none !important;transform:none !important;opacity:1 !important;}
 
 @media(max-width:600px){
     .page-menu-shell{
@@ -1137,6 +1118,7 @@ body[data-page="journey"] #journey,
 body[data-page="memories"] #memories,
 body[data-page="gallery"] #gallery,
 body[data-page="daily"] #daily,
+body[data-page="video"] #video,
 body[data-page="forever"] #forever{
     display:flex;
 }
@@ -2764,6 +2746,74 @@ body.light #chatPanel{
 }
 
 </style>
+
+<style id="option-top-animation-fix">
+/* Option navigation: keep every selected section flush to the viewport top. */
+html, body { scroll-padding-top: 0 !important; }
+.section, [id^="section"], .page-section { scroll-margin-top: 0 !important; }
+.option-content-enter { animation:none !important; }
+@keyframes optionContentEnter { from { opacity: .35; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@media (prefers-reduced-motion: reduce) { .option-content-enter { animation: none !important; } }
+</style>
+<script id="option-top-animation-script">
+(function(){
+  function findScrollable(){ return document.scrollingElement || document.documentElement; }
+  function topAfterOption(el){
+    if(!el) return;
+    requestAnimationFrame(function(){
+      var sc=findScrollable();
+      var r=el.getBoundingClientRect();
+      var y=Math.max(0, (sc.scrollTop || window.pageYOffset || 0) + r.top);
+      window.scrollTo({top:y,behavior:'smooth'});
+      el.classList.remove('option-content-enter');
+      void el.offsetWidth;
+      el.classList.add('option-content-enter');
+      setTimeout(function(){el.classList.remove('option-content-enter');},350);
+    });
+  }
+  document.addEventListener('click',function(e){
+    var option=e.target.closest('[data-section], [data-page], [data-target], .nav-item, .bottom-nav-item, .menu-item');
+    if(!option) return;
+    var targetId=option.getAttribute('data-section')||option.getAttribute('data-page')||option.getAttribute('data-target');
+    if(targetId && targetId.charAt(0)==='#') targetId=targetId.slice(1);
+    if(!targetId) {
+      var href=option.getAttribute('href');
+      if(href && href.charAt(0)==='#') targetId=href.slice(1);
+    }
+    if(targetId){
+      setTimeout(function(){topAfterOption(document.getElementById(targetId));},20);
+    }
+  },true);
+})();
+</script>
+
+<style id="profile-devices-presence-enhancements">
+/* Modern three-dot navigation */
+.page-menu-trigger{position:relative;min-width:118px;height:46px;padding:0 16px 0 14px;border:1px solid rgba(255,255,255,.14);border-radius:16px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));box-shadow:0 10px 30px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;gap:5px;transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;}
+.page-menu-trigger:hover{transform:translateY(-2px);border-color:rgba(196,147,255,.55);box-shadow:0 14px 34px rgba(0,0,0,.22),0 0 24px rgba(160,110,255,.12)}
+.page-menu-trigger>span{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 8px currentColor;transition:transform .2s ease}.page-menu-trigger:hover>span:nth-child(1){transform:translateY(-2px)}.page-menu-trigger:hover>span:nth-child(3){transform:translateY(2px)}
+.page-menu-trigger strong{margin-left:7px;font-size:12px;letter-spacing:.8px}
+.profile-device-card{padding:15px;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);margin:10px 0}.profile-device-card .device-head{display:flex;gap:12px;align-items:center}.device-icon{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:rgba(180,130,255,.12);font-size:21px}.device-status{display:inline-flex;align-items:center;gap:6px;margin-top:4px;font-size:10px;color:#83e8ad}.device-status i{width:7px;height:7px;border-radius:50%;background:#45e38b;box-shadow:0 0 9px rgba(69,227,139,.7)}.device-meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.device-meta div{padding:9px 10px;border-radius:12px;background:rgba(0,0,0,.12);min-width:0}.device-meta small{display:block;color:var(--muted);font-size:9px}.device-meta strong{display:block;margin-top:3px;font-size:11px;word-break:break-word}.presence-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;background:rgba(69,227,139,.09);border:1px solid rgba(69,227,139,.18);font-size:10px;color:#8cf0b5}.presence-pill i{width:7px;height:7px;border-radius:50%;background:#45e38b}.presence-offline{color:var(--muted);background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.08)}.presence-offline i{background:#8d93a5;box-shadow:none}
+@media(max-width:520px){.page-menu-trigger{min-width:104px;height:42px;border-radius:14px}.device-meta{grid-template-columns:1fr}.profile-settings-card{max-height:88vh;overflow:auto}}
+</style>
+
+<style id="encrypted-video-vault-styles">
+.video-vault-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:18px 0}.video-upload-btn{border:1px solid rgba(255,255,255,.13);border-radius:15px;padding:12px 17px;background:linear-gradient(135deg,rgba(255,255,255,.10),rgba(255,255,255,.04));color:inherit;font-weight:700;cursor:pointer;box-shadow:0 10px 28px rgba(0,0,0,.16)}.video-upload-btn span{font-size:18px}.video-security-badge{padding:10px 13px;border-radius:13px;background:rgba(69,227,139,.08);border:1px solid rgba(69,227,139,.18);font-size:11px;color:#91efb7}.video-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.video-card{overflow:hidden;border:1px solid rgba(255,255,255,.09);border-radius:18px;background:rgba(255,255,255,.045);box-shadow:0 12px 30px rgba(0,0,0,.14)}.video-card video{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#050509}.video-card-body{padding:12px}.video-card-title{font-size:13px;font-weight:700;word-break:break-word}.video-card-meta{font-size:10px;color:var(--muted);margin-top:4px}.video-card-actions{display:flex;gap:8px;margin-top:10px}.video-card-actions button{flex:1;border:1px solid rgba(255,255,255,.10);border-radius:10px;padding:8px;background:rgba(255,255,255,.05);color:inherit;cursor:pointer}.video-empty{padding:45px 18px;text-align:center;border:1px dashed rgba(255,255,255,.13);border-radius:18px;color:var(--muted)}.video-vault-note{margin-top:15px;font-size:10px;line-height:1.6;color:var(--muted)}@media(max-width:620px){.video-grid{grid-template-columns:1fr}.video-vault-toolbar{align-items:stretch}.video-upload-btn{width:100%}.video-security-badge{width:100%;text-align:center}}
+
+
+<style id="video-gallery-enhanced-styles">
+.video-upload-panel{margin:0 0 18px;padding:16px;border:1px solid rgba(255,255,255,.10);border-radius:18px;background:rgba(255,255,255,.035);}
+.video-upload-panel-title{font-weight:800;font-size:14px;margin-bottom:12px}.video-upload-panel-title span{float:right;font-size:10px;color:var(--muted);font-weight:600;margin-top:2px}.video-upload-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.video-upload-fields label{display:flex;flex-direction:column;gap:6px;font-size:10px;color:var(--muted);font-weight:700}.video-upload-fields .video-field-wide{grid-column:1/-1}.video-upload-fields input[type=file]{width:100%;padding:11px;border:1px dashed rgba(255,255,255,.16);border-radius:12px;background:rgba(255,255,255,.035);color:inherit}.video-upload-help{margin-top:10px;font-size:10px;color:var(--muted);line-height:1.5}.video-filter-row{display:flex;gap:7px;flex-wrap:wrap;margin:4px 0 14px}.video-filter{border:1px solid var(--line);border-radius:999px;padding:8px 12px;background:rgba(255,255,255,.035);color:inherit;font-size:11px;cursor:pointer}.video-filter.active{background:linear-gradient(135deg,rgba(116,76,255,.32),rgba(255,83,158,.20));border-color:rgba(184,140,255,.55)}.video-stats{font-size:11px;color:var(--muted);margin:5px 0 12px}.video-card-meta{line-height:1.5}.video-card-actions{flex-wrap:wrap}.video-card-actions button{min-height:36px}.video-card video{cursor:pointer}@media(max-width:620px){.video-upload-fields{grid-template-columns:1fr}.video-upload-fields .video-field-wide{grid-column:auto}.video-upload-panel-title span{float:none;display:block;margin-top:4px}.video-filter-row{overflow-x:auto;flex-wrap:nowrap;padding-bottom:3px}.video-filter{flex:0 0 auto}}
+</style>
+
+
+<style id="video-selected-details-styles">
+.video-selected-details{margin-top:8px;padding-top:4px;border-top:1px solid rgba(255,255,255,.08)}
+.video-selected-details .video-upload-btn{margin-top:12px;width:100%}
+.video-selected-details[hidden]{display:none!important}
+</style>
+</style>
+
 </head>
 
 
@@ -3113,6 +3163,11 @@ body.light #chatPanel{
         
 
         
+
+        <button onclick="navigatePage('video')">
+            <span>🎥</span>
+            <div><strong>Video</strong><small>Open video space</small></div>
+        </button>
 
         <button onclick="navigatePage('daily')">
             <span>💌</span>
@@ -3851,6 +3906,59 @@ body.light #chatPanel{
 
 
 <!-- =======================================================
+     VIDEO GALLERY — ENCRYPTED VIDEO VAULT
+======================================================= -->
+<section id="video" class="section page-section">
+  <div class="section-header">
+    <div class="chapter-number">Chapter 06 • Video</div>
+    <h2>Friendship Video Vault 🎥</h2>
+    <p>Upload, organize and watch your friendship videos in one private space.</p>
+  </div>
+
+  <div class="video-vault-toolbar">
+    <button class="video-upload-btn" onclick="triggerVideoUpload()"><span>＋</span> Upload Video</button>
+    <div class="video-security-badge"><span>🔐</span> AES-GCM encrypted</div>
+  </div>
+
+  <div class="video-upload-panel">
+    <div class="video-upload-panel-title">Select a video <span>Details are optional</span></div>
+    <div class="video-upload-fields">
+      <label class="video-field-wide">Video <input id="videoUploadInput" type="file" accept="video/*" onchange="handleVideoSelected(event)"></label>
+    </div>
+    <div id="videoSelectedDetails" class="video-selected-details" hidden>
+      <div class="video-upload-panel-title" style="margin-top:14px">Video details <span>Optional</span></div>
+      <div class="video-upload-fields">
+        <label>Title <input id="videoTitleInput" class="field" type="text" maxlength="120" placeholder="Optional title"></label>
+        <label>Year <select id="videoYearInput" class="field"><option value="">Optional year</option><option>2019</option><option>2020</option><option>2021</option><option>2022</option><option>2023</option><option>2024</option><option>2025</option><option>2026</option></select></label>
+        <label>Date <input id="videoDateInput" class="field" type="date"></label>
+        <label>Category <input id="videoCategoryInput" class="field" type="text" maxlength="60" placeholder="Optional category"></label>
+      </div>
+      <div id="videoSelectedName" class="video-upload-help"></div>
+      <button type="button" class="video-upload-btn" onclick="saveSelectedVideo()"><span>🔐</span> Save Video</button>
+    </div>
+    <div class="video-upload-help">Select a video first. Title, year, date and category are optional.</div>
+  </div>
+
+  <div class="video-filter-row">
+    <button type="button" class="video-filter active" onclick="filterVideoGallery('all',this)">All</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2019',this)">2019</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2020',this)">2020</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2021',this)">2021</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2022',this)">2022</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2023',this)">2023</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2024',this)">2024</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2025',this)">2025</button>
+    <button type="button" class="video-filter" onclick="filterVideoGallery('2026',this)">2026</button>
+  </div>
+
+  <div id="videoStats" class="video-stats"></div>
+  <div id="videoGrid" class="video-grid"></div>
+  <div class="video-vault-note">🔐 Videos are encrypted before being stored in this browser's local vault. This protects stored data on this device; it does not provide cloud/server encryption or cross-device syncing.</div>
+</section>
+
+
+
+<!-- =======================================================
      DAILY MESSAGE
 ======================================================= -->
 
@@ -4154,6 +4262,16 @@ body.light #chatPanel{
           <div><strong>Settings</strong><small>Open the app control center</small></div>
           <b>›</b>
         </button>
+        <button class="profile-setting-row" onclick="openProfileSetting('devices')">
+          <span>📱</span>
+          <div><strong>Devices</strong><small>Google account &amp; current device details</small></div>
+          <b>›</b>
+        </button>
+        <button class="profile-setting-row" onclick="openProfileSetting('activeStatus')">
+          <span>🟢</span>
+          <div><strong>Active Status</strong><small id="activeStatusSummary">Active on this device</small></div>
+          <b>›</b>
+        </button>
       </div>
       <div class="profile-settings-section"><div class="profile-settings-section-title">ACCOUNT</div>
         <button class="profile-setting-row" onclick="openProfileSetting('security')"><span>🔐</span><div><strong>Security notifications</strong><small id="securitySettingSummary">On</small></div><b>›</b></button>
@@ -4320,7 +4438,7 @@ body.light #chatPanel{
     <div class="chat-header">
         <div>
             <strong>Chat</strong>
-            <small id="chatHeaderStatus">Local — ready to connect</small>
+            <small id="chatHeaderStatus">Supabase not configured</small>
         </div>
         <button
             class="modal-close"
@@ -4475,7 +4593,7 @@ function notifyBirthday(name){
    PREMIUM PAGE NAVIGATION
 ========================================================= */
 
-const raPages=["home","story","journey","birthdays","memories","gallery","daily","forever"];
+const raPages=["home","story","journey","birthdays","memories","gallery","video","daily","forever"];
 
 function togglePageMenu(){
 
@@ -4527,6 +4645,7 @@ function navigatePage(id){
     document.body.scrollTop=0;
 
     document.body.dataset.page=id;
+    document.querySelectorAll(".page-section").forEach(sec=>sec.classList.remove("page-enter"));
 
     if(id==="daily"){
         dailyMessage();
@@ -4540,12 +4659,8 @@ function navigatePage(id){
         loadGallery();
     }
 
-    /* Restart a clean, short entry animation every time an option is clicked. */
-    const target=document.getElementById(id);
-    if(target){
-        target.classList.remove("page-enter");
-        void target.offsetWidth;
-        target.classList.add("page-enter");
+    if(id==="video"){
+        loadVideoGallery();
     }
 
     /* A second frame guarantees the selected section begins at the top
@@ -4605,11 +4720,20 @@ function updateProfileSettingsUI(){
     document.getElementById("chatThemeSummary").textContent=s.chatTheme; document.getElementById("appIconSummary").textContent=s.appIcon;
     document.getElementById("appThemeSummary").textContent=s.appTheme; document.getElementById("toneSettingSummary").textContent=s.messageTone+" / "+s.groupTone+" / "+s.callTone;
     document.getElementById("downloadSettingSummary").textContent=s.autoDownload;
+    updatePresenceSummary();
 }
 function profileDetail(title,category,body){document.getElementById("profileDetailTitle").textContent=title;document.getElementById("profileDetailCategory").textContent=category;document.getElementById("profileDetailBody").innerHTML=body;document.getElementById("profileSettingModal").classList.add("show");}
 function openProfileSetting(type){
  const s=getProfileSettings();
- if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
+ if(type==="devices") {
+   const a=currentAccount||{}; const ua=navigator.userAgent||"Unknown browser";
+   const platform=navigator.platform||"Unknown device"; const login=a.loginTime?new Date(a.loginTime).toLocaleString():"Current session";
+   profileDetail("Devices","ACCOUNT",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">📱</div><div><strong>Current device</strong><div class="device-status"><i></i> Active now</div></div></div><div class="device-meta"><div><small>Google account</small><strong>${escapeHtml(a.googleEmail||"Not available")}</strong></div><div><small>Google name</small><strong>${escapeHtml(a.googleName||a.username||"Account")}</strong></div><div><small>Platform</small><strong>${escapeHtml(platform)}</strong></div><div><small>Browser</small><strong>${escapeHtml(getBrowserName())}</strong></div><div><small>Last sign-in</small><strong>${escapeHtml(login)}</strong></div><div><small>Session</small><strong>Current browser</strong></div></div></div><div class="profile-note">This section shows information available to this website from the Google sign-in session and browser. It does not access private Gmail messages or your complete Google device list.</div>`);
+ }
+ else if(type==="activeStatus") {
+   profileDetail("Active Status","PRESENCE",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">🟢</div><div><strong>Website presence</strong><div class="device-status"><i></i> <span id="detailPresenceText">Active now</span></div></div></div></div><div class="profile-control"><div><label>Show Active Status</label><small>When enabled, this website can mark your current session as active while you are using it.</small></div><input id="presenceToggle" type="checkbox" ${localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"checked":""} onchange="setPresenceEnabled(this.checked)"></div><div class="profile-note">Real-time status between different users requires a shared backend presence service. This page is prepared to use <code>/api/presence</code> when your backend provides it; without that service, status is local to this browser.</div>`);
+ }
+ else if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
  else if(type==="number") profileDetail("Change number","ACCOUNT",`<div class="profile-note">Your saved number is used only by this website. Changing it does not change your Google account or phone number.</div><div class="profile-control"><label>Number<input id="newProfileNumber" type="tel" value="${s.number||""}" placeholder="Enter number"></label></div><button class="profile-action primary" onclick="saveProfileNumber()">Save number</button>`);
  else if(type==="blocked") profileDetail("Blocked accounts","PRIVACY",`<div id="blockedList">${(s.blocked||[]).map((x,i)=>`<div class="profile-list-item"><span>${escapeHtml(x)}</span><button onclick="unblockProfile(${i})">Unblock</button></div>`).join("")||"<div class=\"profile-note\">No blocked accounts.</div>"}</div><button class="profile-action" onclick="addBlockedProfile()">+ Block an account</button>`);
  else if(type==="disappearing") profileDetail("Disappearing messages","PRIVACY",`<div class="profile-control"><div><label>Disappearing messages</label><small>New messages can expire automatically after the selected period.</small></div><input type="checkbox" ${s.disappearing?"checked":""} onchange="setDisappearing(this.checked)"></div><div class="profile-control"><label>Message timer</label><select id="disappearTime" onchange="setDisappearTime(this.value)"><option value="86400000" ${s.disappearingTime==86400000?"selected":""}>24 hours</option><option value="604800000" ${s.disappearingTime==604800000?"selected":""}>7 days</option><option value="7776000000" ${s.disappearingTime==7776000000?"selected":""}>90 days</option></select></div>`);
@@ -4624,6 +4748,112 @@ function openProfileSetting(type){
  else if(type==="download") profileDetail("Auto-download","STORAGE AND DATA",`<div class="profile-control"><label>Media auto-download</label><select onchange="setAutoDownload(this.value)"><option value="wifi">Wi-Fi</option><option value="wifi-mobile">Wi-Fi & mobile data</option><option value="never">Never</option></select></div><div class="profile-note">This preference is used by this site's media-loading logic. Existing local files are not deleted when you change it.</div>`);
  else if(type==="language") profileDetail("App language","APP LANGUAGE",`<div class="profile-control"><label>Language</label><select disabled><option>English (device's language)</option></select></div><div class="profile-note">The current website interface is English. The browser/device locale is not changed by this setting.</div>`);
 }
+const PRESENCE_ENABLED_KEY="friendship_presence_enabled_v1";
+function getBrowserName(){const u=navigator.userAgent||"";if(/Edg\//.test(u))return "Microsoft Edge";if(/Chrome\//.test(u))return "Google Chrome";if(/Firefox\//.test(u))return "Mozilla Firefox";if(/Safari\//.test(u)&&!/Chrome\//.test(u))return "Safari";return "Web browser";}
+function openVideoOption(){closePageMenu();navigatePage("video");} 
+
+const VIDEO_DB_NAME="friendship_video_vault_v1";
+const VIDEO_STORE="videos";
+const VIDEO_KEY_NAME="friendship_video_aes_key_v1";
+let videoDbPromise=null;
+let activeVideoFilter="all";
+function openVideoDb(){
+  if(videoDbPromise)return videoDbPromise;
+  videoDbPromise=new Promise((resolve,reject)=>{
+    const req=indexedDB.open(VIDEO_DB_NAME,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains(VIDEO_STORE))db.createObjectStore(VIDEO_STORE,{keyPath:"id",autoIncrement:true});};
+    req.onsuccess=()=>resolve(req.result);req.onerror=()=>reject(req.error);
+  });return videoDbPromise;
+}
+async function getVideoCryptoKey(){
+  let raw=localStorage.getItem(VIDEO_KEY_NAME);
+  if(!raw){const bytes=crypto.getRandomValues(new Uint8Array(32));raw=btoa(String.fromCharCode(...bytes));localStorage.setItem(VIDEO_KEY_NAME,raw);}
+  const rawBytes=Uint8Array.from(atob(raw),c=>c.charCodeAt(0));
+  return crypto.subtle.importKey("raw",rawBytes,{name:"AES-GCM"},false,["encrypt","decrypt"]);
+}
+async function encryptVideoBlob(blob){const key=await getVideoCryptoKey();const iv=crypto.getRandomValues(new Uint8Array(12));const data=await blob.arrayBuffer();const encrypted=await crypto.subtle.encrypt({name:"AES-GCM",iv},key,data);return {iv:Array.from(iv),data:new Uint8Array(encrypted),type:blob.type,size:blob.size};}
+async function decryptVideo(item){const key=await getVideoCryptoKey();const plain=await crypto.subtle.decrypt({name:"AES-GCM",iv:new Uint8Array(item.iv)},key,item.data);return new Blob([plain],{type:item.type||"video/mp4"});}
+function triggerVideoUpload(){const input=document.getElementById("videoUploadInput");if(input)input.click();}
+function getVideoFormMeta(file){
+  const title=(document.getElementById("videoTitleInput")?.value||"").trim();
+  const year=(document.getElementById("videoYearInput")?.value||"").trim();
+  const date=(document.getElementById("videoDateInput")?.value||"").trim();
+  const category=(document.getElementById("videoCategoryInput")?.value||"").trim();
+  return {name:title||file.name||"Video",title,year,date,category};
+}
+function clearVideoForm(){["videoTitleInput","videoYearInput","videoDateInput","videoCategoryInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});const input=document.getElementById("videoUploadInput");if(input)input.value="";}
+function handleVideoSelected(event){
+  const input=event.target;
+  const file=input && input.files && input.files[0];
+  const details=document.getElementById("videoSelectedDetails");
+  const name=document.getElementById("videoSelectedName");
+  if(!file){ if(details)details.hidden=true; return; }
+  if(!file.type || !file.type.startsWith("video/")){
+    alert("Please select a valid video file.");
+    input.value="";
+    if(details)details.hidden=true;
+    return;
+  }
+  if(details)details.hidden=false;
+  if(name)name.textContent="Selected: "+file.name+" • "+formatVideoSize(file.size);
+}
+function getVideoFormMeta(file){
+  const title=(document.getElementById("videoTitleInput")?.value||"").trim();
+  const year=(document.getElementById("videoYearInput")?.value||"").trim();
+  const date=(document.getElementById("videoDateInput")?.value||"").trim();
+  const category=(document.getElementById("videoCategoryInput")?.value||"").trim();
+  return {name:title||file.name||"Video",title,year,date,category};
+}
+function clearVideoForm(){["videoTitleInput","videoYearInput","videoDateInput","videoCategoryInput"].forEach(id=>{const el=document.getElementById(id);if(el)el.value="";});const input=document.getElementById("videoUploadInput");if(input)input.value="";const details=document.getElementById("videoSelectedDetails");if(details)details.hidden=true;}
+async function saveSelectedVideo(){
+  const input=document.getElementById("videoUploadInput");
+  const file=input && input.files && input.files[0];
+  if(!file){alert("Please select a video first.");return;}
+  if(!file.type || !file.type.startsWith("video/")){alert("Please select a valid video file.");return;}
+  try{
+    const db=await openVideoDb();
+    const enc=await encryptVideoBlob(file);
+    const meta=getVideoFormMeta(file);
+    const tx=db.transaction(VIDEO_STORE,"readwrite");
+    tx.objectStore(VIDEO_STORE).add({name:meta.name,title:meta.title,year:meta.year,date:meta.date,category:meta.category,type:file.type,size:file.size,created:Date.now(),iv:enc.iv,data:enc.data});
+    tx.oncomplete=()=>{clearVideoForm();loadVideoGallery();notifyActivity("New video uploaded",file.name);};
+    tx.onerror=()=>alert("Video could not be saved securely in this browser.");
+  }catch(err){alert("Video could not be saved securely in this browser.");console.error(err);}
+}
+
+function filterVideoGallery(filter,button){activeVideoFilter=String(filter||"all");document.querySelectorAll(".video-filter").forEach(b=>b.classList.remove("active"));if(button)button.classList.add("active");loadVideoGallery();}
+async function loadVideoGallery(){
+  const grid=document.getElementById("videoGrid");if(!grid)return;
+  try{const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readonly");const req=tx.objectStore(VIDEO_STORE).getAll();req.onsuccess=async()=>{
+    let items=req.result||[];
+    const allCount=items.length;
+    if(activeVideoFilter!=="all")items=items.filter(x=>String(x.year||"")===activeVideoFilter);
+    const stats=document.getElementById("videoStats");if(stats)stats.textContent=allCount?(`${items.length} shown • ${allCount} total video${allCount===1?"":"s"}`):"No videos saved yet";
+    grid.innerHTML="";
+    if(!items.length){grid.innerHTML='<div class="video-empty"><div style="font-size:44px">🎥</div><strong>'+(allCount?"No videos for this year":"No videos yet")+'</strong><p>'+(allCount?"Choose another year or All to view your videos.":"Upload your first video above. Title, year, date and category are optional.")+'</p></div>';return;}
+    for(const item of items.slice().sort((a,b)=>(b.created||0)-(a.created||0))){
+      const card=document.createElement("div");card.className="video-card";
+      const v=document.createElement("video");v.controls=true;v.preload="metadata";v.setAttribute("playsinline","");
+      const metaParts=[];if(item.year)metaParts.push("📅 "+item.year);if(item.date)metaParts.push("🗓️ "+item.date);if(item.category)metaParts.push("🏷️ "+item.category);metaParts.push("🔐 Encrypted • "+formatVideoSize(item.size||0));
+      const body=document.createElement("div");body.className="video-card-body";body.innerHTML='<div class="video-card-title">'+escapeHtml(item.title||item.name||"Video")+'</div><div class="video-card-meta">'+escapeHtml(metaParts.join(" • "))+'</div><div class="video-card-actions"><button type="button" data-action="fullscreen">⛶ Full Screen</button><button type="button" data-action="delete">🗑️ Delete</button></div>';
+      card.append(v,body);grid.appendChild(card);
+      v.addEventListener("click",()=>openVideoFullscreen(v));
+      try{const blob=await decryptVideo(item);const url=URL.createObjectURL(blob);v.src=url;}catch(e){body.querySelector(".video-card-meta").textContent="🔐 Encrypted video • unable to decrypt";}
+      body.querySelector('[data-action="fullscreen"]').onclick=()=>openVideoFullscreen(v);body.querySelector('[data-action="delete"]').onclick=()=>deleteVideo(item.id);
+    }
+  };req.onerror=()=>{grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';};
+  }catch(e){grid.innerHTML='<div class="video-empty">Video vault is unavailable in this browser.</div>';}
+}
+function formatVideoSize(bytes){if(bytes<1024*1024)return Math.max(1,Math.round(bytes/1024))+" KB";return (bytes/(1024*1024)).toFixed(1)+" MB";}
+function openVideoFullscreen(video){if(!video)return;try{if(video.requestFullscreen)video.requestFullscreen();else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();else if(video.webkitRequestFullscreen)video.webkitRequestFullscreen();else alert("Full screen video is not supported by this browser.");}catch(e){console.warn("Fullscreen unavailable",e);}}
+async function deleteVideo(id){if(!confirm("Delete this video from the encrypted vault?"))return;const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");tx.objectStore(VIDEO_STORE).delete(id);tx.oncomplete=()=>loadVideoGallery();}
+
+function setPresenceEnabled(v){localStorage.setItem(PRESENCE_ENABLED_KEY,v?"true":"false");updatePresenceSummary();}
+function updatePresenceSummary(){const el=document.getElementById("activeStatusSummary");if(el)el.textContent=localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"Active on this device":"Active Status off";}
+function startLocalPresence(){if(!currentAccount)return;if(localStorage.getItem(PRESENCE_ENABLED_KEY)==="false")return;localStorage.setItem("friendship_presence_last_seen",String(Date.now()));updatePresenceSummary();}
+['pointerdown','keydown','touchstart','visibilitychange'].forEach(ev=>document.addEventListener(ev,()=>{if(document.visibilityState!=="hidden")startLocalPresence();},{passive:true}));
+setInterval(()=>{if(document.visibilityState!=="hidden")startLocalPresence();},30000);
+
 function escapeHtml(v){return String(v).replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));}
 function profileSetSecurity(v){let s=getProfileSettings();s.security=v;saveProfileSettings(s);updateProfileSettingsUI();}
 function saveProfileNumber(){let s=getProfileSettings();s.number=document.getElementById('newProfileNumber').value.trim();saveProfileSettings(s);updateProfileSettingsUI();closeModal('profileSettingModal');}
@@ -4844,7 +5074,9 @@ function scrollToId(id){
     if(element){
 
         element.scrollIntoView({
-            behavior:"smooth"
+            behavior:"auto",
+            block:"start",
+            inline:"nearest"
         });
 
     }
@@ -5413,6 +5645,7 @@ function applyAuthState(){
     updateAccountProfileUI();
     updateBiometricUI();
     updateGoogleAuthMode();
+    startLocalPresence();
 
     if(!currentAccount){
         if(accountScreen){
@@ -5734,7 +5967,7 @@ function base64UrlDecode(value){
     }).join(""));
 }
 
-function handleGoogleCredential(response){
+async function handleGoogleCredential(response){
     try{
         if(!response || !response.credential){
             throw new Error("Google credential was not received.");
@@ -5759,6 +5992,13 @@ function handleGoogleCredential(response){
             googlePicture:payload.picture||"",
             loginTime:new Date()
         };
+
+        if(initSupabaseClient()){
+            const supabaseSignedIn=await signInSupabaseWithGoogleCredential(response.credential);
+            if(!supabaseSignedIn){
+                setBiometricStatus("Google login succeeded, but live chat account connection failed. Check Supabase Google provider settings.");
+            }
+        }
 
         localStorage.setItem(
             FRIENDSHIP_ACCOUNT_SESSION_KEY,
@@ -5786,6 +6026,214 @@ function handleGoogleCredential(response){
         console.error("Google sign-in failed:",error);
         setAccountError(error && error.message ? error.message : "Google sign-in failed. Please try again.");
     }
+}
+
+/* =========================================================
+   SUPABASE CONNECTION
+
+   Paste your Supabase project URL and publishable key below.
+   The publishable/anon key is intended for browser use; never
+   put a Supabase service-role/secret key in this HTML.
+========================================================= */
+const SUPABASE_URL="https://wrphlappjayieheskhks.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_pRnM57p0XBx7q2amfK6AUA_rVu34r_d";
+let supabaseClient=null;
+let supabaseChatChannel=null;
+
+function supabaseIsConfigured(){
+    return !!(
+        window.supabase &&
+        SUPABASE_URL &&
+        SUPABASE_PUBLISHABLE_KEY &&
+        SUPABASE_URL.indexOf("YOUR_")!==0 &&
+        SUPABASE_PUBLISHABLE_KEY.indexOf("YOUR_")!==0
+    );
+}
+
+function initSupabaseClient(){
+    if(!supabaseIsConfigured()){
+        return false;
+    }
+
+    try{
+        if(!supabaseClient){
+            supabaseClient=window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_PUBLISHABLE_KEY
+            );
+        }
+        return true;
+    }catch(error){
+        console.error("Supabase initialization failed:",error);
+        supabaseClient=null;
+        return false;
+    }
+}
+
+function getChatRoomKey(){
+    let raw="friendship-default";
+
+    if(activeSession && activeSession.name1 && activeSession.name2){
+        raw=[
+            activeSession.name1.trim().toLowerCase(),
+            activeSession.name2.trim().toLowerCase(),
+            String(activeSession.year||"")
+        ].sort().join("::");
+    }else if(currentAccount && currentAccount.googleEmail){
+        raw="account::"+currentAccount.googleEmail.toLowerCase();
+    }
+
+    try{
+        return btoa(unescape(encodeURIComponent(raw)))
+            .replace(/\+/g,"-")
+            .replace(/\//g,"_")
+            .replace(/=+$/g,"");
+    }catch(error){
+        return raw.replace(/[^a-zA-Z0-9_-]/g,"_");
+    }
+}
+
+function getChatSenderEmail(){
+    return String(
+        (currentAccount && (currentAccount.googleEmail||currentAccount.username)) ||
+        "guest"
+    ).toLowerCase();
+}
+
+function getChatSenderName(){
+    return String(
+        (currentAccount && (currentAccount.googleName||currentAccount.username)) ||
+        "Guest"
+    );
+}
+
+async function connectSupabaseChat(){
+    const statusEl=document.getElementById("chatHeaderStatus");
+
+    if(!initSupabaseClient()){
+        if(statusEl) statusEl.textContent="Supabase not configured";
+        return false;
+    }
+
+    if(!currentAccount || !currentAccount.googleEmail){
+        if(statusEl) statusEl.textContent="Sign in with Google to use live chat";
+        return false;
+    }
+
+    const {data:{session},error}=await supabaseClient.auth.getSession();
+
+    if(error || !session){
+        if(statusEl) statusEl.textContent="Waiting for Supabase sign-in";
+        return false;
+    }
+
+    await loadSupabaseChatMessages();
+    subscribeSupabaseChat();
+    return true;
+}
+
+async function loadSupabaseChatMessages(){
+    if(!supabaseClient) return;
+
+    const roomKey=getChatRoomKey();
+
+    const {data,error}=await supabaseClient
+        .from("chat_messages")
+        .select("id,room_key,sender_email,sender_name,body,created_at")
+        .eq("room_key",roomKey)
+        .order("created_at",{ascending:true});
+
+    if(error){
+        console.error("Could not load Supabase chat:",error);
+        return;
+    }
+
+    chatMessages=(data||[]).map(function(row){
+        return {
+            id:row.id,
+            sender:row.sender_email===getChatSenderEmail()?"me":"them",
+            senderEmail:row.sender_email,
+            senderName:row.sender_name,
+            text:row.body,
+            time:row.created_at
+        };
+    });
+
+    renderChatMessages();
+}
+
+function subscribeSupabaseChat(){
+    if(!supabaseClient) return;
+
+    if(supabaseChatChannel){
+        try{ supabaseClient.removeChannel(supabaseChatChannel); }catch(error){}
+    }
+
+    const roomKey=getChatRoomKey();
+    const statusEl=document.getElementById("chatHeaderStatus");
+
+    supabaseChatChannel=supabaseClient
+        .channel("chat-room-"+btoa(unescape(encodeURIComponent(roomKey))).replace(/[^a-zA-Z0-9]/g,"").slice(0,70))
+        .on("postgres_changes",{
+            event:"INSERT",
+            schema:"public",
+            table:"chat_messages",
+            filter:"room_key=eq."+roomKey
+        },function(payload){
+            const row=payload.new;
+
+            if(!row || row.room_key!==getChatRoomKey()) return;
+
+            if(chatMessages.some(function(item){return item.id===row.id;})) return;
+
+            chatMessages.push({
+                id:row.id,
+                sender:row.sender_email===getChatSenderEmail()?"me":"them",
+                senderEmail:row.sender_email,
+                senderName:row.sender_name,
+                text:row.body,
+                time:row.created_at
+            });
+
+            renderChatMessages();
+
+            if(row.sender_email!==getChatSenderEmail()){
+                const panel=document.getElementById("chatPanel");
+                if(panel && !panel.classList.contains("show")){
+                    const badge=document.getElementById("chatFabBadge");
+                    if(badge){
+                        badge.textContent=String(Number(badge.textContent||"0")+1);
+                        badge.classList.add("show");
+                    }
+                }
+            }
+        })
+        .subscribe(function(status,error){
+            if(status==="SUBSCRIBED"){
+                chatBackendAvailable=true;
+                if(statusEl) statusEl.textContent="Connected · Live";
+            }else if(status==="CHANNEL_ERROR" || status==="TIMED_OUT"){
+                chatBackendAvailable=false;
+                if(statusEl) statusEl.textContent="Supabase Realtime error";
+                console.error("Supabase Realtime:",status,error);
+            }
+        });
+}
+
+async function signInSupabaseWithGoogleCredential(googleCredential){
+    if(!initSupabaseClient()) return false;
+
+    const result=await supabaseClient.auth.signInWithIdToken({
+        provider:"google",
+        token:googleCredential
+    });
+
+    if(result.error){
+        console.error("Supabase Google sign-in failed:",result.error);
+        return false;
+    }
+
+    return true;
 }
 
 /* =========================================================
@@ -5910,6 +6358,10 @@ async function toggleChatPanel(forceOpen){
             await loadChatMessages();
         }
 
+        if(initSupabaseClient() && currentAccount && currentAccount.googleEmail){
+            await connectSupabaseChat();
+        }
+
         renderChatMessages();
 
         const badge=document.getElementById("chatFabBadge");
@@ -5955,6 +6407,7 @@ async function sendChatMessage(){
     }
 
     addChatMessage("me",text);
+    notifyActivity("New message",text);
     input.value="";
     input.style.height="auto";
 
@@ -5969,57 +6422,53 @@ async function sendChatMessage(){
 async function deliverChatMessage(text){
     const statusEl=document.getElementById("chatHeaderStatus");
 
-    try{
-        const response=await fetch("/api/chat",{
-            method:"POST",
-            headers:{"Content-Type":"application/json"},
-            body:JSON.stringify({
-                text:text,
-                sender:currentAccount?currentAccount.username:"guest",
-                session:activeSession
-                    ? activeSession.name1+" x "+activeSession.name2
-                    : null
-            })
-        });
+    if(initSupabaseClient() && currentAccount && currentAccount.googleEmail){
+        try{
+            const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
 
-        if(!response.ok){
-            throw new Error("Backend responded with "+response.status);
-        }
-
-        chatBackendAvailable=true;
-        if(statusEl) statusEl.textContent="Connected";
-
-        const data=await response.json().catch(function(){ return null; });
-
-        if(data && typeof data.reply==="string" && data.reply.trim()){
-            addChatMessage("them",data.reply.trim());
-
-            const panel=document.getElementById("chatPanel");
-            if(panel && !panel.classList.contains("show")){
-                const badge=document.getElementById("chatFabBadge");
-                if(badge){
-                    badge.textContent=String(
-                        Number(badge.textContent||"0")+1
-                    );
-                    badge.classList.add("show");
-                }
+            if(sessionError || !session){
+                throw new Error("Supabase authentication session is missing.");
             }
-        }
 
-    }catch(error){
-        chatBackendAvailable=false;
+            const {data,error}=await supabaseClient
+                .from("chat_messages")
+                .insert({
+                    room_key:getChatRoomKey(),
+                    sender_email:getChatSenderEmail(),
+                    sender_name:getChatSenderName(),
+                    body:text
+                })
+                .select("id,room_key,sender_email,sender_name,body,created_at")
+                .single();
 
-        if(statusEl) statusEl.textContent="Local — ready to connect";
+            if(error) throw error;
 
-        if(!chatBackendChecked){
-            chatBackendChecked=true;
-            addChatMessage(
-                "system",
-                "This chat is saved on your device. Connect a backend at /api/chat to enable live replies."
-            );
+            chatBackendAvailable=true;
+            if(statusEl) statusEl.textContent="Connected · Live";
+
+            /* The Realtime subscription will receive this row.
+               Avoid adding a second copy here. */
+            return;
+        }catch(error){
+            console.error("Supabase chat send failed:",error);
+            chatBackendAvailable=false;
+            if(statusEl) statusEl.textContent="Supabase chat unavailable";
+            return;
         }
     }
+
+    /* Local fallback is retained when Supabase is not configured. */
+    if(statusEl) statusEl.textContent="Supabase not configured";
+
+    if(!chatBackendChecked){
+        chatBackendChecked=true;
+        addChatMessage(
+            "system",
+            "Connect Supabase to enable live replies between devices."
+        );
+    }
 }
+
 
 /* =========================================================
    BACKUP & RESTORE
@@ -6683,6 +7132,22 @@ function loadMemories(){
             card.dataset.year=
                 memory.year;
 
+            card.style.cursor="pointer";
+            card.setAttribute("role","button");
+            card.setAttribute("tabindex","0");
+            card.onclick=function(){
+                openLightbox(
+                    memory.image,
+                    memory.title,
+                    memory.description || "A saved friendship memory. 📸"
+                );
+            };
+            card.onkeydown=function(e){
+                if(e.key==="Enter" || e.key===" "){
+                    e.preventDefault();
+                    card.click();
+                }
+            };
 
             card.innerHTML=`
 
@@ -7122,6 +7587,14 @@ function revealMessage(title,text){
    DAILY MESSAGE
 ========================================================= */
 
+function notifyActivity(title,message){
+    try{
+        if("Notification" in window && Notification.permission==="granted"){
+            showNotification(title,message||"FRIENDSHIP FOREVER has a new update.");
+        }
+    }catch(error){console.warn("Activity notification failed:",error);}
+}
+
 const dailyMessages=[
 
     "Some friendships are gifts that don't need wrapping. 🫶",
@@ -7265,6 +7738,12 @@ initGoogleLogin();
 restoreAccountSession();
 restoreActiveSession();
 updateActiveUserUI();
+initSupabaseClient();
+if(currentAccount && currentAccount.googleEmail){
+    connectSupabaseChat().catch(function(error){
+        console.error("Supabase chat initialization failed:",error);
+    });
+}
 applyAuthState();
 
 </script>
