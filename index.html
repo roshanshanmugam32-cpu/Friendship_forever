@@ -4731,7 +4731,8 @@ function openProfileSetting(type){
    profileDetail("Devices","ACCOUNT",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">📱</div><div><strong>Current device</strong><div class="device-status"><i></i> Active now</div></div></div><div class="device-meta"><div><small>Google account</small><strong>${escapeHtml(a.googleEmail||"Not available")}</strong></div><div><small>Google name</small><strong>${escapeHtml(a.googleName||a.username||"Account")}</strong></div><div><small>Platform</small><strong>${escapeHtml(platform)}</strong></div><div><small>Browser</small><strong>${escapeHtml(getBrowserName())}</strong></div><div><small>Last sign-in</small><strong>${escapeHtml(login)}</strong></div><div><small>Session</small><strong>Current browser</strong></div></div></div><div class="profile-note">This section shows information available to this website from the Google sign-in session and browser. It does not access private Gmail messages or your complete Google device list.</div>`);
  }
  else if(type==="activeStatus") {
-   profileDetail("Active Status","PRESENCE",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">🟢</div><div><strong>Website presence</strong><div class="device-status"><i></i> <span id="detailPresenceText">Active now</span></div></div></div></div><div class="profile-control"><div><label>Show Active Status</label><small>When enabled, this website can mark your current session as active while you are using it.</small></div><input id="presenceToggle" type="checkbox" ${localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"checked":""} onchange="setPresenceEnabled(this.checked)"></div><div class="profile-note">Real-time status between different users requires a shared backend presence service. This page is prepared to use <code>/api/presence</code> when your backend provides it; without that service, status is local to this browser.</div>`);
+   profileDetail("Active Status","PRESENCE",`<div class="profile-device-card"><div class="device-head"><div class="device-icon">🟢</div><div><strong>Online users</strong><div class="device-status"><i></i> <span id="detailPresenceText">Checking live status…</span></div></div></div><div id="onlineUsersList" style="margin-top:12px"><div class="profile-note">Connecting to live presence…</div></div></div><div class="profile-control"><div><label>Show Active Status</label><small>When enabled, this account is shown as active to other logged-in users.</small></div><input id="presenceToggle" type="checkbox" ${localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"checked":""} onchange="setPresenceEnabled(this.checked)"></div><div class="profile-note">Online status is shared through Supabase. A user is shown online while their last heartbeat was received within the last 60 seconds.</div>`);
+   refreshOnlineUsers();
  }
  else if(type==="security") profileDetail("Security notifications","ACCOUNT",`<div class="profile-control"><div><label>Security notifications</label><small>Show a notification when account security details change.</small></div><input id="securityToggle" type="checkbox" ${s.security?"checked":""} onchange="profileSetSecurity(this.checked)"></div><div class="profile-note">This preference is stored on this device and controls this website's security-notification setting.</div>`);
  else if(type==="number") profileDetail("Change number","ACCOUNT",`<div class="profile-note">Your saved number is used only by this website. Changing it does not change your Google account or phone number.</div><div class="profile-control"><label>Number<input id="newProfileNumber" type="tel" value="${s.number||""}" placeholder="Enter number"></label></div><button class="profile-action primary" onclick="saveProfileNumber()">Save number</button>`);
@@ -4848,10 +4849,68 @@ function formatVideoSize(bytes){if(bytes<1024*1024)return Math.max(1,Math.round(
 function openVideoFullscreen(video){if(!video)return;try{if(video.requestFullscreen)video.requestFullscreen();else if(video.webkitEnterFullscreen)video.webkitEnterFullscreen();else if(video.webkitRequestFullscreen)video.webkitRequestFullscreen();else alert("Full screen video is not supported by this browser.");}catch(e){console.warn("Fullscreen unavailable",e);}}
 async function deleteVideo(id){if(!confirm("Delete this video from the encrypted vault?"))return;const db=await openVideoDb();const tx=db.transaction(VIDEO_STORE,"readwrite");tx.objectStore(VIDEO_STORE).delete(id);tx.oncomplete=()=>loadVideoGallery();}
 
-function setPresenceEnabled(v){localStorage.setItem(PRESENCE_ENABLED_KEY,v?"true":"false");updatePresenceSummary();}
+function setPresenceEnabled(v){localStorage.setItem(PRESENCE_ENABLED_KEY,v?"true":"false");updatePresenceSummary();if(v)startSupabasePresence();}
 function updatePresenceSummary(){const el=document.getElementById("activeStatusSummary");if(el)el.textContent=localStorage.getItem(PRESENCE_ENABLED_KEY)!=="false"?"Active on this device":"Active Status off";}
 function startLocalPresence(){if(!currentAccount)return;if(localStorage.getItem(PRESENCE_ENABLED_KEY)==="false")return;localStorage.setItem("friendship_presence_last_seen",String(Date.now()));updatePresenceSummary();}
-['pointerdown','keydown','touchstart','visibilitychange'].forEach(ev=>document.addEventListener(ev,()=>{if(document.visibilityState!=="hidden")startLocalPresence();},{passive:true}));
+
+let presenceChannel=null;
+let presenceTimer=null;
+const PRESENCE_ONLINE_MS=60000;
+async function updateSupabasePresence(){
+  if(!supabaseClient || !currentAccount || localStorage.getItem(PRESENCE_ENABLED_KEY)==="false") return;
+  try{
+    const {data:{session},error:sessionError}=await supabaseClient.auth.getSession();
+    if(sessionError || !session || !session.user) return;
+    const email=String(session.user.email||currentAccount.googleEmail||"").toLowerCase();
+    if(!email) return;
+    const {error}=await supabaseClient.from("user_presence").upsert({
+      user_id:session.user.id,
+      email:email,
+      display_name:String(currentAccount.googleName||email),
+      last_seen:new Date().toISOString()
+    },{onConflict:"user_id"});
+    if(error) console.error("Supabase presence update failed:",error);
+    else { startLocalPresence(); refreshOnlineUsers(); }
+  }catch(e){console.error("Supabase presence heartbeat failed:",e);}
+}
+async function refreshOnlineUsers(){
+  const list=document.getElementById("onlineUsersList");
+  const status=document.getElementById("detailPresenceText");
+  if(!list || !supabaseClient) return;
+  try{
+    const {data,error}=await supabaseClient.from("user_presence").select("user_id,email,display_name,last_seen").order("last_seen",{ascending:false});
+    if(error) throw error;
+    const cutoff=Date.now()-PRESENCE_ONLINE_MS;
+    const users=(data||[]).filter(u=>new Date(u.last_seen).getTime()>=cutoff);
+    if(status) status.textContent=users.length+" online now";
+    if(!users.length){list.innerHTML='<div class="profile-note">No other logged-in users are online right now.</div>';return;}
+    list.innerHTML=users.map(u=>{
+      const me=currentAccount && String(currentAccount.googleEmail||"").toLowerCase()===String(u.email||"").toLowerCase();
+      return '<div class="profile-list-item"><span><strong>'+escapeHtml(u.display_name||u.email)+'</strong><small style="display:block;opacity:.7">'+escapeHtml(u.email||"")+'</small></span><span style="white-space:nowrap">🟢 '+(me?"You":"Online")+'</span></div>';
+    }).join("");
+  }catch(e){
+    if(status) status.textContent="Live status unavailable";
+    list.innerHTML='<div class="profile-note">Supabase presence is not connected yet.</div>';
+    console.error("Supabase presence read failed:",e);
+  }
+}
+function subscribeSupabasePresence(){
+  if(!supabaseClient) return;
+  if(presenceChannel){try{supabaseClient.removeChannel(presenceChannel);}catch(e){}}
+  presenceChannel=supabaseClient.channel("friendship-user-presence")
+    .on("postgres_changes",{event:"*",schema:"public",table:"user_presence"},()=>refreshOnlineUsers())
+    .subscribe();
+}
+async function startSupabasePresence(){
+  if(!initSupabaseClient() || !currentAccount || localStorage.getItem(PRESENCE_ENABLED_KEY)==="false") return;
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  if(!session) return;
+  subscribeSupabasePresence();
+  await updateSupabasePresence();
+  refreshOnlineUsers();
+  if(!presenceTimer){presenceTimer=setInterval(()=>{if(document.visibilityState!=="hidden")updateSupabasePresence();},20000);}
+}
+['pointerdown','keydown','touchstart','visibilitychange'].forEach(ev=>document.addEventListener(ev,()=>{if(document.visibilityState!=="hidden"){startLocalPresence();if(supabaseClient)updateSupabasePresence();}},{passive:true}));
 setInterval(()=>{if(document.visibilityState!=="hidden")startLocalPresence();},30000);
 
 function escapeHtml(v){return String(v).replace(/[&<>'\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));}
@@ -5997,6 +6056,8 @@ async function handleGoogleCredential(response){
             const supabaseSignedIn=await signInSupabaseWithGoogleCredential(response.credential);
             if(!supabaseSignedIn){
                 setBiometricStatus("Google login succeeded, but live chat account connection failed. Check Supabase Google provider settings.");
+            }else{
+                await startSupabasePresence();
             }
         }
 
@@ -6129,6 +6190,7 @@ async function connectSupabaseChat(){
 
     await loadSupabaseChatMessages();
     subscribeSupabaseChat();
+    await startSupabasePresence();
     return true;
 }
 
